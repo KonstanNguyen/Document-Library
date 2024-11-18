@@ -1,0 +1,105 @@
+{
+    "navbar": {
+        "mainTitle": "Trung tâm Sáng tạo Khoa học–kỹ thuật (TSK)",
+        "subTitle": "Center for Scientific and Technical Creativity (CSTC)",
+        "courses": "Khóa học",
+        "blog": "Bài viết",
+        "contact": "Liên hệ",
+        "tool": "Công cụ"
+    },
+    "course": {
+        "title": "Khóa học và chương trình học",
+        "showAll": "Toàn bộ khóa học",
+        "startAt": "Bắt đầu vào",
+        "associatedPrograms": "Chương trình liên kết",
+        "professionalCertificate": "Chứng chỉ chuyên nghiệp",
+        "professionalCertificateDescription": "Hệ thống năng lượng thông minh và tích hợp",
+        "enroll": "Đăng ký ngay",
+        "free": "Miễn phí",
+        "earnCertificateFor": "Lấy chứng chỉ trong khoảng",
+        "groupFee": "Phí nhóm",
+        "contactUs": "Liên hệ chúng tôi",
+        "courseLength": "Thời gian học",
+        "effort": "Lịch học",
+        "overview": "Tổng quan",
+        "details": "Chi tiết",
+        "admission": "Nhập học",
+        "about": "Thông tin khóa học",
+        "relatedCourse": "Khóa học liên quan",
+        "courseType": "Loại chương trình học",
+        "startingSoon": "Sắp bắt đầu",
+        "featured": "Luôn sẵn sàng"
+    },
+    "instructor": {
+        "title": "Các giảng viên",
+        "showAll": "Danh sách giảng viên",
+        "name": "Giảng viên",
+        "bio": "Thông tin cá nhân",
+        "details": "Chi tiết",
+        "position": "Vị trí",
+        "degrees": "Bằng cấp",
+        "faculty": "Khoa",
+        "courses": "Khóa học được giảng viên này giảng dạy"
+    },
+    "contact": {
+        "title": "Liên hệ"
+    },
+    "popularTheme": {
+        "title": "Chủ đề phổ biến",
+        "showAll": "Xem toàn bộ"
+    },
+    "startCourse": {
+        "title": "Bắt đầu khóa học",
+        "showAll": "Xem toàn bộ"
+    },
+    "footer": {
+        "about_us_title": "TSK",
+        "quick_link_title": "Truy cập nhanh",
+        "news_title": "Tin tức",
+        "about_us": "Về chúng tôi",
+        "find_course": "Tìm khóa học",
+        "our_course": "Khóa học của chúng tôi",
+        "our_program": "Chương trình của chúng tôi",
+        "help_and_support": "Trợ giúp & Hỗ trợ",
+        "popular_topics": "Các chủ đề phổ biến",
+        "terms_and_conditions": "Điều khoản & Điều kiện",
+        "privacy_statement": "Tuyên bố về Quyền riêng tư",
+        "accessibility_statement": "Tuyên bố về khả năng truy cập",
+        "learning_regulations": "Quy định học tập",
+        "taking_exams": "Làm bài kiểm tra",
+        "change_your_password": "Thay đổi mật khẩu",
+        "news_content": "Subscribe to receive updates about online courses and programs in your field of interest.",
+        "new_redirect": "Subscribe Now",
+        "copyright": {
+            "title": "Trung tâm Sáng tạo Khoa học – kỹ thuật (TSK)",
+            "address": "Phòng 31, Lầu 3, Nhà B, 227 Nguyễn Văn Cừ, P.4, Q.5, TP. Hồ Chí Minh",
+            "tel": "ĐT: (84.8) 38 301 743",
+            "email": "Email: tsk@hcmus.edu.vn",
+            "fax": "Fax: (84.8) 38 350 096"
+        }
+    },
+    "aside": {
+        "category": "Danh mục",
+        "showFilter": "Hiện bộ lọc",
+        "resetFilter": "Xóa bộ lọc",
+        "signUpForNews": "Đăng ký để nhận nhữ thông tin mới nhất!"
+    },
+    "blog": {
+        "postListEmpty": "Không tìm thấy bài viết nào!",
+        "relatedPost": "Bài viết liên quan",
+        "postSubjects": "Chủ đề bài viết",
+        "lastedOn": "Bài viết mới nhất về chủ đề: ",
+        "references": "Nguồn tham khảo: "
+    },
+    "whyUs": {
+        "title": "Tại sao nên chọn TSK?",
+        "description": "TSK là một trong những ... được xếp hạng cao nhất trong ... được bình chọn bởi ..."
+    },
+    "learnMore": "Tìm hiểu thêm",
+    "message": {
+        "mail": {
+            "subject": "Giới thiệu về TSK",
+            "contents": "Xem này, trang web này có các khóa học mà bạn cần: "
+        }
+    }
+}
