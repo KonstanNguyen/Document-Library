@@ -49,26 +49,8 @@
 					<div class="row">
 						<div class="top-nav d-flex justify-content-end">
 							<li class="navbar align-items-center">
-								<router-link to="/my-documents/upload"><button class="btn-upload">+ Upload</button></router-link>
-								<button class="btn-login">Đăng nhập</button>
-								<!-- <div class="dropdown">
-									<button
-										class="btn-lang dropdown-toggle"
-										type="button"
-										data-bs-toggle="dropdown"
-										aria-expanded="false">
-										Tiếng việt
-									</button>
-									<ul class="dropdown-menu">
-										<li>
-											<a
-												class="dropdown-item"
-												href="#"
-												>English</a
-											>
-										</li>
-									</ul>
-								</div> -->
+								<router-link to="/my-documents/upload"><button class="btn-upload"><i class="bi bi-upload"></i> Upload</button></router-link>
+								<button class="btn-login"><i class="bi bi-person-circle"></i></button>
 								<button
 									class="menu-icon d-sm-none"
 									data-bs-toggle="offcanvas"
@@ -169,28 +151,19 @@
 				font-size: 16px;
 			}
 		}
-		.btn-login,
-		.btn-lang {
-			border: none;
-			padding: 4px 7px;
-			font-size: 14px;
-			text-transform: uppercase;
-			@media (max-width: 550px) {
-				font-size: 12px;
-				padding: 2px 5px;
-			}
-		}
 		.btn-login {
-			color: #c23410;
+			padding: 5px 22px;
+			color: #1976d2;
 			background: #fff;
-		}
-		.btn-lang {
-			border: 1px solid #fff;
-			color: #fff;
-			background: #c23410;
-		}
-		.dropdown-menu a {
-			color: black;
+			text-transform: uppercase;
+			border: none;
+			font-size: 14px;
+			font-weight: 600;
+			transition: all 0.3s ease 0s;
+			&:hover{
+				background-color: #1976d2;
+				color: #fff;
+			}
 		}
 		.btn-upload{
 			padding: 5px 22px;

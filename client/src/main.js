@@ -27,7 +27,6 @@ if (localStorage.getItem("language") == "vi-vn") {
 } else if (localStorage.getItem("language") == "en-us") {
     app.config.globalProperties.langPack = english;
 }
-app.use(VNetworkGraph)
 
 // Setup global component
 app.component('LoadingTransition', LoadingTransition);

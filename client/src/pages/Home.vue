@@ -1,19 +1,23 @@
 <template>
-	<MainContent
-		:title="title"
-		:cards="cards"
-		ref="pageRef" />
+	<div>
+		<Categories />
+		<MainContent
+			:title="title"
+			:cards="cards"
+			ref="pageRef" />
+	</div>
 </template>
 
 <script lang="ts">
 	import { DataCard } from '@/type/DataCard';
-
 	import { computed, defineAsyncComponent } from 'vue';
+	import Categories from '@/components/Categories/Index.vue'
 	export default {
 		components: {
 			MainContent: defineAsyncComponent(
 				() => import('@/components/BlogEtc/DataCard.vue')
 			),
+			Categories
 		},
 		data() {
 			return {

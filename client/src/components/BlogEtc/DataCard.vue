@@ -47,14 +47,9 @@
 				<div
 					v-for="(card, index) in cards"
 					:key="index"
-					:class="
-						index === 0
-							? 'top-card align-items-center mb-5'
-							: 'ncard col-md-6 col-lg-4 mb-5'
-					">
+					class='ncard col-md-6 col-lg-4 mb-5'>
 					<DataCardItem
-						:cardContent="card"
-						:isTopCard="index === 0" />
+						:cardContent="card"/>
 				</div>
 			</div>
 		</section>

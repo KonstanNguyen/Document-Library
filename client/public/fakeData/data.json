@@ -2,67 +2,66 @@
     "news": [
         {
             "id": 1,
-            "title": "1Mở khoá cơ bản 537: Phương pháp luận sáng tạo và đổi mới (TRIZ mở rộng)",
-            "author": "",
-            "summary": "<b>Khai giảng:</b> thứ hai, 16/09/2024<br><b>Ngày học:</b> tối thứ hai, tối thứ tư và tối thứ sáu",
-            "content": "<h1>Nội dung thẻ</h1>Khai giảng: thứ hai, 16/09/2024<br>Giờ học: 17g45 - 20g45<br>Ngày học: tối thứ hai, tối thứ tư và tối thứ sáu<br>Thời gian học: 9 buổi<br>Học phí hiện nay: 1.200.000 đồng.<br>Chiêu sinh tất cả mọi người có trình độ văn hóa lớp 12 trở lên, không phân biệt tuổi, nghề nghiệp chuyên môn, chức vụ...<br>Điện thoại: (028) 38301743 - 0939795225 (Mr Khôi)<br>Giấy chứng nhận hoàn thành khóa học do Trường đại học khoa học tự nhiên thuộc Đại học quốc gia Tp. Hồ Chí Minh cấp.",
-            "image": "/imgs/students.png",
-            "href": "/documents/mo-khoa-co-ban-537-phuong-phap-luan-sang-tao-va-doi-moi-triz-mo-rong",
-            "slug": "mo-khoa-co-ban-537-phuong-phap-luan-sang-tao-va-doi-moi-triz-mo-rong"
+            "title": "Chương 4: Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
+            "author": "Le Nguyen Truong Giang",
+            "summary": "<b>34 trang</b> - <b>156 views</b>",
+            "content": "",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/chuong4binhquandidong-sanbangsomu-170425121551-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/chuong4binhquandidong-sanbangsomu",
+            "slug": "chuong4binhquandidong-sanbangsomu"
         },
         {
             "id": 2,
-            "title": "2Phương pháp luận sáng tạo và đổi mới là gì?",
-            "author": "",
-            "summary": "Phương pháp luận sáng tạo và đổi mới (viết tắt là PPLSTVĐM, tiếng Anh là Creativity and Innovation Methodologies) là phần ứng dụng của Khoa học về sáng tạo (Sáng tạo học, tên cổ điển – Heuristics, tên hiện đại – Creatology), gồm hệ thống các phương pháp và các kỹ năng cụ thể giúp nâng cao năng suất và hiệu quả, về lâu dài tiến tới điều khiển tư duy sáng tạo (quá trình suy nghĩ giải quyết vấn đề và ra quyết định) của người sử dụng.",
-            "content": "<p>Phương pháp luận sáng tạo và đổi mới (viết tắt là PPLSTVĐM, tiếng Anh là Creativity and Innovation Methodologies) là phần ứng dụng của Khoa học về sáng tạo (Sáng tạo học, tên cổ điển – Heuristics, tên hiện đại – Creatology), gồm hệ thống các phương pháp và các kỹ năng cụ thể giúp nâng cao năng suất và hiệu quả, về lâu dài tiến tới điều khiển tư duy sáng tạo (quá trình suy nghĩ giải quyết vấn đề và ra quyết định) của người sử dụng.</p><p>Suốt cuộc đời, mỗi người chúng ta dùng suy nghĩ rất nhiều, nếu không nói là hàng ngày. Từ việc trả lời những câu hỏi bình thường như <span style=\"font-style: italic;\">\"Hôm nay ăn gì? mặc gì? làm gì? mua gì? xem gì? đi đâu?...\"</span> đến làm các bài tập thầy, cô cho khi đi học; chọn ngành nghề đào tạo; lo sức khỏe, việc làm, thu nhập, hôn nhân, nhà ở; giải quyết các vấn đề nảy sinh trong công việc, trong quan hệ xã hội, gia đình, nuôi dạy con cái..., tất tần tật đều đòi hỏi phải suy nghĩ và chắc rằng ai cũng muốn mình suy nghĩ tốt, ra những quyết định đúng để <span style=\"font-style: italic;\">\"đời là bể khổ\"</span> trở thành <span style=\"font-style: italic;\">\"bể sướng\"</span>.</p><p>Chúng ta tuy được đào tạo và làm những nghề khác nhau nhưng có lẽ có một nghề chung, giữ nguyên suốt cuộc đời, cần cho tất cả mọi người. Đó là \"nghề\" suy nghĩ và hành động giải quyết các vấn đề gặp phải trong suốt cuộc đời nhằm thỏa mãn các nhu cầu chính đáng của cá nhân mình, đồng thời thỏa mãn các nhu cầu để xã hội tồn tại và phát triển. Nhìn dưới góc độ này, PPLSTVĐM giúp trang bị loại nghề chung nói trên, bổ sung cho giáo dục, đào tạo hiện nay, chủ yếu, chỉ đào tạo các nhà chuyên môn. Nhà chuyên môn có thể giải quyết tốt các vấn đề chuyên môn nhưng nhiều khi không giải quyết tốt các vấn đề ngoài chuyên môn, do vậy, không thực sự hạnh phúc như ý.</p><p>Các nghiên cứu cho thấy, phần lớn mọi người thường suy nghĩ một cách tự nhiên như đi lại, ăn uống, hít thở mà ít khi suy nghĩ về chính suy nghĩ của mình, xem nó hoạt động ra sao để cải tiến, làm suy nghĩ của mình trở nên tốt hơn, như người ta thường chú ý cải tiến các dụng cụ, máy móc dùng trong sinh hoạt và công việc. Cách suy nghĩ tự nhiên nói trên có năng suất, hiệu quả rất thấp và nhiều khi trả giá đắt cho các quyết định sai. Nói một cách nôm na, cách suy nghĩ tự nhiên ứng với việc lao động bằng xẻng thì PPLSTVĐM là máy xúc với năng suất và hiệu quả cao hơn nhiều. Nếu xem bộ não của mỗi người là máy tính tinh xảo – đỉnh cao tiến hóa và phát triển của tự nhiên thì phần mềm (cách suy nghĩ) tự nhiên đi kèm với nó chỉ khai thác một phần rất nhỏ tiềm năng của bộ não. PPLSTVĐM là phần mềm tiên tiến giúp máy tính – bộ não hoạt động tốt hơn nhiều. Nếu như cần <span style=\"font-style: italic;\">\"học ăn, học nói, học gói, học mở\"</span> thì <span style=\"font-style: italic;\">\"học suy nghĩ\"</span> cũng cần thiết cho tất cả mọi người.</p><p>PPLSTVĐM dạy và học được như các môn học truyền thống: Toán, lý, hóa, sinh, tin học, quản trị kinh doanh,... Trên thế giới, nhiều trường và công ty đã bắt đầu từ lâu và đang làm điều đó một cách bình thường. Dưới đây là vài thông tin về PPLSTVĐM trên thế giới và ở nước ta.</p><p>Từ những năm 1950, ở Mỹ và Liên Xô đã có những lớp học dạy thử nghiệm PPLSTVĐM. Dưới ảnh hưởng của A.F. Osborn, phó chủ tịch công ty quảng cáo BBD &amp; O và là tác giả của phương pháp não công (Brainstorming) nổi tiếng, Trung tâm nghiên cứu sáng tạo (Center for Studies in Creativity) được thành lập năm 1967 tại Đại học Buffalo, bang New York. Năm 1974, Trung tâm nói trên bắt đầu đào tạo cử nhân khoa học và năm 1975 – thạc sỹ khoa học về sáng tạo và đổi mới (BS, MS in Creativity and Innovation).</p><p>Ở Liên Xô, G.S. Altshuller, nhà sáng chế, nhà văn viết truyện khoa học viễn tưởng và là tác giả của Lý thuyết giải các bài toán sáng chế (viết tắt theo tiếng Nga và chuyển sang ký tự Latinh – TRIZ) cộng tác với \"Hiệp hội toàn liên bang các nhà sáng chế và hợp lý hóa\" (VOIR) thành lập Phòng thí nghiệm các phương pháp sáng chế năm 1968 và Học viện công cộng về sáng tạo sáng chế (Public Institute of Inventive Creativity) năm 1971. Người viết, lúc đó đang học ngành vật lý bán dẫn thực nghiệm tại Liên Xô, có may mắn học thêm được khóa đầu tiên của Học viện sáng tạo nói trên, dưới sự hướng dẫn trực tiếp của thầy G.S. Altshuller.</p><p>Chịu ấn tượng rất sâu sắc do những ích lợi PPLSTVĐM đem lại cho cá nhân mình, bản thân lại mong muốn chia sẻ những gì học được với mọi người, cùng với sự khuyến khích của thầy G.S. Altshuller, năm 1977 người viết đã tổ chức dạy dưới dạng ngoại khóa cho sinh viên các khoa tự nhiên thuộc Đại học tổng hợp TpHCM (nay là Trường đại học khoa học tự nhiên, Đại học quốc gia TpHCM). Những khóa PPLSTVĐM tiếp theo là kết quả của sự cộng tác giữa người viết và Câu lạc bộ thanh niên (nay là Nhà văn hóa thanh niên TpHCM), Ủy ban khoa học và kỹ thuật TpHCM (nay là Sở khoa học và công nghệ TpHCM). Năm 1991, được sự chấp thuận của lãnh đạo Đại học tổng hợp TpHCM, Trung tâm Sáng tạo Khoa học – kỹ thuật (TSK) hoạt động theo nguyên tắc tự trang trải ra đời và trở thành cơ sở chính thức đầu tiên ở nước ta giảng dạy, đào tạo và nghiên cứu PPLSTVĐM.</p><p>Đến nay đã có vài chục ngàn người với nghề nghiệp khác nhau thuộc mọi thành phần kinh tế, xã hội, từ Hà Nội đến Cà Mau tham dự các khóa học từng phần hoặc đầy đủ chương trình 120 tiết của TSK dành đào tạo những người sử dụng PPLSTVĐM.</p><p>TSK cũng tích cực tham gia các hoạt động quốc tế như công bố các công trình nghiên cứu khoa học dưới dạng các báo cáo, báo cáo chính (keynotes) tại các hội nghị, các bài báo đăng trong các tạp chí chuyên ngành và giảng dạy PPLSTVĐM cho các cán bộ quản lý, giảng dạy, nghiên cứu ở nước ngoài theo lời mời.</p><p>Năm 2000, tại Mỹ, nhà xuất bản Kendall/Hunt Publishing Company xuất bản quyển sách <span style=\"font-style: italic;\">\"Facilitative Leadership: Making a Difference with Creative Problem Solving\"</span> (Tạm dịch là <span style=\"font-style: italic;\">\"Lãnh đạo hỗ trợ: Tạo sự khác biệt nhờ giải quyết vấn đề một cách sáng tạo\"</span>) do tiến sỹ Scott G. Isaksen làm chủ biên. Ở các trang 219, 220, dưới tiêu đề <span style=\"font-style: italic;\">Các tổ chức sáng tạo (Creativity Organizations)</span> có đăng danh sách đại biểu các tổ chức hoạt động trong lĩnh vực sáng tạo và đổi mới trên thế giới. Trong 17 tổ chức được nêu tên, TSK là tổ chức duy nhất ở châu Á.</p><p>Nhiều nhà nghiên cứu cho rằng, xã hội loài người trong quá trình phát triển trải qua bốn thời đại hay nền văn minh (làn sóng phát triển): Nông nghiệp, công nghiệp, thông tin và tri thức. Nền văn minh nông nghiệp chấm dứt thời kỳ săn bắn, hái lượm, du cư bằng việc định cư, trồng trọt và chăn nuôi, sử dụng các công cụ lao động còn thủ công. Nền văn minh công nghiệp cho thấy, mọi người lao động bằng các máy móc hoạt động bằng năng lượng ngoài cơ bắp, giúp tăng sức mạnh và nối dài đôi tay của con người. Ở thời đại thông tin, máy tính, các mạng lưới thông tin giúp tăng sức mạnh, nối dài các bộ phận thu, phát thông tin trên cơ thể người như các giác quan, tiếng nói, chữ viết và một số hoạt động lôgích của bộ não. Nhờ công nghệ thông tin, thông tin trở nên truyền, biến đổi nhanh, nhiều, lưu trữ gọn, truy cập dễ dàng. Tuy nhiên, trừ loại thông tin có ích lợi thấy ngay đối với người nhận tin, các loại thông tin khác vẫn phải cần bộ não của người nhận tin xử lý, biến đổi để trở thành thông tin có ý nghĩa và ích lợi (tri thức) cho người có thông tin. Nếu người có thông tin không làm được điều này trong thời đại bùng nổ thông tin thì có thể trở thành bội thực thông tin nhưng đói tri thức, thậm chí ngộ độc vì nhiễu thông tin và chết đuối trong đại dương thông tin mà không khai thác được gì từ đại dương giàu có đó. Thời đại tri thức mà thực chất là thời đại sáng tạo và đổi mới, ở đó đông đảo quần chúng sử dụng PPLSTVĐM được dạy và học đại trà để biến thông tin thành tri thức với các ích lợi toàn diện, không chỉ riêng về mặt kinh tế. Nói cách khác, PPLSTVĐM là hệ thống các công cụ dùng để biến đổi thông tin thành tri thức, tri thức đã biết thành tri thức mới.</p><p>Rất tiếc, ở nước ta hiện nay chưa chính thức đào tạo các cán bộ giảng dạy, nghiên cứu Sáng tạo học và PPLSTVĐM với các bằng cấp tương ứng: Cử nhân, thạc sỹ và tiến sỹ như một số nước tiên tiến trên thế giới. Người viết tin rằng sớm hay muộn, những người có trách nhiệm quyết định sẽ phải để tâm đến vấn đề này và \"sớm\" chắc chắn tốt hơn \"muộn\". Hy vọng rằng, PPLSTVĐM nói riêng, Sáng tạo học nói chung sẽ có chỗ đứng xứng đáng, trước hết, trong chương trình giáo dục và đào tạo của nước ta trong tương lai không xa.</p>",
-            "image": "/imgs/students.png",
-            "href": "/documents/phuong-phap-luan-sang-tao-va-doi-moi-la-gi",
-            "slug": "phuong-phap-luan-sang-tao-va-doi-moi-la-gi"
-        },
-        {
-            "id": 2,
-            "title": "222",
-            "author": "s",
-            "summary": "Sumary",
-            "content": "Content",
-            "image": "/imgs/students.png",
-            "href": "/documents/2",
-            "slug": "2"
+            "title": "Đề tài: Lập dự án quán cafe sinh viên, 9 ĐIỂM!",
+            "author": "Viết thuê",
+            "summary": "<b>53 trang</b> - <b>120 views</b>",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tieuluanquantrihoc20054-190922033524-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/tieuluanquantrihoc20054",
+            "slug": "tieuluanquantrihoc20054"
         },
         {
             "id": 3,
-            "title": "333",
-            "author": "s",
-            "summary": "Sumary",
+            "title": "[NCKH] thiết kế nghiên cứu khoa học",
+            "author": "CLBSVHTTCNCKH",
+            "summary": "<b>33 trang</b> - <b>44 views</b>",
             "content": "Content",
-            "image": "/imgs/students.png",
-            "href": "/documents/3",
-            "slug": "3"
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/nckhthitknghincukhoahc-151227113101-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/nckhthitknghincukhoahc",
+            "slug": "nckhthitknghincukhoahc"
         },
         {
             "id": 4,
-            "title": "444",
-            "author": "s",
-            "summary": "Sumary",
+            "title": "KINH TẾ HỌC VĨ MÔ - Chương 5 CHÍNH SÁCH TÀI CHÍNH VÀ NGOẠI THƯƠNG",
+            "author": "Digiword Ha Noi",
+            "summary": "<b>44 trang</b> - <b>116 views</b>",
             "content": "Content",
-            "image": "/imgs/students.png",
-            "href": "/documents/4",
-            "slug": "4"
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/5-chinhsachtaichinhngoaithuong-091225213241-phpapp02-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/chinhsachtaichinhngoaithuong",
+            "slug": "chinhsachtaichinhngoaithuong"
         },
         {
             "id": 5,
-            "title": "555",
-            "author": "s",
-            "summary": "Sumary",
+            "title": "2024 Trend Updates: What Really Works In SEO & Content Marketing",
+            "author": "Search Engine Journal",
+            "summary": "<b>21 trang</b> - <b>32 views</b>",
             "content": "Content",
-            "image": "/imgs/students.png",
-            "href": "/documents/5",
-            "slug": "5"
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/conductor-webinar-6182024-presentation-240618152603-d6c54198-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/conductor-webinar-presentation",
+            "slug": "conductor-webinar-presentation"
         },
         {
             "id": 6,
-            "title": "666",
+            "title": "Tổng hợp các công thức kinh tế vi mô.",
+            "author": "Hoa Trò",
+            "summary": "<b>2 trang</b> - <b>53 views</b>",
+            "content": "Content",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tnghpcccngthckinhtvim-120912111052-phpapp01-thumbnail.jpg?width=560&fit=bounds",
+            "href": "/documents/tnghpcccngthckinhtvim",
+            "slug": "tnghpcccngthckinhtvim"
+        },
+        {
+            "id": 7,
+            "title": "Test",
             "author": "s",
             "summary": "Sumary",
             "content": "Content",
@@ -71,7 +70,7 @@
             "slug": "6"
         },
         {
-            "id": 7,
+            "id": 8,
             "title": "777",
             "author": "s",
             "summary": "Sumary",
@@ -81,7 +80,7 @@
             "slug": "7"
         },
         {
-            "id": 8,
+            "id": 9,
             "title": "888",
             "author": "s",
             "summary": "Sumary",
@@ -91,7 +90,7 @@
             "slug": "8"
         },
         {
-            "id": 9,
+            "id": 10,
             "title": "999",
             "author": "s",
             "summary": "Sumary",
@@ -101,7 +100,7 @@
             "slug": "9"
         },
         {
-            "id": 10,
+            "id": 11,
             "title": "1010",
             "101010hor": "s",
             "summary": "Sumary",

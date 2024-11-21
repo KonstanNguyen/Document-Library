@@ -22,7 +22,7 @@
 						data-aos-delay="200"
 						:isCol="true"
 						:refCard="poscast">
-						<h4 class="mb-2 refR-title fw-bold">Tài liệu cùng người dùng</h4>
+						<h4 class="mb-2 refR-title fw-bold">Tài liệu đề xuất</h4>
 					</DataBlogRefPost>
 				</div>
 				<div class="col-12 order-lg-3">

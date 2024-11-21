@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vueuse/core": "^11.3.0",
+    "pdfjs-dist": "^4.8.69"
+  }
+}
