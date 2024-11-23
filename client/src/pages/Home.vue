@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Categories />
+		<Categories/>
 		<MainContent
 			:title="title"
 			:cards="cards"
@@ -37,6 +37,7 @@
 						summary: 'Sumary',
 						content: 'Content',
 						image: '/imgs/students.png',
+						category: 'Giáo dục',
 						href: '/documents/1',
 						slug: 'link',
 					},

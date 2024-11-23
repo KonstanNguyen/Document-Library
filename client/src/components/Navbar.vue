@@ -50,7 +50,7 @@
 						<div class="top-nav d-flex justify-content-end">
 							<li class="navbar align-items-center">
 								<router-link to="/my-documents/upload"><button class="btn-upload"><i class="bi bi-upload"></i> Upload</button></router-link>
-								<button class="btn-login"><i class="bi bi-person-circle"></i></button>
+								<router-link to="/login"><button class="btn-login">Đăng nhập</button></router-link>
 								<button
 									class="menu-icon d-sm-none"
 									data-bs-toggle="offcanvas"

@@ -7,6 +7,7 @@
             "summary": "<b>34 trang</b> - <b>156 views</b>",
             "content": "",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/chuong4binhquandidong-sanbangsomu-170425121551-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
             "href": "/documents/chuong4binhquandidong-sanbangsomu",
             "slug": "chuong4binhquandidong-sanbangsomu"
         },
@@ -16,6 +17,7 @@
             "author": "Viết thuê",
             "summary": "<b>53 trang</b> - <b>120 views</b>",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tieuluanquantrihoc20054-190922033524-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
             "href": "/documents/tieuluanquantrihoc20054",
             "slug": "tieuluanquantrihoc20054"
         },
@@ -26,6 +28,7 @@
             "summary": "<b>33 trang</b> - <b>44 views</b>",
             "content": "Content",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/nckhthitknghincukhoahc-151227113101-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "khoa-hoc",
             "href": "/documents/nckhthitknghincukhoahc",
             "slug": "nckhthitknghincukhoahc"
         },
@@ -36,6 +39,7 @@
             "summary": "<b>44 trang</b> - <b>116 views</b>",
             "content": "Content",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/5-chinhsachtaichinhngoaithuong-091225213241-phpapp02-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
             "href": "/documents/chinhsachtaichinhngoaithuong",
             "slug": "chinhsachtaichinhngoaithuong"
         },
@@ -46,6 +50,7 @@
             "summary": "<b>21 trang</b> - <b>32 views</b>",
             "content": "Content",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/conductor-webinar-6182024-presentation-240618152603-d6c54198-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "Marketing",
             "href": "/documents/conductor-webinar-presentation",
             "slug": "conductor-webinar-presentation"
         },
@@ -56,6 +61,7 @@
             "summary": "<b>2 trang</b> - <b>53 views</b>",
             "content": "Content",
             "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tnghpcccngthckinhtvim-120912111052-phpapp01-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
             "href": "/documents/tnghpcccngthckinhtvim",
             "slug": "tnghpcccngthckinhtvim"
         },
@@ -66,6 +72,7 @@
             "summary": "Sumary",
             "content": "Content",
             "image": "/imgs/students.png",
+            "categorySlug": "Marketing",
             "href": "/documents/6",
             "slug": "6"
         },

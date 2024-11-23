@@ -4,7 +4,6 @@ import Router from '@/routes';
 import vietnamese from "@/assets/locales/vi-vn.json"
 import english from "@/assets/locales/en-us.json"
 import '@/assets/scss/Root.scss';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 import { LoadingTransition } from '@/components/globalComponents.js'
@@ -31,4 +30,3 @@ if (localStorage.getItem("language") == "vi-vn") {
 // Setup global component
 app.component('LoadingTransition', LoadingTransition);
 app.mount('#app');
-AOS.init();

@@ -67,6 +67,7 @@
 		summary: 'Tóm tắt của thẻ',
 		content: '<h1>Nội dung thẻ</h1>',
 		image: '/imgs/students.png',
+		category: 'Thể loại',
 		href: '/link',
 		slug: 'link',
 	};

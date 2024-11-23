@@ -40,6 +40,27 @@ const router = createRouter({
                 },
             ]
         },
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('@/components/Auth/Login.vue')
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import('@/components/Auth/Register.vue')
+        },
+        {
+            path: '/category',
+            name: 'Category',
+            children: [
+                {
+                    path: ":categorySlug",
+                    name: 'Documents by category',
+                    component: () => import('@/pages/Category.vue')
+                },
+            ]
+        },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {

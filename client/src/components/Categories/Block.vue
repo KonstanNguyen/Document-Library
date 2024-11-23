@@ -1,13 +1,16 @@
 <template>
-	<div class="container-category" :class="{ active: isActive }"  @click="handleClick">
-		<IconLoader class="right" :iconUrl="iconName" width="35" height="35"/>
+	<router-link :to="`/category/${categorySlug}`">
+		<div class="container-category" :class="{ active: isActive }">
+			<IconLoader class="right" :iconUrl="iconName" width="35" height="35"/>
 
-		<div class="name">{{ name }}</div>
-	</div>
+			<div class="name">{{ name }}</div>
+		</div>
+	</router-link>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, computed } from "vue";
+import { useRoute } from 'vue-router';
 import IconLoader from '@/components/IconLoader.vue';
 const props = defineProps({
 	iconName: {
@@ -18,17 +21,17 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	isActive: {
-		type: Boolean,
-		default: false,
+	categorySlug: {
+		type: String,
+		default: true,
 	},
 });
-const emit = defineEmits(["click"]);
 
-const handleClick = () => {
-  emit("click", props.name);
-};
-
+const route = useRoute();
+const isActive = computed(() => route.params.categorySlug === props.categorySlug);
+console.log('Route Slug:', route.params.categorySlug); // Giá trị lấy từ URL
+console.log('Block Slug:', props.categorySlug); 
+console.log('Is Active:', route.params.categorySlug === props.categorySlug);
 </script>
 
 <style scoped lang="scss">
@@ -48,8 +51,10 @@ const handleClick = () => {
 	cursor: pointer;
 
 	&.active {
-		background: #FBFAED;
-
+		background: #1976d2;
+		.name{
+			color: #fff;
+		}
 	}
 
 	.logo {
@@ -67,6 +72,7 @@ const handleClick = () => {
 		font-weight: 600;
 		line-height: 19.2px;
 		color: #5c5612;
+
 		@media (max-width: 550px) {
 			font-size: 16px;
 		}
