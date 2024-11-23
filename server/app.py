@@ -30,17 +30,19 @@ def encode_attributes(df):
 
     # Encoding and scaling
     df['Category'] = le.fit_transform(df['Category'])
-    df['Gender'] = df['Gender'].map({'Male': 0, 'Female': 1, 'Unknown': -1})
+    df['Gender'] = le.fit_transform(df['Gender']) #df['Gender'].map({'True': 1, 'False': 0})
     df['Age'] = df['Age'].apply(lambda age: 0 if 12 <= age <= 25 else (1 if age <= 40 else 2))
     df['Rating'] = le.fit_transform(df['Rating'])
     
+    df = df.drop_duplicates()
     return df
 
 
 def find_K(df):
     distortions = []
-    K = range(1, 10)
-
+    max_clusters = min(10, len(df))
+    K = range(1, max_clusters + 1)
+       
     for k in K:
         kmeanModel = KMeans(n_clusters=k,
                             init='k-means++',
@@ -63,19 +65,21 @@ def find_K(df):
             return i + 1
 
     # Nếu không có sự giảm nhanh, trả về số cụm lớn nhất
-    return 9
+    return max_clusters
 
 
-def train_kmeans(df, n_clusters=3):
+def train_kmeans(df):
     df_encoded = encode_attributes(df)
     
-    # Handle any remaining NaN values after encoding
-    df_encoded.fillna(0, inplace=True)  # Replace any leftover NaNs with 0 or an appropriate default value
-
+    # # Handle any remaining NaN values after encoding
+    # df_encoded.fillna(0, inplace=True)  # Replace any leftover NaNs with 0 or an appropriate default value
 
     X = df_encoded[['Category', 'Gender', 'Age', 'Rating']]
 
-    kmeans = KMeans(n_clusters=find_K(X),
+    optimal_k = find_K(X)
+    optimal_k = min(optimal_k, len(X))
+
+    kmeans = KMeans(n_clusters=optimal_k,
                     init='k-means++',
                     max_iter=300,
                     n_init=10,
