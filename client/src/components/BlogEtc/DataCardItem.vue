@@ -206,5 +206,8 @@
 				return window.location.origin;
 			},
 		},
+		mounted() {
+  console.log("Card Content in DataCardItem:", this.cardContent);
+}
 	};
 </script>

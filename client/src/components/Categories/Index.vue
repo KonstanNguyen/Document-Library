@@ -1,6 +1,7 @@
 <template>
 	<div class="container d-flex justify-content-between pt-5">
         <Block v-for="item in ListCategories"
+        :key="item.categorySlug"
         :iconName="item.iconName"
         :name="item.name"
         :categorySlug="item.categorySlug"/>

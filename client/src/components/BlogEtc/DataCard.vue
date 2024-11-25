@@ -2,7 +2,7 @@
 	.container {
 		.page-title {
 			padding: 50px 0;
-			width: 90%;
+			width: 100%;
 			div {
 				justify-content: center;
 				h1 {
@@ -62,16 +62,6 @@
 	import Pagination from './Pagination.vue';
 	import { DataCard } from '@/type/DataCard';
 
-	const placeHolderCard = {
-		title: 'Tiêu đề thẻ',
-		summary: 'Tóm tắt của thẻ',
-		content: '<h1>Nội dung thẻ</h1>',
-		image: '/imgs/students.png',
-		category: 'Thể loại',
-		href: '/link',
-		slug: 'link',
-	};
-
 	export default {
 		name: 'DataCard',
 		components: { DataCardItem, Pagination },
@@ -79,9 +69,14 @@
 			title: { type: String, default: 'Danh sách thẻ' },
 			cards: {
 				type: Array<DataCard>,
-				default: [placeHolderCard, placeHolderCard],
+				default: [],
 			}, // This is from server, 10 each page
 		},
 		methods: {},
+		watch: {
+			cards(newCards) {
+				console.log('Cards:', newCards);  // Kiểm tra dữ liệu cards nhận được
+			}
+		}
 	};
 </script>

@@ -22,16 +22,13 @@ const props = defineProps({
 		required: true,
 	},
 	categorySlug: {
-		type: String,
-		default: true,
-	},
+        type: String,
+        required: true,
+    },
 });
 
 const route = useRoute();
 const isActive = computed(() => route.params.categorySlug === props.categorySlug);
-console.log('Route Slug:', route.params.categorySlug); // Giá trị lấy từ URL
-console.log('Block Slug:', props.categorySlug); 
-console.log('Is Active:', route.params.categorySlug === props.categorySlug);
 </script>
 
 <style scoped lang="scss">

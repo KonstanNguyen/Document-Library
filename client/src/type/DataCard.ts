@@ -4,7 +4,7 @@ export type DataCard = {
 	summary: string;
 	content: string;
 	image: string;
-	category: string;
+	categorySlug: string;
 	href: string;
 	slug: string;
 };
