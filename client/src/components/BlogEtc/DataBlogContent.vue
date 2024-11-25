@@ -30,24 +30,10 @@
 			}
 		}
 	}
-	.btn-download{
-		padding: 5px 22px;
-		height: 50px;
-		background-color: #1976d2;
-		border: none;
-		color: #fff;
-		text-transform: uppercase;
-		font-size: 14px;
-		font-weight: 600;
-		transition: all 0.3s ease 0s;
-		&:hover{
-			background-color: rgb(18, 33, 121);
-		}
-	}
+	
 	.page-view{
 		position: relative;
 		padding-top: 1.25rem;
-		left: -23%;
 		color: gray;
 	}
 </style>
@@ -55,7 +41,7 @@
 <template>
 	<div class="post-content-wrap mb-5">
 		<h2 class="post-title">{{ post.title }}</h2>
-		<div class="d-flex justify-content-between">
+		<div class="d-flex gap-5">
 			<div class="widget-social d-flex border-bottom pt-3 pb-3 mb-3">
 				<a
 					target="_blank"
@@ -86,13 +72,12 @@
 				</a>
 			</div>
 			<span class="page-view" v-html="post.summary"></span>
-			<button class="btn-download"><i class="bi bi-download"></i> Tải xuống</button>
 		</div>
-		<div class="post-author">{{ post.author }}</div>
+		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ post.author }}</div>
 		<div
 			class="post-content"
 			v-html="post.content"></div>
-		<PdfView pdfUrl="/fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf" />
+		 <PdfView class="mt-3"/>
 	</div>
 </template>
 
