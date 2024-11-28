@@ -5,6 +5,9 @@ export type DataCard = {
 	content: string;
 	image: string;
 	categorySlug: string;
+	status: number;
+	create_at: Date;
+	update_at: Date;
 	href: string;
 	slug: string;
 };

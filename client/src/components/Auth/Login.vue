@@ -64,7 +64,7 @@
 	</div>
 </template>
 
-<!-- <script>
+<script>
 	import { useCookies } from '@vueuse/integrations/useCookies';
 	import { jwtDecode } from 'jwt-decode';
 	export default {
@@ -106,13 +106,13 @@
 							console.log('Đăng nhập thành công!');
 						} else throw new Error(data.message);
 						this.cookies.set('accessToken', data.accessToken, {
-							path: '/admin',
+							path: '/',
 							expires: new Date(
 								new Date().getTime() + 60 * 60 * 1000
 							), // 1 hour
 						});
 						this.cookies.set('refreshToken', data.refreshToken, {
-							path: '/admin',
+							path: '/',
 							expires: new Date(
 								new Date().getTime() + 60 * 60 * 1000 * 24 * 7
 							),
@@ -154,4 +154,4 @@
 			},
 		},
 	};
-</script> -->
+</script>
