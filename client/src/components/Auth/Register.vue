@@ -15,7 +15,7 @@
 <template>
 	<div class="form container mt-3">
 		<h2>Đăng ký</h2>
-		<form @submit="register">
+		<form @submit.prevent="register">
 			<div class="form-group mb-3">
 				<label for="username">Tên tài khoản</label>
 				<input
@@ -53,23 +53,24 @@
 					class="form-control"
 					id="password"
                     placeholder="Xác nhận mật khẩu"
-					v-model="password"
+					v-model="confirmPassword"
 					required />
 			</div>  
 			<div class="form-group mb-3">
-				<label for="age">Năm sinh</label>
-				<select class="form-select" 
-					id="year-select" v-model="selectedYear" @change="onYearChange">
-					<option selected disabled>Chọn năm sinh</option>
-					<option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-				</select>
+				<label for="age">Ngày sinh</label>
+				<VueDatePicker v-model="dateOfBirth" :calendar="calendarFn" />
 			</div>
 			<div class="form-group mb-3">
-				<label for="dateOfBirth">Giới tính</label>
-				<select class="form-select" aria-label="Large select example">
+				<label for="gender">Giới tính</label>
+				<select
+					class="form-select"
+					id="gender"
+					v-model="gender"
+					required
+				>
 					<option selected disabled>Chọn giới tính</option>
-					<option value="0">Nam</option>
-					<option value="1">Nữ</option>
+					<option value="false">Nam</option>
+					<option value="true">Nữ</option>
 				</select>
 			</div>
 			<div
@@ -78,14 +79,13 @@
 				{{ message }}
 			</div>
             
-            <router-link to="/register">
-                <button
-                    type="submit"
-                    class="btn btn-primary mb-2">
-                    Đăng Ký
-                </button>
-            </router-link>
-			<router-link to="login">
+            <button
+				type="submit"
+				class="btn btn-primary mb-2"
+			>
+				Đăng Ký
+			</button>
+			<router-link to="/login">
                 <button
                     type="submit"
                     class="btn btn-primary">
@@ -97,45 +97,49 @@
 </template>
 
 <script>
-import { ref } from "vue";
-
+import apiClient from "@/api/service";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 export default {
-  name: "YearSelect",
-  props: {
-    startYear: {
-      type: Number,
-      default: 1900, // Default start year
-    },
-    endYear: {
-      type: Number,
-      default: new Date().getFullYear(), // Default to current year
-    },
-    defaultYear: {
-      type: Number,
-      default: null, // Optionally pre-select a year
-    },
-  },
-  setup(props, { emit }) {
-    // Generate years in descending order
-    const years = ref(
-      Array.from({ length: props.endYear - props.startYear + 1 }, (_, i) =>
-        props.endYear - i
-      )
-    );
-
-    // Selected year state
-    const selectedYear = ref(props.defaultYear);
-
-    // Emit the selected year on change
-    const onYearChange = () => {
-      emit("year-selected", selectedYear.value);
-    };
-
+	components: {
+    	VueDatePicker,
+  	},
+  data() {
     return {
-      years,
-      selectedYear,
-      onYearChange,
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      dateOfBirth: null,
+      gender: null,
+      message: "",
     };
+  },
+  methods: {
+    async register(event) {
+      event.preventDefault();
+
+      if (this.password !== this.confirmPassword) {
+        this.message = "Mật khẩu và xác nhận mật khẩu không khớp!";
+        return;
+      }
+
+      const requestBody = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        birthYear: this.dateOfBirth,
+        gender: this.gender === "true" ? true : false,
+      };
+
+      try {
+        const response = await apiClient.post("/api/accounts/register", requestBody);
+        this.message = response.data.message;
+      } catch (error) {
+        this.message =
+          error.response?.data?.message || "Đã xảy ra lỗi khi đăng ký!";
+      }
+    },
   },
 };
 </script>

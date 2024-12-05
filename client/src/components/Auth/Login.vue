@@ -15,7 +15,7 @@
 <template>
 	<div class="form container mt-3">
 		<h2>Đăng nhập</h2>
-		<form @submit="login">
+		<form @submit.prevent="login">
 			<div class="form-group mb-4">
 				<label for="username">Tên tài khoản</label>
 				<input
@@ -65,93 +65,34 @@
 </template>
 
 <script>
-	import { useCookies } from '@vueuse/integrations/useCookies';
-	import { jwtDecode } from 'jwt-decode';
-	export default {
-		data() {
-			return {
-				username: '',
-				password: '',
-				inLoad: false,
-				message: '',
-				isVerified: false,
-			};
-		},
-		setup() {
-			const cookies = useCookies();
-			return { cookies };
-		},
-		methods: {
-			async login(event) {
-				event.preventDefault();
-				this.inLoad = true;
+import apiClient from "@/api/service";
 
-				const loginData = {
-					username: this.username,
-					password: this.password,
-				};
-
-				await fetch(`${this.serverUrl}/api/auth/login`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(loginData),
-					credentials: 'include',
-				})
-					.then((response) => response.json())
-					.then((data) => {
-						this.inLoad = false;
-						if (data.status === 200) {
-							console.log('Đăng nhập thành công!');
-						} else throw new Error(data.message);
-						this.cookies.set('accessToken', data.accessToken, {
-							path: '/',
-							expires: new Date(
-								new Date().getTime() + 60 * 60 * 1000
-							), // 1 hour
-						});
-						this.cookies.set('refreshToken', data.refreshToken, {
-							path: '/',
-							expires: new Date(
-								new Date().getTime() + 60 * 60 * 1000 * 24 * 7
-							),
-						});
-
-						const accessToken = this.cookies.get('accessToken');
-
-						const decodedToken = jwtDecode(accessToken);
-						const user = {
-							uid: decodedToken.uid,
-							username: decodedToken.username,
-							permissions: decodedToken.permissions,
-						};
-						this.cookies.set('user', JSON.stringify(user), {
-							path: '/admin',
-							expires: new Date(
-								new Date().getTime() + 60 * 60 * 1000 * 24 * 7
-							),
-						});
-
-						const refreshToken = this.cookies.get('refreshToken');
-
-						if (!accessToken || !refreshToken) {
-							throw new Error(
-								'Lỗi đăng nhập, không nhận được token!'
-							);
-						}
-						this.isVerified = true;
-						this.$emit('login-success', username);
-						console.log(
-							'Đăng nhập thành công và token đã được lưu trong cookies'
-						);
-					})
-					.catch((error) => {
-						// Handle any errors
-						this.message = error;
-						console.error(error);
-					});
-			},
-		},
-	};
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+      message: null,
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await apiClient.post('/api/accounts/login', {
+          username: this.username,
+          password: this.password,
+        });
+        this.message = response.data.message;
+        localStorage.setItem('token', response.data.data.token); 
+        this.$router.push('/'); 
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.message = error.response.data.message || 'Đăng nhập thất bại';
+        } else {
+          this.message = 'Có lỗi xảy ra, vui lòng thử lại';
+        }
+      }
+    },
+  },
+};
 </script>
