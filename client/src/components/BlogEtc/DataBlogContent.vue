@@ -71,9 +71,10 @@
 					<i class="bi bi-envelope"></i>
 				</a>
 			</div>
-			<span class="page-view" v-html="post.summary"></span>
+			<span class="page-view" v-html="post.views"></span>
+			<span class="page-rating" v-html="post.ratings"></span>
 		</div>
-		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ post.author }}</div>
+		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{post.author?.name}}</div>
 		<div
 			class="post-content"
 			v-html="post.content"></div>
@@ -93,6 +94,11 @@
 		},
 		props: {
 			post: { type: Object as PropType<DataCard>, required: true },
+		},
+		data() {
+			return {
+
+			}
 		},
 		methods: {
 			getCurrentLink() {

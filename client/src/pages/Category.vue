@@ -29,6 +29,7 @@ import { DataCard } from "@/type/DataCard";
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import Categories from "@/components/Categories/Index.vue";
+import apiClient from "@/api/service";
 
 export default {
     components: {
@@ -39,7 +40,7 @@ export default {
     },
     setup() {
         const route = useRoute();
-        const categorySlug = ref(route.params.categorySlug || null);
+        const categoryId = ref(route.params.id);
         const cards = ref<DataCard[]>([]);
         const page = ref({ current: 1, max: 1 });
         const isLoading = ref(false);
@@ -48,19 +49,21 @@ export default {
         const fetchData = async () => {
             isLoading.value = true;
             try {
-                const response = await fetch("/fakeData/data.json");
-                const data = await response.json();
-
-                // Lọc dữ liệu theo categorySlug (nếu có)
-                const filteredData = categorySlug.value
-                    ? data.news.filter(
-                          (item: DataCard) =>
-                              item.categorySlug === categorySlug.value
-                      )
-                    : data.news;
+                const response = await apiClient.get("/api/documents", {
+                    params: {
+                        categoryId: categoryId.value,
+                    },
+                });
+                const data = await response.data;
 
                 const start = (page.value.current - 1) * 10;
                 const end = page.value.current * 10;
+
+                // Lọc theo categoryId nếu cần
+                const filteredData = data.news.filter(
+                    (item: DataCard) => item.category.id === Number(categoryId.value)
+                );
+
                 cards.value = filteredData.slice(start, end);
                 page.value.max = Math.ceil(filteredData.length / 10);
             } catch (error) {
@@ -71,12 +74,11 @@ export default {
             }
         };
 
-        // Theo dõi sự thay đổi của slug để tải lại dữ liệu
         watch(
-            () => route.params.categorySlug,
-            (newSlug) => {
-                categorySlug.value = newSlug;
-                page.value.current = 1; // Reset về trang đầu
+            () => route.params.id,
+            (newCategoryId) => {
+                categoryId.value = newCategoryId; 
+                page.value.current = 1; 
                 fetchData();
             }
         );

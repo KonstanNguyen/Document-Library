@@ -132,11 +132,11 @@
 			class="card-thumbnail"
 			:class="isTopCard ? 'col-lg-6 col-xl-7 ps-0' : ''">
 			<router-link
-				:to="cardContent.href"
+				:to="`/documents/${cardContent.id}`"
 				class="card-link">
 				<img
 					class="fit-image"
-					:src="cardContent.image" />
+					:src="cardContent.thumbnail" />
 			</router-link>
 		</div>
 		<div
@@ -144,14 +144,14 @@
 			:class="isTopCard ? 'col-lg-6 col-xl-5 m-auto' : 'pt-4'">
 			<h3 class="title">
 				<router-link
-					:to="cardContent.href"
+					:to="`/documents/${cardContent.id}`"
 					class="card-link">
 					{{ cardContent.title }}
 				</router-link>
 			</h3>
 			<p
 				class="sumary-content mb-2 mb-md-5"
-				v-html="cardContent.summary"></p>
+				v-html="cardContent.content"></p>
 			<div
 				class="card-meta mb-2 mt-2"
 				v-if="isTopCard">

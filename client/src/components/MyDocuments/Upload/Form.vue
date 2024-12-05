@@ -21,58 +21,84 @@ export default {
                     placeholder: "Để có kết quả cao tại thứ hạng tìm kiếm",
                 },
             ],
-            Categories: [
-                {
-                    id: "01",
-                    name: "Khoa học",
-                },
-                {
-                    id: "02",
-                    name: "Văn học",
-                },
-                {
-                    id: "03",
-                    name: "Kinh tế",
-                },
-            ],
+            Categories: [],
             selectedFile: null,
+            selectedCategory: null,
+            description: "",
         };
     },
+
     methods: {
+        async fetchCategories() {
+            try {
+                const response = await apiClient.get("/category");
+                this.Categories = response.data;
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        },
         handleFileUpload(event) {
             this.selectedFile = event.target.files[0];
         },
         async submitForm() {
             if (!this.selectedFile) {
-                alert("Please upload a file.");
+                alert("Vui lòng tải lên một file.");
                 return;
             }
 
             const formData = new FormData();
             formData.append("file", this.selectedFile);
 
+            // Thêm thông tin từ các block vào formData
+            this.Blocks.forEach((block) => {
+                formData.append(block.name, block.value);
+            });
+
+            // Lấy danh mục đã chọn
+            const selectedCategory = document.querySelector(
+                "select[name='categories_id']"
+            ).value;
+            formData.append("categories_id", selectedCategory);
+
+            // Lấy mô tả
+            const description = document.querySelector(
+                "textarea[name='description']"
+            ).value;
+            formData.append("description", description);
+
             try {
-                const response = await apiClient.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const response = await apiClient.post(
+                    "/api/documents",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
 
                 if (response.data && response.data.message) {
-                    alert(response.data.message); 
+                    alert(response.data.message);
                 } else {
-                    alert("File uploaded successfully!");
+                    alert("Tải lên tệp thành công!");
                 }
                 console.log(response.data);
             } catch (error) {
                 console.error("Error submitting form:", error);
                 if (error.response) {
-                    alert(`An error occurred: ${error.response.data.error || "Unknown error"}`);
+                    alert(
+                        `Lỗi xảy ra: ${
+                            error.response.data.error || "Lỗi không xác định"
+                        }`
+                    );
                 } else {
-                    alert("An error occurred. Please try again.");
+                    alert("Đã xảy ra lỗi. Vui lòng thử lại.");
                 }
             }
         },
+    },
+    mounted() {
+        this.fetchCategories();
     },
 };
 </script>

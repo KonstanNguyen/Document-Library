@@ -18,7 +18,7 @@ const router = createRouter({
                     component: () => import('@/pages/Documents/List.vue')
                 },
                 {
-                    path: ":slug",
+                    path: ":id",
                     name: 'Documents post',
                     component: () => import('@/pages/Documents/Post.vue')
                 },

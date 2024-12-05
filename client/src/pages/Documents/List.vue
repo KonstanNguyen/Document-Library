@@ -7,8 +7,8 @@
 
 <script lang="ts">
 	import { DataCard } from '@/type/DataCard';
-
 	import { computed, defineAsyncComponent } from 'vue';
+	import apiClient from "@/api/service";
 	export default {
 		components: {
 			MainContent: defineAsyncComponent(
@@ -27,47 +27,14 @@
 					max: 1,
 				},
 				// Fetch from server, max 10 cards each page
-				cards: [
-					{
-						title: 'Title',
-						summary: 'Sumary',
-						content: 'Content',
-						image: '/imgs/students.png',
-						href: '/documents/1',
-						slug: 'link',
-					},
-					{
-						title: 'Title',
-						summary: 'Sumary',
-						content: 'Content',
-						image: '/imgs/students.png',
-						href: '/documents/1',
-						slug: 'link',
-					},
-					{
-						title: 'Title',
-						summary: 'Sumary',
-						content: 'Content',
-						image: '/imgs/students.png',
-						href: '/documents/1',
-						slug: 'link',
-					},
-					{
-						title: 'Title',
-						summary: 'Sumary',
-						content: 'Content',
-						image: '/imgs/students.png',
-						href: '/documents/1',
-						slug: 'link',
-					},
-				] as DataCard[],
+				cards: [] as DataCard[],
 			};
 		},
 		methods: {
 			async fetchData() {
 				try {
-					const response = await fetch('/fakeData/data.json');
-					const data = await response.json();
+					const response = await apiClient.get('/api/documents');
+					const data = await response.data;
 					const start = (this.page.current - 1) * 10;
 					const end = this.page.current * 10;
 					this.cards = data.news.slice(start, end);

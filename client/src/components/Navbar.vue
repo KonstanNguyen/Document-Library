@@ -1,28 +1,50 @@
-<script setup>
-	import { ref, onMounted, onUnmounted } from 'vue';
-	const lastScrollPosition = ref(0);
-	const isNavbarVisible = ref(true);
+<script>
+export default {
+	props: {
+    username: {
+      type: String,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      lastScrollPosition: 0,
+      isNavbarVisible: true,
+    };
+  },
+  methods: {
+    handleScroll() {
+      const currentScrollPosition = window.scrollY;
 
-	const handleScroll = () => {
-		const currentScrollPosition = window.scrollY;
+      if (currentScrollPosition > this.lastScrollPosition) {
+        this.isNavbarVisible = false;
+      } else {
+        this.isNavbarVisible = true;
+      }
 
-		if (currentScrollPosition > lastScrollPosition.value) {
-			isNavbarVisible.value = false;
-		} else {
-			isNavbarVisible.value = true;
-		}
-
-		lastScrollPosition.value = currentScrollPosition;
-	};
-
-	onMounted(() => {
-		window.addEventListener('scroll', handleScroll);
-	});
-
-	onUnmounted(() => {
-		window.removeEventListener('scroll', handleScroll);
-	});
+      this.lastScrollPosition = currentScrollPosition;
+    },
+	confirmLogout() {
+      const confirmLogout = window.confirm("Bạn có chắc muốn đăng xuất?");
+      if (confirmLogout) {
+        this.logout();
+      }
+    },
+	logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      window.location.href = '/';
+    },
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+};
 </script>
+
 
 <template>
 	<div
@@ -50,7 +72,22 @@
 						<div class="top-nav d-flex justify-content-end">
 							<li class="navbar align-items-center">
 								<router-link to="/my-documents/upload"><button class="btn-upload"><i class="bi bi-upload"></i> Upload</button></router-link>
-								<router-link to="/login"><button class="btn-login">Đăng nhập</button></router-link>
+								
+								<div v-if="username" class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+										<i class="bi bi-person-circle"></i> {{ username }}
+									</button>
+									<ul class="dropdown-menu" aria-labelledby="userDropdown">
+										<li>
+										<button class="dropdown-item" @click="confirmLogout">Đăng xuất</button>
+										</li>
+									</ul>
+								</div>
+
+								<router-link to="/login" v-if="!username">
+									<button class="btn-login">Đăng nhập</button>
+								</router-link>
+								
 								<button
 									class="menu-icon d-sm-none"
 									data-bs-toggle="offcanvas"
@@ -179,6 +216,18 @@
 			}
 		}
 	}
+	.dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-toggle i {
+  margin-right: 8px;
+}
+
+.dropdown-menu {
+  min-width: 200px;
+}
 	.mobile-menu {
 		a {
 			color: #252525;
