@@ -58,7 +58,10 @@
 			</div>  
 			<div class="form-group mb-3">
 				<label for="age">Ngày sinh</label>
-				<VueDatePicker v-model="dateOfBirth" :calendar="calendarFn" />
+				<VueDatePicker v-model="dateOfBirth" 
+				:format="dateFormat"
+				:disable-time-selection="true"
+				 />
 			</div>
 			<div class="form-group mb-3">
 				<label for="gender">Giới tính</label>
@@ -113,6 +116,7 @@ export default {
       dateOfBirth: null,
       gender: null,
       message: "",
+	  dateFormat: "yyyy-mm-dd",
     };
   },
   methods: {
