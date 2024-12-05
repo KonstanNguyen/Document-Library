@@ -61,6 +61,9 @@
 				<VueDatePicker v-model="dateOfBirth" 
 				:format="dateFormat"
 				:disable-time-selection="true"
+				:start-date="startDate"
+				:min-date="minDate" 
+  				:max-date="maxDate"
 				 />
 			</div>
 			<div class="form-group mb-3">
@@ -116,7 +119,10 @@ export default {
       dateOfBirth: null,
       gender: null,
       message: "",
-	  dateFormat: "yyyy-mm-dd",
+	  dateFormat: "yyyy-MM-dd",
+    	minDate: new Date(1945, 0, 1), 
+    	maxDate: new Date(2012, 0, 1), 
+		startDate: new Date(2000, 0, 1),
     };
   },
   methods: {

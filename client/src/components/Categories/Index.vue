@@ -15,44 +15,36 @@
         components: { Block },
 		data() {
 			return {
-                // ListCategories: [
-                //     {
-                //         iconName: 'book',
-                //         name: 'Giáo dục',
-                //         categorySlug: 'giao-duc',
-                //     },
-                //     {
-                //         iconName: 'light',
-                //         name: 'Công nghệ',
-                //         categorySlug: 'cong-nghe',
-                //     },
-                //     {
-                //         iconName: 'chess',
-                //         name: 'Khoa học',
-                //         categorySlug: 'khoa-hoc',
-                //     },
-                //     {
-                //         iconName: 'sale',
-                //         name: 'Kinh tế',
-                //         categorySlug: 'kinh-te',
-                //     },
-                //     {
-                //         iconName: 'hand',
-                //         name: 'Sức khỏe',
-                //         categorySlug: 'suc-khoe',
-                //     },
-                //     {
-                //         iconName: 'fly',
-                //         name: 'Tự động hóa',
-                //         categorySlug: 'tu-dong-hoa',
-                //     },
-                //     {
-                //         iconName: 'money',
-                //         name: 'Marketing',
-                //         categorySlug: 'marketing',
-                //     },
-                // ],
-                ListCategories: [],
+                ListCategories: [
+                    {
+                        iconName: 'book',
+                        categorySlug: 'giao-duc',
+                    },
+                    {
+                        iconName: 'light',
+                        categorySlug: 'cong-nghe',
+                    },
+                    {
+                        iconName: 'chess',
+                        categorySlug: 'khoa-hoc',
+                    },
+                    {
+                        iconName: 'sale',
+                        categorySlug: 'kinh-te',
+                    },
+                    {
+                        iconName: 'hand',
+                        categorySlug: 'suc-khoe',
+                    },
+                    {
+                        iconName: 'fly',
+                        categorySlug: 'tu-dong-hoa',
+                    },
+                    {
+                        iconName: 'money',
+                        categorySlug: 'marketing',
+                    },
+                ],
             };
 		},
         mounted() {
@@ -63,6 +55,7 @@
                 try {
                     const response = await apiClient.get('/category');
                     this.ListCategories = response.data; 
+                    console.log(this.ListCategories);
                 } catch (error) {
                     console.error('Error fetching categories:', error);
                 }

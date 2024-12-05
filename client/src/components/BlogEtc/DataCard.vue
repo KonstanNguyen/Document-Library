@@ -75,7 +75,7 @@
 		methods: {},
 		watch: {
 			cards(newCards) {
-				console.log('Cards:', newCards);  // Kiểm tra dữ liệu cards nhận được
+				// console.log('Cards:', newCards);  // Kiểm tra dữ liệu cards nhận được
 			}
 		}
 	};

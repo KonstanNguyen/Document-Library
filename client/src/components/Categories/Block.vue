@@ -15,14 +15,14 @@ import IconLoader from '@/components/IconLoader.vue';
 const props = defineProps({
 	iconName: {
 		type: String,
-		required: true,
+		default: 'book',
 	},
 	name: {
 		type: String,
 		required: true,
 	},
 	categorySlug: {
-        type: String,
+        type: Nu,
         required: true,
     },
 });
