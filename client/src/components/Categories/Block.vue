@@ -1,5 +1,5 @@
 <template>
-	<router-link :to="`/category/${categorySlug}`">
+	<router-link :to="`/category/${categoryId}`">
 		<div class="container-category" :class="{ active: isActive }">
 			<IconLoader class="right" :iconUrl="iconName" width="35" height="35"/>
 
@@ -21,14 +21,14 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	categorySlug: {
-        type: Nu,
+	categoryId: {
+        type: Number,
         required: true,
     },
 });
 
 const route = useRoute();
-const isActive = computed(() => route.params.categorySlug === props.categorySlug);
+const isActive = computed(() => route.params.id === props.categoryId);
 </script>
 
 <style scoped lang="scss">

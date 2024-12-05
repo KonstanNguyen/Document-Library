@@ -4,7 +4,7 @@
         :key="item.id"
         :iconName="item.iconName"
         :name="item.name"
-        :categorySlug="item.categorySlug"/>
+        :categoryId="item.id"/>
     </div>
 </template>
 

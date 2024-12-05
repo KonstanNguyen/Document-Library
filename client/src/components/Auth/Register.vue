@@ -58,13 +58,19 @@
 			</div>  
 			<div class="form-group mb-3">
 				<label for="age">Ngày sinh</label>
-				<VueDatePicker v-model="dateOfBirth" 
+				<!-- <VueDatePicker v-model="dateOfBirth" 
 				:format="dateFormat"
 				:disable-time-selection="true"
 				:start-date="startDate"
 				:min-date="minDate" 
   				:max-date="maxDate"
-				 />
+				 /> -->
+				 <input
+                    class="form-control"
+                    type="date"
+                    id="age"
+                    v-model="dateOfBirth"
+                />
 			</div>
 			<div class="form-group mb-3">
 				<label for="gender">Giới tính</label>
@@ -125,31 +131,67 @@ export default {
 		startDate: new Date(2000, 0, 1),
     };
   },
-  methods: {
-    async register(event) {
-      event.preventDefault();
+//   methods: {
+//     async register(event) {
+//       event.preventDefault();
 
-      if (this.password !== this.confirmPassword) {
-        this.message = "Mật khẩu và xác nhận mật khẩu không khớp!";
-        return;
-      }
+//       if (this.password !== this.confirmPassword) {
+//         this.message = "Mật khẩu và xác nhận mật khẩu không khớp!";
+//         return;
+//       }
 
-      const requestBody = {
-        username: this.username,
-        email: this.email,
-        password: this.password,
-        birthYear: this.dateOfBirth,
-        gender: this.gender === "true" ? true : false,
-      };
+//       const requestBody = {
+//         username: this.username,
+//         email: this.email,
+//         password: this.password,
+//         birthYear: this.dateOfBirth,
+//         gender: this.gender === "true" ? true : false,
+//       };
 
-      try {
-        const response = await apiClient.post("/api/accounts/register", requestBody);
-        this.message = response.data.message;
-      } catch (error) {
-        this.message =
-          error.response?.data?.message || "Đã xảy ra lỗi khi đăng ký!";
-      }
+//       try {
+//         const response = await apiClient.post("/api/accounts/register", requestBody);
+//         this.message = response.data.message;
+//       } catch (error) {
+//         this.message =
+//           error.response?.data?.message || "Đã xảy ra lỗi khi đăng ký!";
+//       }
+//     },
+//   },
+  //Register.vue
+methods: {
+        async register(event) {
+            event.preventDefault();
+
+            if (this.password !== this.confirmPassword) {
+                this.message = "Mật khẩu và xác nhận mật khẩu không khớp!";
+                return;
+            }
+
+            const date = new Date(this.dateOfBirth);
+            const day = String(date.getDate()).padStart(2, "0"); // Ensure 2 digits
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+            const year = date.getFullYear();
+
+            const requestBody = {
+                username: this.username,
+                email: this.email,
+                password: this.password,
+                birthday: `${year}-${month}-${day}`,
+                gender: this.gender === "true" ? true : false,
+            };
+
+            try {
+                const response = await apiClient
+                    .post("/api/accounts/register", requestBody)
+                    .then((returnValue) => console.log(response));
+                this.message = response.data.message;
+            } catch (error) {
+                this.message =
+                    error.response?.data?.message ||
+                    "Đã xảy ra lỗi khi đăng ký!";
+                console.log(error);
+            }
+        },
     },
-  },
 };
 </script>
