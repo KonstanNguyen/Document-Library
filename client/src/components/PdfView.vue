@@ -39,11 +39,9 @@ export default {
       const loadingTask = pdfjsLib.getDocument({ data: pdfData });
       loadingTask.promise
         .then(async (pdfDoc) => {
-          console.log('PDF loaded, total pages:', pdfDoc.numPages);
 
           for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
             const page = await pdfDoc.getPage(pageNum);
-            console.log('Page loaded:', pageNum);
 
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -53,7 +51,6 @@ export default {
             }
 
             const viewport = page.getViewport({ scale: 1.5 });
-            console.log("Viewport dimensions:", viewport);
 
             canvas.width = viewport.width;
             canvas.height = viewport.height;

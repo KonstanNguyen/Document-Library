@@ -3,6 +3,7 @@
 		color: #212121;
 		font-size: 30px;
 		font-weight: 700;
+		text-transform: capitalize;
 	}
 	.post-content-wrap {
 		* {
@@ -31,10 +32,9 @@
 		}
 	}
 	
-	.page-view{
-		position: relative;
-		padding-top: 1.25rem;
+	.page-view, .page-rating{
 		color: gray;
+		font-weight: 600;
 	}
 </style>
 
@@ -71,10 +71,12 @@
 					<i class="bi bi-envelope"></i>
 				</a>
 			</div>
-			<span class="page-view" v-html="post.views"></span>
-			<span class="page-rating" v-html="post.ratings"></span>
+			<div class="d-flex align-items-center gap-2">
+				<span class="page-view">Lượt xem: {{post.views}}</span>
+				<span class="page-rating">Đánh giá: {{post.ratingAvg}}</span>
+			</div>
 		</div>
-		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{post.author?.name}}</div>
+		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{post.author}}</div>
 		<div
 			class="post-content"
 			v-html="post.category?.name">

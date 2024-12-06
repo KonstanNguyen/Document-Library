@@ -66,13 +66,14 @@
 				color: #1976d2;
 				font-size: 20px;
 				font-weight: 600;
+				text-transform: capitalize;
 				.card-link {
 					color: #1976d2;
 				}
 			}
 			.sumary-content {
 				text-align: justify;
-				font-size: 13px;
+				font-size: 15px;
 				height: 60px;
 				overflow: hidden;
 				word-wrap: break-word;
@@ -149,9 +150,8 @@
 					{{ cardContent.title }}
 				</router-link>
 			</h3>
-			<p
-				class="sumary-content mb-2 mb-md-5"
-				v-html="cardContent.views"></p>
+			<p class="sumary-content fw-bold">Views:{{cardContent.views}} - Rating:{{cardContent.views}}</p>
+			<p class="sumary-content" v-html="cardContent.description"></p>
 			<div
 				class="card-meta mb-2 mt-2"
 				v-if="isTopCard">

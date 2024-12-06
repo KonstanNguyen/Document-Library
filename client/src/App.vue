@@ -21,41 +21,41 @@ import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
 
 export default {
-  components: {
-    Navbar,
-    Footer,
-  },
-  data() {
-    return {
-      username: null,
-      showLoading: true,
-    };
-  },
-  mounted() {
-    this.loadUsername();
-  },
-  methods: {
-    loadUsername() {
-      const username = localStorage.getItem("username");
-      if (username) {
-        this.username = username;
-      }
+    components: {
+        Navbar,
+        Footer,
     },
-    checkContent() {
-      const appContent = document.getElementById('app-content');
-      this.showLoading = !appContent || appContent.querySelectorAll('div').length === 0;
+    data() {
+        return {
+            username: null,
+            showLoading: true,
+        };
     },
-  },
-  watch: {
-    '$route': 'checkContent',
-    username(newUsername) {
-      localStorage.setItem('username', newUsername);
+    mounted() {
+        this.loadUsername();
     },
-  },
-  created() {
-    let interval = setInterval(this.checkContent, 1000);
-    onBeforeUnmount(() => clearInterval(interval));
-  },
+    methods: {
+        loadUsername() {
+            const username = localStorage.getItem("username");
+            if (username) {
+                this.username = username;
+            }
+        },
+        checkContent() {
+            const appContent = document.getElementById('app-content');
+            this.showLoading = !appContent || appContent.querySelectorAll('div').length === 0;
+        },
+    },
+    watch: {
+        '$route': 'checkContent',
+        username(newUsername) {
+            localStorage.setItem('username', newUsername);
+        },
+    },
+    created() {
+        let interval = setInterval(this.checkContent, 1000);
+        onBeforeUnmount(() => clearInterval(interval));
+    },
 };
 </script>
 <style>
@@ -86,9 +86,11 @@ body {
 .fade-leave-to {
     opacity: 0;
 }
+
 .fade-enter-from {
     transform: translateY(10vh);
 }
+
 .fade-leave-to {
     transform: translateY(-100vh);
 }

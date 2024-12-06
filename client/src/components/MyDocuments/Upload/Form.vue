@@ -6,8 +6,8 @@ export default {
             formData: {
                 title: "",
                 categoryId: null,
-                // description: "",
-                authorId: 3,
+                description: "",
+                authorId: 1,
                 status: 0,
             },
             Categories: [],
@@ -40,6 +40,7 @@ export default {
                     title: this.formData.title,
                     categoryId: this.formData.categoryId,
                     authorId: this.formData.authorId,
+                    description: this.formData.description,
                     status: this.formData.status,
                 };
                 formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));

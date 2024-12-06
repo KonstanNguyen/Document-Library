@@ -31,7 +31,7 @@ export default {
         async fetchData() {
             const paginationRequest = {
                 page: this.page.current > 0 ? this.page.current - 1 : 0,
-                size: 24,
+                size: 6,
                 sortBy: "id",
                 sortDirection: "asc",
             };
@@ -85,41 +85,49 @@ export default {
                     console.log('Fetched data:', this.cards);
 
                     this.cards = this.cards.slice(start, end);
-                    this.page.max = Math.ceil(data.content.length / paginationRequest.size);
+                    this.page.max = Math.ceil(data.totalElements / paginationRequest.size);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         },
-    async gotoPage(page) {
-        this.page.current = page;
-        await this.fetchData();
-        this.scrollToTop();
+        async gotoPage(page: number) {
+            if (page >= 1 && page <= this.page.max) {
+                this.page.current = page;
+                await this.fetchData();
+                this.scrollToTop();
+            }
+        },
+
+        async gotoPrePage() {
+            if (this.page.current > 1) {
+                this.page.current--;
+                await this.fetchData();
+                this.scrollToTop();
+            }
+        },
+
+        async gotoNxtPage() {
+            if (this.page.current < this.page.max) {
+                this.page.current++;
+                await this.fetchData();
+                this.scrollToTop();
+            }
+        },
+        scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        },
     },
-    async gotoPrePage() {
-        this.page.current--;
-        await this.fetchData();
-        this.scrollToTop();
+    provide() {
+        return {
+            gotoPage: this.gotoPage,
+            gotoPrePage: this.gotoPrePage,
+            gotoNxtPage: this.gotoNxtPage,
+            page: computed(() => this.page),
+        };
     },
-    async gotoNxtPage() {
-        this.page.current++;
-        await this.fetchData();
-        this.scrollToTop();
+    created() {
+        this.fetchData();
     },
-    scrollToTop() {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-},
-provide() {
-    return {
-        gotoPage: this.gotoPage,
-        gotoPrePage: this.gotoPrePage,
-        gotoNxtPage: this.gotoNxtPage,
-        page: computed(() => this.page),
-    };
-},
-created() {
-    this.fetchData();
-},
 };
 </script>

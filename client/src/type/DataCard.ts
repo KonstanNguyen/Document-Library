@@ -10,6 +10,7 @@ export type DataCard = {
 	thumbnail: string;
     title: string;
     content: string;
+    description: string;
     status: number;
     createAt: Date;  
     updateAt: Date; 

@@ -27,14 +27,15 @@ export default {
             try {
                 const documentId = this.$route.params.id;
                 const response = await apiClient.get(`/api/documents/${documentId}`);
-      			const data = response.data;
-                this.post = data;
-                console.log("post content", this.post);
-                // const filteredPosts = data.news.filter(
-                //     (post) => post.id !== this.post.id
-                // );
-                // this.poscast = filteredPosts.slice(0, 5); 
-                // this.refCard = data.learning.slice(0, 3); 
+                this.post = response.data;
+
+                const allPostsResponse = await apiClient.get('/api/documents');
+                const allPosts = allPostsResponse.data;
+
+                const filteredPosts = allPosts.filter(post => post.id !== this.post.id);
+
+                this.refCard = filteredPosts.slice(0, 3);
+                this.poscast = filteredPosts.slice(3, 8);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -46,8 +47,5 @@ export default {
     created() {
         this.fetchData();
     },
-    // updated() {
-    //     this.fetchData();
-    // },
 };
 </script>

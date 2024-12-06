@@ -1,6 +1,6 @@
-<script setup>
-import { ref } from "vue";
-    defineProps({
+<script>
+export default {
+    props: {
         id: {
             type: String,
             required: true,
@@ -25,33 +25,38 @@ import { ref } from "vue";
             type: Number,
             required: true,
         }
-    });
-    const listDocuments = ref([
-        {
-            id: '01',
-            title: "[NCKH] thiết kế nghiên cứu khoa học",
-            category: "Khoa học",
-            create_at: "20/01/2024",
-            update_at: "20/01/2024",
-            status: 1,
-        },
-        {
-            id: '02',
-            title: "2024 Trend Updates: What Really Works In SEO & Content Marketing",
-            category: "Marketing",
-            create_at: "20/01/2024",
-            update_at: "20/01/2024",
-            status: 1,
-        },
-        {
-            id: '03',
-            title: "Phương pháp luận sáng tạo và đổi mới (TRIZ mở rộng)",
-            category: "Khoa học",
-            create_at: "20/01/2024",
-            update_at: "21/01/2024",
-            status: 1,
-        },
-    ])
+    },
+    data() {
+        return {
+            listDocuments: [
+                {
+                    id: '01',
+                    title: "[NCKH] thiết kế nghiên cứu khoa học",
+                    category: "Khoa học",
+                    create_at: "20/01/2024",
+                    update_at: "20/01/2024",
+                    status: 1,
+                },
+                {
+                    id: '02',
+                    title: "2024 Trend Updates: What Really Works In SEO & Content Marketing",
+                    category: "Marketing",
+                    create_at: "20/01/2024",
+                    update_at: "20/01/2024",
+                    status: 1,
+                },
+                {
+                    id: '03',
+                    title: "Phương pháp luận sáng tạo và đổi mới (TRIZ mở rộng)",
+                    category: "Khoa học",
+                    create_at: "20/01/2024",
+                    update_at: "21/01/2024",
+                    status: 1,
+                },
+            ]
+        }
+    }
+};
 </script>
 
 <template>
@@ -85,17 +90,19 @@ import { ref } from "vue";
 </template>
 
 <style scoped lang="scss">
-    .btn-edit, .btn-delete{
-        padding: 5px 10px;
-        background-color: #1976d2;
-        border: none;
-        color: #fff;
-        text-transform: uppercase;
-        font-size: 14px;
-        font-weight: 600;
-        transition: all 0.3s ease 0s;
-        &:hover{
-            background-color: rgb(18, 33, 121);
-        }
+.btn-edit,
+.btn-delete {
+    padding: 5px 10px;
+    background-color: #1976d2;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease 0s;
+
+    &:hover {
+        background-color: rgb(18, 33, 121);
     }
+}
 </style>
