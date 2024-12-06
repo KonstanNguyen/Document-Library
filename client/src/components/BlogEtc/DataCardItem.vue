@@ -27,7 +27,7 @@
 				position: relative;
 
 				img {
-					height: 195px;
+					height: 215px;
 					overflow: hidden;
 				}
 
@@ -61,11 +61,13 @@
 			padding: 5px 25px;
 			font-size: 16px;
 			.title {
-				min-height: 60px;
+				height: 54px;
 				line-height: 1.3;
 				color: #1976d2;
 				font-size: 20px;
 				font-weight: 600;
+				overflow: hidden;
+				word-wrap: break-word;
 				text-transform: capitalize;
 				.card-link {
 					color: #1976d2;
@@ -150,8 +152,14 @@
 					{{ cardContent.title }}
 				</router-link>
 			</h3>
-			<p class="sumary-content fw-bold">Views:{{cardContent.views}} - Rating:{{cardContent.views}}</p>
-			<p class="sumary-content" v-html="cardContent.description"></p>
+			<p class="sumary-content fw-bold d-grid">
+				<div class="d-flex gap-2">
+					<span>{{cardContent.views}} views</span>
+					-
+					<span>{{cardContent.ratingAvg}} <i class="bi bi-star-fill" style="color:darkgoldenrod;"></i></span>
+				</div>
+				<span style="color: #666;">{{ cardContent.author }}</span>
+			</p>
 			<div
 				class="card-meta mb-2 mt-2"
 				v-if="isTopCard">

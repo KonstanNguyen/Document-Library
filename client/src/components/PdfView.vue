@@ -1,5 +1,8 @@
 <template>
-  <div ref="pdfContainer"></div>
+  <div class="d-grid">
+    <button @click="downloadPdf" class="download-btn">Tải xuống</button>
+    <div class="wrapper" ref="pdfContainer"></div>
+  </div>
 </template>
 
 <script>
@@ -70,14 +73,53 @@ export default {
       console.error("Lỗi khi hiển thị trang PDF:", error);
     }
   },
+  methods: {
+    async downloadPdf() {
+      try {
+        const response = await axios.get('http://localhost:5454/pdf/file', {
+          params: {
+            pdfPath: this.pdfPath,
+          },
+          responseType: 'blob', // Specify blob for binary data
+        });
+
+        // Create a temporary anchor element for downloading
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = this.pdfPath.split('/').pop(); // Use the filename from the path
+        link.click();
+      } catch (error) {
+        console.error("Lỗi khi tải PDF:", error);
+      }
+    },
+  },
 };
 </script>
 
 
 <style scoped>
-div {
+.wrapper {
   border: 1px solid #ccc;
   width: 100%;
   height: auto;
+}
+.download-btn {
+  position: relative;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+  top: -117%;
+  left: 78%;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.download-btn:hover {
+  background-color: #0056b3;
 }
 </style>

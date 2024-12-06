@@ -35,6 +35,7 @@
 	.page-view, .page-rating{
 		color: gray;
 		font-weight: 600;
+		margin-top: 1rem;
 	}
 </style>
 
@@ -71,9 +72,10 @@
 					<i class="bi bi-envelope"></i>
 				</a>
 			</div>
-			<div class="d-flex align-items-center gap-2">
-				<span class="page-view">Lượt xem: {{post.views}}</span>
-				<span class="page-rating">Đánh giá: {{post.ratingAvg}}</span>
+			<div class="d-flex gap-2 page-view">
+				<span>{{post.views}} views</span>
+				-
+				<span>{{post.ratingAvg}} <i class="bi bi-star-fill" style="color:darkgoldenrod;"></i></span>
 			</div>
 		</div>
 		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{post.author}}</div>

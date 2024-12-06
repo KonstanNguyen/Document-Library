@@ -53,7 +53,6 @@
 				</div>
 			</div>
 		</section>
-		<Pagination />
 	</div>
 </template>
 
