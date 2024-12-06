@@ -151,7 +151,7 @@
 			</h3>
 			<p
 				class="sumary-content mb-2 mb-md-5"
-				v-html="cardContent.content"></p>
+				v-html="cardContent.views"></p>
 			<div
 				class="card-meta mb-2 mt-2"
 				v-if="isTopCard">

@@ -29,6 +29,7 @@ export default {
                 const response = await apiClient.get(`/api/documents/${documentId}`);
       			const data = response.data;
                 this.post = data;
+                console.log("post content", this.post);
                 // const filteredPosts = data.news.filter(
                 //     (post) => post.id !== this.post.id
                 // );
@@ -45,8 +46,8 @@ export default {
     created() {
         this.fetchData();
     },
-    updated() {
-        this.fetchData();
-    },
+    // updated() {
+    //     this.fetchData();
+    // },
 };
 </script>

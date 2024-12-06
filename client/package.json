@@ -23,6 +23,7 @@
     "documents-library-web": "file:",
     "jwt-decode": "^4.0.0",
     "marked": "^14.1.2",
+    "pdfjs-dist": "^4.9.155",
     "sass": "^1.77.8",
     "tsk-chess": "^0.8.0",
     "tsk-web": "file:",

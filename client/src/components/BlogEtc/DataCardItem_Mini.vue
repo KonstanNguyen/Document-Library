@@ -90,7 +90,7 @@
 				class="card-link">
 				<img
 					class="fit-image"
-					:src="cardContent.image" />
+					:src="cardContent.thumbnail" />
 			</router-link>
 		</div>
 		<div class="card-content-wrap pt-3 pb-2">

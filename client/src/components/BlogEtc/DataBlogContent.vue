@@ -77,8 +77,9 @@
 		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{post.author?.name}}</div>
 		<div
 			class="post-content"
-			v-html="post.content"></div>
-		 <PdfView class="mt-3"/>
+			v-html="post.category?.name">
+		</div>
+		<PdfView v-if="post.content" class="mt-3" :pdfPath="post.content" />
 	</div>
 </template>
 
@@ -94,11 +95,6 @@
 		},
 		props: {
 			post: { type: Object as PropType<DataCard>, required: true },
-		},
-		data() {
-			return {
-
-			}
 		},
 		methods: {
 			getCurrentLink() {

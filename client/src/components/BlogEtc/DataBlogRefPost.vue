@@ -5,7 +5,7 @@
 			<div
 				:class="isCol ? 'col-12 mb-5' : 'col-md-6 col-lg-4 mb-10'"
 				v-for="card in refCard"
-				:key="card.slug">
+				:key="card.id">
 				<DataCardItem_Mini
 					:card-content="card"
 					:haveRM="!isCol"
