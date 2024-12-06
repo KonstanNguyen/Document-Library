@@ -1,30 +1,16 @@
 <script>
 import apiClient from "@/api/service";
-import Block from "./Block.vue";
 export default {
-    components: { Block },
     data() {
         return {
-            Blocks: [
-                {
-                    label: "Tên tài liệu",
-                    type: "text",
-                    value: "",
-                    name: "name",
-                    placeholder: "Tên tài liệu",
-                },
-                {
-                    label: "Từ khóa",
-                    type: "text",
-                    value: "",
-                    name: "keyword",
-                    placeholder: "Để có kết quả cao tại thứ hạng tìm kiếm",
-                },
-            ],
+            formData: {
+                title: "",
+                categoryId: null,
+                // description: "",
+                authorId: 3,
+                status: 0,
+            },
             Categories: [],
-            selectedFile: null,
-            selectedCategory: null,
-            description: "",
         };
     },
 
@@ -38,62 +24,40 @@ export default {
             }
         },
         handleFileUpload(event) {
-            this.selectedFile = event.target.files[0];
-        },
-        async submitForm() {
-            if (!this.selectedFile) {
-                alert("Vui lòng tải lên một file.");
+            const file = event.target.files[0];
+            if (!file) {
+                alert("Vui lòng chọn một file hợp lệ.");
                 return;
             }
-
-            const formData = new FormData();
-            formData.append("file", this.selectedFile);
-
-            // Thêm thông tin từ các block vào formData
-            this.Blocks.forEach((block) => {
-                formData.append(block.name, block.value);
-            });
-
-            // Lấy danh mục đã chọn
-            const selectedCategory = document.querySelector(
-                "select[name='categories_id']"
-            ).value;
-            formData.append("categories_id", selectedCategory);
-
-            // Lấy mô tả
-            const description = document.querySelector(
-                "textarea[name='description']"
-            ).value;
-            formData.append("description", description);
-
+            this.formData.file = file;
+            console.log("File được chọn:", file.name);
+        },
+        async submitForm() {
             try {
-                const response = await apiClient.post(
-                    "/api/documents",
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                );
+                const formDataToSend = new FormData();
+                
+                const data = {
+                    title: this.formData.title,
+                    categoryId: this.formData.categoryId,
+                    authorId: this.formData.authorId,
+                    status: this.formData.status,
+                };
+                formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+                formDataToSend.append("file", this.formData.file);
 
-                if (response.data && response.data.message) {
-                    alert(response.data.message);
-                } else {
-                    alert("Tải lên tệp thành công!");
-                }
-                console.log(response.data);
+                console.log("Payload:", JSON.stringify(this.formData));
+
+                // Gửi dữ liệu đến backend
+                const response = await apiClient.post("/api/documents", formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                alert("Tải lên thành công!");
+                console.log("Kết quả:", response.data);
             } catch (error) {
                 console.error("Error submitting form:", error);
-                if (error.response) {
-                    alert(
-                        `Lỗi xảy ra: ${
-                            error.response.data.error || "Lỗi không xác định"
-                        }`
-                    );
-                } else {
-                    alert("Đã xảy ra lỗi. Vui lòng thử lại.");
-                }
+                alert("Đã xảy ra lỗi trong quá trình tải lên.");
             }
         },
     },
@@ -108,20 +72,23 @@ export default {
         <div class="wrapper">
             <form @submit.prevent="submitForm" enctype="multipart/form-data">
                 <div class="row">
-                    <Block
-                        v-for="block in Blocks"
-                        :label="block.label"
-                        :type="block.type"
-                        :value="block.value"
-                        :name="block.name"
-                        :placeholder="block.placeholder"
-                    />
+                    <div class="col-12 mb-3">
+                        <label for="title" class="form-label">Tiêu đề</label>
+                        <input
+                            id="title"
+                            type="text"
+                            class="form-control"
+                            placeholder="Nhập tiêu đề"
+                            v-model="formData.title"
+                        />
+                    </div>
                     <div class="col-12 d-grid gap-1 mb-3">
                         <label>Danh mục</label>
                         <select
                             class="select-category"
-                            name="categories_id"
+                            name="categoryId"
                             id="categories"
+                            v-model="formData.categoryId"
                         >
                             <option v-for="item in Categories" :value="item.id">
                                 {{ item.name }}
@@ -146,6 +113,7 @@ export default {
                             type="text"
                             placeholder="Nhập mô tả"
                             name="description"
+                            v-model="formData.description"
                         ></textarea>
                     </div>
                     <div class="col-12 text-center pt-4">
