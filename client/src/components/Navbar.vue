@@ -1,4 +1,5 @@
 <script>
+import apiClient from "@/api/service";
 export default {
 	props: {
 		username: {
@@ -8,6 +9,8 @@ export default {
 	},
 	data() {
 		return {
+			accountId: localStorage.getItem("userId") || "",
+			roleName: "",
 			lastScrollPosition: 0,
 			isNavbarVisible: true,
 		};
@@ -36,9 +39,29 @@ export default {
 			localStorage.removeItem('userId');
 			window.location.href = '/';
 		},
+
+		async getRoleByAccount(accountId) {
+			try {
+				const response = await apiClient.get(`/api/accounts/getRoleById/${accountId}`);
+				const roles = response.data.data;
+				if (roles && roles.length > 0) {
+					const role = roles[0].id;
+					this.roleName = role === 1 ? "admin" : "user";
+					localStorage.setItem("roleName", this.roleName);
+				} else {
+					console.warn("No roles found for this account.");
+				}
+			}
+			catch (error) {
+				console.error("Error role:", error);
+			}
+		},
 	},
 	mounted() {
 		window.addEventListener('scroll', this.handleScroll);
+		if (this.accountId) {
+			this.getRoleByAccount(this.accountId);
+		}
 	},
 	beforeUnmount() {
 		window.removeEventListener('scroll', this.handleScroll);
@@ -80,6 +103,14 @@ export default {
 										<i class="bi bi-person-circle"></i> {{ username }}
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="userDropdown">
+										<li v-if="roleName === 'admin'">
+											<router-link to="/admin/documents/all"><button class="dropdown-item">Quản
+													lý tài liệu</button></router-link>
+											<router-link to="/admin/accounts"><button class="dropdown-item">Quản
+													lý tài khoản</button></router-link>
+											<router-link to="/admin/history-download"><button class="dropdown-item">Quản
+												lý tải xuống</button></router-link>
+										</li>
 										<li>
 											<button class="dropdown-item" @click="confirmLogout">Đăng xuất</button>
 										</li>
@@ -229,6 +260,10 @@ export default {
 
 .dropdown-menu {
 	min-width: 200px;
+}
+.dropdown-item{
+	font-size: 16px;
+	text-transform: capitalize;
 }
 
 .mobile-menu {

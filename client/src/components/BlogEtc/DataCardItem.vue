@@ -158,7 +158,7 @@
 				-
 				<span>{{ cardContent.ratingAvg }} <i class="bi bi-star-fill" style="color:darkgoldenrod;"></i></span>
 			</div>
-			<span style="color: #666;">{{ cardContent.author || authorName }}</span>
+			<span style="color: #666;">{{ cardContent.authorName }}</span>
 			</p>
 			<div class="card-meta mb-2 mt-2" v-if="isTopCard">
 				Chia sẻ bài viết:

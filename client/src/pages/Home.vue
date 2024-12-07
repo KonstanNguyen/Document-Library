@@ -35,13 +35,12 @@ export default {
             },
             cards: [] as DataCard[],
 
-            //Recommend documents
             titleR: "Tài liệu đề xuất",
             cardsR: [
                 {
                     "id": 1,
                     "title": "Chương 4: Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
-                    "author": "Le Nguyen Truong Giang",
+                    "authorName": "Le Nguyen Truong Giang",
                     "description": "Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
                     "content": "",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/chuong4binhquandidong-sanbangsomu-170425121551-thumbnail.jpg?width=560&fit=bounds",
@@ -51,7 +50,7 @@ export default {
                 {
                     "id": 2,
                     "title": "Đề tài: Lập dự án quán cafe sinh viên, 9 ĐIỂM!",
-                    "author": "Viết thuê",
+                    "authorName": "Viết thuê",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/tieuluanquantrihoc20054-190922033524-thumbnail.jpg?width=560&fit=bounds",
                     "views": 9,
 	                "ratingAvg": 3.9,
@@ -59,7 +58,7 @@ export default {
                 {
                     "id": 3,
                     "title": "[NCKH] thiết kế nghiên cứu khoa học",
-                    "author": "CLBSVHTTCNCKH",
+                    "authorName": "CLBSVHTTCNCKH",
                     "content": "Content",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/nckhthitknghincukhoahc-151227113101-thumbnail.jpg?width=560&fit=bounds",
                     "views": 12,
@@ -68,7 +67,7 @@ export default {
                 {
                     "id": 4,
                     "title": "KINH TẾ HỌC VĨ MÔ - Chương 5 CHÍNH SÁCH TÀI CHÍNH VÀ NGOẠI THƯƠNG",
-                    "author": "Digiword Ha Noi",
+                    "authorName": "Digiword Ha Noi",
                     "content": "Content",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/5-chinhsachtaichinhngoaithuong-091225213241-phpapp02-thumbnail.jpg?width=560&fit=bounds",
                     "views": 9,
@@ -77,7 +76,7 @@ export default {
                 {
                     "id": 5,
                     "title": "2024 Trend Updates: What Really Works In SEO & Content Marketing",
-                    "author": "Search Engine Journal",
+                    "authorName": "Search Engine Journal",
                     "content": "Content",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/conductor-webinar-6182024-presentation-240618152603-d6c54198-thumbnail.jpg?width=560&fit=bounds",
                     "views": 7,
@@ -86,7 +85,7 @@ export default {
                 {
                     "id": 6,
                     "title": "Tổng hợp các công thức kinh tế vi mô.",
-                    "author": "Hoa Trò",
+                    "authorName": "Hoa Trò",
                     "content": "Content",
                     "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/tnghpcccngthckinhtvim-120912111052-phpapp01-thumbnail.jpg?width=560&fit=bounds",
                     "views": 5,
@@ -98,7 +97,7 @@ export default {
     methods: {
         async fetchData() {
             const paginationRequest = {
-                page: this.page.current > 0 ? this.page.current - 1 : 0,
+                page: this.page.current,
                 size: 6,
                 sortBy: "id",
                 sortDirection: "asc",
@@ -117,10 +116,6 @@ export default {
                             try {
                                 const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
                                 const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
-
-                                console.log('Processing document:', doc.id);
-                                console.log('Thumbnail Filename:', thumbnailFilename);
-                                console.log('Content Filename:', contentFilename);
 
                                 const [thumbnailResponse, contentResponse] = await Promise.all([
                                     thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
@@ -149,8 +144,6 @@ export default {
                     this.cards = this.cards
                         .map((result) => (result.status === 'fulfilled' ? result.value : null))
                         .filter(Boolean);
-
-                    console.log('Fetched data:', this.cards);
 
                     this.cards = this.cards.slice(start, end);
                     this.page.max = Math.ceil(data.totalElements / paginationRequest.size);
