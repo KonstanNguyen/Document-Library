@@ -57,7 +57,7 @@ public class DocUserController {
         
         return docUserMapper.toDTOPage(docUserPage);
     }
-
+    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody

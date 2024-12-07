@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class HistoryDownloadResponse {
-    private Long accountId;
-    private Long documentId;
+    private String username;
+    private String documentName;
     private LocalDateTime date;
+    private int totalDownload;
 }

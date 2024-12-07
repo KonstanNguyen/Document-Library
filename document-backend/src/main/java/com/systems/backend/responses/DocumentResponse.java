@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DocumentResponse {
     private Long id;
-    private Long categoryId;
-    private Long authorId;
+    private String categoryName;
+    private String authorName;
     private Short status;
     private String thumbnail;
     private String title;

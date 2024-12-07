@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface HistoryDownloadMapper {
-    @Mapping(source = "historyDownloadId.account.id", target = "accountId")
-    @Mapping(source = "historyDownloadId.document.id", target = "documentId")
+    @Mapping(source = "historyDownloadId.account.username", target = "username")
+    @Mapping(source = "historyDownloadId.document.title", target = "documentName")
     HistoryDownloadResponse toDTO(HistoryDownload historyDownload);
 }

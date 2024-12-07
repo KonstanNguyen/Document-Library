@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Collection;
 
 @Entity
@@ -25,7 +27,7 @@ public class Role {
     @Column(name = "description")
     private String description;
 
-    // @JsonIgnore
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Collection<Account> accounts;
 }

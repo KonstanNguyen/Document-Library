@@ -7,6 +7,7 @@ import com.systems.backend.repository.RoleRepository;
 import com.systems.backend.requests.CreateRoleRequest;
 import com.systems.backend.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -28,8 +29,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleById(Long roleId) {
-        Optional<Role> roleOptional = roleRepository.findById(roleId);
-        return roleOptional.orElse(null);
+        return roleRepository.findById(roleId).orElseThrow(() ->
+            new ResourceNotFoundException("Role not found!")
+        );
+    }
+
+    @Override
+    public List<Role> getRoleByAccountId(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(() ->
+            new ResourceNotFoundException("Account not found!")
+        );
+        return account.getRoles().stream().toList();
     }
 
     @Override

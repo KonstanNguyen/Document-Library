@@ -16,8 +16,8 @@ import org.springframework.data.domain.Page;
 public interface DocumentMapper {
 
     // Map từ Entity sang DTO
-    @Mapping(source = "category.id", target = "categoryId") 
-    @Mapping(source = "author.id", target = "authorId")
+    @Mapping(source = "category.name", target = "categoryName") 
+    @Mapping(source = "author.name", target = "authorName")
     @Mapping(target="ratingAvg", expression = "java(calculateRatingAvg(document.getRatings()))")
     DocumentResponse toDTO(Document document);
 
