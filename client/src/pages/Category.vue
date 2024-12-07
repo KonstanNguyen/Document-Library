@@ -65,36 +65,68 @@ export default {
             }
         },
         async fetchData() {
-            this.isLoading = true;
+            const paginationRequest = {
+                page: this.page.current,
+                size: 6,
+                sortBy: "id",
+                sortDirection: "asc",
+            };
+
             try {
-                const response = await apiClient.get(
-                    `/category/${this.categoryId}/documents`,
-                    {
-                        params: {
-                            page: this.page.current,
-                            size: this.page.size,
-                            sortBy: "createAt",
-                            sortDirection: "desc",
-                        },
-                    }
-                );
-                const data = response.data;
-                this.cards = data.content;
-                this.page.max = data.totalPages;
+                const response = await apiClient.get('/api/documents', { params: paginationRequest });
+                const data = await response.data;
+                if (data && data.content) {
+                    const start = (this.page.current - 1) * paginationRequest.size;
+                    const end = this.page.current * paginationRequest.size;
+
+                    this.cards = await Promise.allSettled(
+                        data.content.map(async (doc: any) => {
+                            try {
+                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
+                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
+
+                                const [thumbnailResponse, contentResponse] = await Promise.all([
+                                    thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
+                                    contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
+                                ]);
+
+                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
+                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
+
+                                return {
+                                    ...doc,
+                                    thumbnail: thumbnailData,
+                                    content: contentData,
+                                };
+                            } catch (error) {
+                                console.error(`Error processing document ID ${doc.id}:`, error);
+                                return {
+                                    ...doc,
+                                    thumbnail: null,
+                                    content: null,
+                                };
+                            }
+                        })
+                    );
+
+                    this.cards = this.cards
+                        .map((result) => (result.status === 'fulfilled' ? result.value : null))
+                        .filter(Boolean);
+                    console.log("DATA", cards);
+                    this.cards = this.cards.slice(start, end);
+                    this.page.max = Math.ceil(data.totalElements / paginationRequest.size);
+                }
             } catch (error) {
-                console.error("Error fetching data:", error);
-                this.cards = [];
-            } finally {
-                this.isLoading = false;
+                console.error('Error fetching data:', error);
             }
         },
         async loadCategoryData() {
             await this.fetchCategoryName();
             await this.fetchData();
         },
-        async gotoPage(pageNumber) {
-            if (pageNumber >= 0 && pageNumber < this.page.max) {
-                this.page.current = pageNumber;
+        async gotoPage(page) {
+            if (page >= 0 && page < this.page.max) {
+                this.page.current = page;
                 await this.fetchData();
                 window.scrollTo({ top: 0, behavior: "smooth" });
             }

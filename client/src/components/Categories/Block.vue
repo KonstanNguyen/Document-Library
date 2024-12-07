@@ -1,9 +1,9 @@
 <template>
 	<router-link :to="`/category/${categoryId}`">
 		<div class="container-category" :class="{ active: isActive }">
-			<IconLoader class="right" :iconUrl="iconName" width="35" height="35"/>
+			<IconLoader class="right" :iconUrl="iconName" width="25" height="25"/>
 
-			<div class="name">{{ name }}</div>
+			<div class="name text-center">{{ name }}</div>
 		</div>
 	</router-link>
 </template>
@@ -36,7 +36,7 @@ const isActive = computed(() => route.params.id === String(props.categoryId));
 	display: inline-flex;
 	flex-direction: row;
 	width: auto;
-	height: 56px;
+	height: 54px;
 	background-color:#ccd0d3;
 	box-shadow: 0px 2px 4px -2px #0000001a;
 	border-radius: 35px;
@@ -44,7 +44,7 @@ const isActive = computed(() => route.params.id === String(props.categoryId));
 	justify-content: center;
 	padding-left: 10px;
 	padding-right: 12px;
-	gap: 6px;
+	gap: 0px;
 	cursor: pointer;
 
 	&.active {
@@ -65,7 +65,7 @@ const isActive = computed(() => route.params.id === String(props.categoryId));
 
 	.name {
 		font-family: var(--primary-font);
-		font-size: 24px;
+		font-size: 20px;
 		font-weight: 600;
 		line-height: 19.2px;
 		color: #5c5612;

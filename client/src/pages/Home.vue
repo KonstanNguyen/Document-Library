@@ -1,6 +1,8 @@
 <template>
     <div>
-        <Categories />
+        <div class="w-100 p-3">
+            <Categories />
+        </div>
         <Recommend :title="titleR" :cards="cardsR" ref="pageRefR" />
         <section>
             <MainContent :title="title" :cards="cards" ref="pageRef" />

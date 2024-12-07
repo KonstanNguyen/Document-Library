@@ -11,11 +11,11 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col" style="width: 30%;">Username</th>
+                    <th scope="col" style="width: 30%;">Tiêu đề</th>
                     <th scope="col">Danh mục</th>
                     <th scope="col">Thời gian gửi</th>
                     <th scope="col">Người đăng</th>
-                    <th scope="col" style="width: 15%;">Thao tác</th>
+                    <th scope="col" style="width: 22%;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +29,7 @@
                     <td class="d-flex gap-2">
                         <button class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Duyệt</button>
                         <button class="btn btn-danger btn-sm"><i class="bi bi-trash3-fill"></i> Từ chối</button>
+                        <button class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> Xem </button>
                     </td>
                 </tr>
             </tbody>
@@ -86,7 +87,7 @@ export default {
             ],
             page: {
                 current: 1,
-                max: 4,
+                max: 3,
             },
         }
     },
@@ -132,7 +133,7 @@ export default {
                 const data = response.data;
 
                 if (data && data.content) {
-                    this.listDocAll = data.content.filter(doc => doc.status === 0);
+                    this.listDocAll = data.content.filter(doc => doc.status === 1);
                     this.page.max = data.totalPages;
                 }
             } catch (error) {
