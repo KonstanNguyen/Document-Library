@@ -5,7 +5,6 @@ export default {
         return {
             listDocuments: [],
             accountId: localStorage.getItem("userId") || "",
-            categoryNames: {},
             message: "",
         };
     },
@@ -46,19 +45,6 @@ export default {
                 }
             } catch (error) {
                 console.error("Lỗi khi gọi API lấy tài liệu:", error);
-                this.message = "Không thể tải tài liệu.";
-            }
-        },
-        async fetchCategoryName(categoryId) {
-            try {
-                const response = await apiClient.get(`/category/${categoryId}`);
-                const category = response.data.name;
-                if (category) {
-                    this.categoryNames[categoryId] = category;
-                }
-            } catch (error) {
-                console.error("Lỗi khi gọi API lấy thông tin danh mục:", error);
-                this.message = "Không thể tải thông tin danh mục.";
             }
         },
         formatDate(date) {
@@ -86,7 +72,7 @@ export default {
             <tr v-for="(item, index) in listDocuments" :key="item.id">
                 <th scope="row">{{ index + 1 }}</th> <!-- Đổi ID thành số thứ tự -->
                 <td>{{ item.title }}</td>
-                <td>{{ categoryNames[item.categoryId] }}</td>
+                <td>{{ item.categoryName }}</td>
                 <td>{{ formatDate(item.createAt) }}</td>
                 <td>{{ formatDate(item.updateAt) }}</td>
                 <td>
