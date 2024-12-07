@@ -1,0 +1,105 @@
+{
+    "navbar": {
+        "mainTitle": "Center for Scientific and Technical Creativity (CSTC)",
+        "subTitle": "Trung tâm Sáng tạo Khoa học–kỹ thuật (TSK)",
+        "courses": "Courses",
+        "blog": "Blog",
+        "contact": "Contact",
+        "tool": "Tools"
+    },
+    "course": {
+        "title": "Courses and programs",
+        "showAll": "Show all courses",
+        "startAt": "Starts",
+        "associatedPrograms": "Associated Programs",
+        "professionalCertificate": "Professional Certificate",
+        "professionalCertificateDescription": "Intelligent and Integrated Energy Systems",
+        "enroll": "Enroll now",
+        "free": "Free",
+        "earnCertificateFor": "Earn certificate for",
+        "groupFee": "Group fee",
+        "contactUs": "Contact us",
+        "courseLength": "Length",
+        "effort": "Effort",
+        "overview": "Overview",
+        "details": "Details",
+        "admission": "Admission",
+        "about": "About this course",
+        "relatedCourse": "Related courses",
+        "courseType": "Course type",
+        "startingSoon": "Starting soon",
+        "featured": "Featured"
+    },
+    "instructor": {
+        "title": "Meet our Instructors",
+        "showAll": "View all Instructors",
+        "name": "Instructors",
+        "bio": "Bio",
+        "details": "More info",
+        "position": "Position",
+        "degrees": "Degrees",
+        "faculty": "Faculty",
+        "courses": "Courses and programs by this instructor"
+    },
+    "contact": {
+        "title": "Contact us..."
+    },
+    "popularTheme": {
+        "title": "Popular Theme",
+        "showAll": "Show all"
+    },
+    "startCourse": {
+        "title": "Start course",
+        "showAll": "Show all"
+    },
+    "footer": {
+        "about_us_title": "CSTC",
+        "quick_link_title": "Quick link",
+        "news_title": "Newsletter",
+        "about_us": "About us",
+        "find_course": "Find course",
+        "our_course": "Our Course",
+        "our_program": "Our Program",
+        "help_and_support": "Help & Support",
+        "popular_topics": "Popular Topics",
+        "terms_and_conditions": "Terms & Conditions",
+        "privacy_statement": "Privacy Statement",
+        "accessibility_statement": "Accessibility Statement",
+        "learning_regulations": "Learning Regulations",
+        "taking_exams": "Taking Exams",
+        "change_your_password": "Change Your Password",
+        "news_content": "Subscribe to receive updates about online courses and programs in your field of interest.",
+        "new_redirect": "Subscribe Now",
+        "copyright": {
+            "title": "Center for Scientific and Technical Creativity (CSTC)",
+            "address": "Room 31 (3rd floor), House B, 227 Nguyễn Văn Cừ, District 5, Ho Chi Minh City, Vietnam",
+            "tel": "Tel: (84.8) 38 301 743",
+            "email": "Email: tsk@hcmus.edu.vn",
+            "fax": "Fax: (84.8) 38 350 096"
+        }
+    },
+    "aside": {
+        "category": "Category",
+        "showFilter": "Show filter",
+        "resetFilter": "Reset filter",
+        "signUpForNews": "Sign up for Our Newsletter"
+    },
+    "blog": {
+        "postListEmpty": "No post found!",
+        "relatedPost": "Related post",
+        "postSubjects": "Post subjects",
+        "lastedOn": "Lasted on: ",
+        "references": "References: "
+    },
+    "whyUs": {
+        "title": "Why choose CSTC?",
+        "description": "CSTC is ranked among the top... in ... voted by ..."
+    },
+    "learnMore": "Learn more...",
+    "message": {
+        "mail": {
+            "subject": "About CSTC",
+            "contents": "Hey, this website have all courses you need: "
+        }
+    }
+}

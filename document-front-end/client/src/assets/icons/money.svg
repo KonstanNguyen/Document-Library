@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 592.34 538.72">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: Averta-Bold, Averta-Bold;
+        font-size: 261.27px;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        fill: #1976d2;
+      }
+    </style>
+  </defs>
+  <g id="_Ñëîé_1" data-name="Ñëîé 1">
+    <g>
+      <path class="cls-2" d="m6.64,219.06s73.02-120,216-107.74S410.04,72,478.98,0l113.36,195.06s-68.43,148.27-240.51,152.68c-39.8,1.02-171.06-27.06-237.45,67.4L6.64,219.06Z"/>
+      <path class="cls-2" d="m19.91,296.17L0,327.32l114.89,211.4s43.4-126.13,161.87-130.21,199.15,32.52,304.34-102.72l-15.83-26.47s-67.4,97.02-178.72,96c-101.15-.93-215.49-18.38-268.09,95.49L19.91,296.17Z"/>
+      <text class="cls-1" transform="translate(308.94 331.24) rotate(-34.28)"><tspan x="0" y="0">$</tspan></text>
+    </g>
+  </g>
+</svg>

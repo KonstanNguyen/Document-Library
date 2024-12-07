@@ -1,0 +1,212 @@
+{
+    "news": [
+        {
+            "id": 1,
+            "title": "Chương 4: Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
+            "author": "Le Nguyen Truong Giang",
+            "summary": "<b>34 trang</b> - <b>156 views</b>",
+            "content": "",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/chuong4binhquandidong-sanbangsomu-170425121551-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
+            "href": "/documents/chuong4binhquandidong-sanbangsomu",
+            "slug": "chuong4binhquandidong-sanbangsomu"
+        },
+        {
+            "id": 2,
+            "title": "Đề tài: Lập dự án quán cafe sinh viên, 9 ĐIỂM!",
+            "author": "Viết thuê",
+            "summary": "<b>53 trang</b> - <b>120 views</b>",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tieuluanquantrihoc20054-190922033524-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
+            "href": "/documents/tieuluanquantrihoc20054",
+            "slug": "tieuluanquantrihoc20054"
+        },
+        {
+            "id": 3,
+            "title": "[NCKH] thiết kế nghiên cứu khoa học",
+            "author": "CLBSVHTTCNCKH",
+            "summary": "<b>33 trang</b> - <b>44 views</b>",
+            "content": "Content",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/nckhthitknghincukhoahc-151227113101-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "khoa-hoc",
+            "href": "/documents/nckhthitknghincukhoahc",
+            "slug": "nckhthitknghincukhoahc"
+        },
+        {
+            "id": 4,
+            "title": "KINH TẾ HỌC VĨ MÔ - Chương 5 CHÍNH SÁCH TÀI CHÍNH VÀ NGOẠI THƯƠNG",
+            "author": "Digiword Ha Noi",
+            "summary": "<b>44 trang</b> - <b>116 views</b>",
+            "content": "Content",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/5-chinhsachtaichinhngoaithuong-091225213241-phpapp02-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
+            "href": "/documents/chinhsachtaichinhngoaithuong",
+            "slug": "chinhsachtaichinhngoaithuong"
+        },
+        {
+            "id": 5,
+            "title": "2024 Trend Updates: What Really Works In SEO & Content Marketing",
+            "author": "Search Engine Journal",
+            "summary": "<b>21 trang</b> - <b>32 views</b>",
+            "content": "Content",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/conductor-webinar-6182024-presentation-240618152603-d6c54198-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "marketing",
+            "href": "/documents/conductor-webinar-presentation",
+            "slug": "conductor-webinar-presentation"
+        },
+        {
+            "id": 6,
+            "title": "Tổng hợp các công thức kinh tế vi mô.",
+            "author": "Hoa Trò",
+            "summary": "<b>2 trang</b> - <b>53 views</b>",
+            "content": "Content",
+            "image": "https://cdn.slidesharecdn.com/ss_thumbnails/tnghpcccngthckinhtvim-120912111052-phpapp01-thumbnail.jpg?width=560&fit=bounds",
+            "categorySlug": "giao-duc",
+            "href": "/documents/tnghpcccngthckinhtvim",
+            "slug": "tnghpcccngthckinhtvim"
+        },
+        {
+            "id": 7,
+            "title": "Test",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "categorySlug": "marketing",
+            "href": "/documents/6",
+            "slug": "6"
+        },
+        {
+            "id": 8,
+            "title": "777",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/documents/7",
+            "slug": "7"
+        },
+        {
+            "id": 9,
+            "title": "888",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/documents/8",
+            "slug": "8"
+        },
+        {
+            "id": 10,
+            "title": "999",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/documents/9",
+            "slug": "9"
+        },
+        {
+            "id": 11,
+            "title": "1010",
+            "101010hor": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/documents/10",
+            "slug": "10"
+        }
+    ],
+    "learning": [
+        {
+            "id": 2,
+            "title": "lndc222",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/2",
+            "slug": "2"
+        },
+        {
+            "id": 3,
+            "title": "lndc333",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/3",
+            "slug": "3"
+        },
+        {
+            "id": 4,
+            "title": "lndc444",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/4",
+            "slug": "4"
+        },
+        {
+            "id": 5,
+            "title": "lndc555",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/5",
+            "slug": "5"
+        },
+        {
+            "id": 6,
+            "title": "lndc666",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/6",
+            "slug": "6"
+        },
+        {
+            "id": 7,
+            "title": "lndc777",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/7",
+            "slug": "7"
+        },
+        {
+            "id": 8,
+            "title": "lndc888",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/8",
+            "slug": "8"
+        },
+        {
+            "id": 9,
+            "title": "lndc999",
+            "author": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/9",
+            "slug": "9"
+        },
+        {
+            "id": 10,
+            "title": "lndc1010",
+            "101010hor": "s",
+            "summary": "Sumary",
+            "content": "Content",
+            "image": "/imgs/students.png",
+            "href": "/learning-documents/10",
+            "slug": "10"
+        }
+    ]
+}
