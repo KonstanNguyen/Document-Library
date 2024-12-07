@@ -1,12 +1,7 @@
 export type DataCard = {
 	id: number,
-	category: {
-        id: number,
-        name: string,
-    },
-    author: {
-        name: string;
-    };
+	categoryId: number,
+    authorId: number,
 	thumbnail: string;
     title: string;
     content: string;

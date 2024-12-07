@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const isActive = computed(() => route.params.id === props.categoryId);
+const isActive = computed(() => route.params.id === String(props.categoryId));
 </script>
 
 <style scoped lang="scss">
@@ -43,8 +43,8 @@ const isActive = computed(() => route.params.id === props.categoryId);
 	align-items: center;
 	justify-content: center;
 	padding-left: 10px;
-	padding-right: 10px;
-	gap: 10px;
+	padding-right: 12px;
+	gap: 6px;
 	cursor: pointer;
 
 	&.active {

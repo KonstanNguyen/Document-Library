@@ -138,6 +138,7 @@ export default {
                 const documentId = this.$route.params.id;
                 const response = await apiClient.get(`/api/documents/${documentId}`);
                 this.post = response.data;
+                this.author = response.data.authorId;
 
                 // const allPostsResponse = await apiClient.get('/api/documents');
                 // const allPosts = allPostsResponse.data;
@@ -150,6 +151,7 @@ export default {
                 console.error("Error fetching data:", error);
             }
         },
+        
         scrollToTop() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         },

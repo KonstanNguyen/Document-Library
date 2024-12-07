@@ -55,7 +55,7 @@ const router = createRouter({
             name: 'Category',
             children: [
                 {
-                    path: ":categoryId",
+                    path: ":id",
                     name: 'Documents by category',
                     component: () => import('@/pages/Category.vue')
                 },

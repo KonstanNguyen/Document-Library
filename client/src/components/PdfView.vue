@@ -76,18 +76,18 @@ export default {
   methods: {
     async downloadPdf() {
       try {
-        const response = await axios.get('http://localhost:5454/pdf/file', {
+        const pdfPath = this.pdfPath.split('/').pop();
+        const response = await axios.get('http://localhost:5454/pdf/download', {
           params: {
-            pdfPath: this.pdfPath,
+            pdfPath: pdfPath,
           },
-          responseType: 'blob', // Specify blob for binary data
+          responseType: 'blob',
         });
 
-        // Create a temporary anchor element for downloading
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = this.pdfPath.split('/').pop(); // Use the filename from the path
+        link.download = pdfPath; 
         link.click();
       } catch (error) {
         console.error("Lỗi khi tải PDF:", error);

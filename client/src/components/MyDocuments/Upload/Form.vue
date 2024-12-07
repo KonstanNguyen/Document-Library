@@ -7,10 +7,12 @@ export default {
                 title: "",
                 categoryId: null,
                 description: "",
-                authorId: 1,
+                authorId: null,
                 status: 0,
             },
             Categories: [],
+            accountId: localStorage.getItem("userId") || "",
+            isLoading: false,
         };
     },
 
@@ -23,6 +25,15 @@ export default {
                 console.error("Error fetching categories:", error);
             }
         },
+        async fetchAuthorId(accountId) {
+            try {
+                const response = await apiClient.get(`/api/accounts/${accountId}`);
+                this.formData.authorId = response.data.userId;
+            } catch (error) {
+                console.error("Lỗi khi gọi API lấy thông tin tài khoản:", error);
+                this.message = "Không thể tải thông tin người dùng.";
+            }
+        },
         handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) {
@@ -33,9 +44,10 @@ export default {
             console.log("File được chọn:", file.name);
         },
         async submitForm() {
+            this.isLoading = true;
             try {
                 const formDataToSend = new FormData();
-                
+
                 const data = {
                     title: this.formData.title,
                     categoryId: this.formData.categoryId,
@@ -59,10 +71,13 @@ export default {
             } catch (error) {
                 console.error("Error submitting form:", error);
                 alert("Đã xảy ra lỗi trong quá trình tải lên.");
+            } finally {
+                this.isLoading = false;
             }
         },
     },
     mounted() {
+        this.fetchAuthorId(this.accountId);
         this.fetchCategories();
     },
 };
@@ -75,50 +90,29 @@ export default {
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label for="title" class="form-label">Tiêu đề</label>
-                        <input
-                            id="title"
-                            type="text"
-                            class="form-control"
-                            placeholder="Nhập tiêu đề"
-                            v-model="formData.title"
-                        />
+                        <input id="title" type="text" class="form-control" placeholder="Nhập tiêu đề"
+                            v-model="formData.title" />
                     </div>
                     <div class="col-12 d-grid gap-1 mb-3">
                         <label>Danh mục</label>
-                        <select
-                            class="select-category"
-                            name="categoryId"
-                            id="categories"
-                            v-model="formData.categoryId"
-                        >
+                        <select class="select-category" name="categoryId" id="categories" v-model="formData.categoryId">
                             <option v-for="item in Categories" :value="item.id">
                                 {{ item.name }}
                             </option>
                         </select>
                     </div>
                     <div class="col-12 mb-3">
-                        <label for="formFile" class="form-label"
-                            >Upload file</label
-                        >
-                        <input
-                            class="upload form-control"
-                            type="file"
-                            id="formFile"
-                            @change="handleFileUpload"
-                        />
+                        <label for="formFile" class="form-label">Upload file</label>
+                        <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload" />
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Mô tả</label>
-                        <textarea
-                            class="description form-control"
-                            type="text"
-                            placeholder="Nhập mô tả"
-                            name="description"
-                            v-model="formData.description"
-                        ></textarea>
+                        <textarea class="description form-control" type="text" placeholder="Nhập mô tả"
+                            name="description" v-model="formData.description"></textarea>
                     </div>
                     <div class="col-12 text-center pt-4">
-                        <button class="btn-apply" type="submit">
+                        <button class="btn-apply" type="submit" :disabled="isLoading">
+                            <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Lưu thông tin
                         </button>
                     </div>
@@ -135,12 +129,14 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
 .select-category {
     width: 100%;
     border: none;
     background-color: #e9ecef;
     padding: 10px 20px;
 }
+
 .btn-apply {
     background-color: #1976d2;
     border: 2px solid #fff;
@@ -157,6 +153,7 @@ export default {
         background-color: #0e1a61;
     }
 }
+
 .description {
     background: #e9ecef;
     height: 100px;
@@ -165,7 +162,14 @@ export default {
     width: 100%;
     padding: 10px 20px;
 }
+
 .upload {
     background: #e9ecef;
+}
+.spinner-border {
+    margin-right: 5px;
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
 }
 </style>

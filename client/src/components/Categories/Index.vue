@@ -15,36 +15,7 @@
         components: { Block },
 		data() {
 			return {
-                ListCategories: [
-                    {
-                        iconName: 'book',
-                        categorySlug: 'giao-duc',
-                    },
-                    {
-                        iconName: 'light',
-                        categorySlug: 'cong-nghe',
-                    },
-                    {
-                        iconName: 'chess',
-                        categorySlug: 'khoa-hoc',
-                    },
-                    {
-                        iconName: 'sale',
-                        categorySlug: 'kinh-te',
-                    },
-                    {
-                        iconName: 'hand',
-                        categorySlug: 'suc-khoe',
-                    },
-                    {
-                        iconName: 'fly',
-                        categorySlug: 'tu-dong-hoa',
-                    },
-                    {
-                        iconName: 'money',
-                        categorySlug: 'marketing',
-                    },
-                ],
+                ListCategories: [],
             };
 		},
         mounted() {
