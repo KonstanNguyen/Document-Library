@@ -68,9 +68,8 @@
 				<span>{{ post.ratingAvg }} <i class="bi bi-star-fill" style="color:darkgoldenrod;"></i></span>
 			</div>
 		</div>
-		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ authorName }}</div>
-		<div class="post-content" v-html="post.category?.name">
-		</div>
+		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ post.authorName }}</div>
+		<div class="post-content"><span class="fw-bold">Danh mục:</span> {{ post.categoryName }}</div>
 		<PdfView v-if="post.content" class="mt-3" :pdfPath="post.content" />
 	</div>
 </template>
@@ -89,26 +88,7 @@ export default {
 	props: {
 		post: { type: Object as PropType<DataCard>, required: true },
 	},
-	data() {
-		return {
-			authorName: "",
-		};
-	},
-	computed: {
-		authorId() {
-			return this.post ? this.post.authorId : null;
-		},
-	},
 	methods: {
-		async fetchDocUser(authorId: number) {
-			console.log("Author id", authorId);
-			try {
-				const response = await apiClient.get(`/api/doc-users/${authorId}`);
-				this.authorName = response.data.name;
-			} catch (error) {
-				console.error("Lỗi khi gọi API lấy thông tin tài khoản:", error);
-			}
-		},
 		getCurrentLink() {
 			return window.location.origin;
 		},
@@ -122,11 +102,6 @@ export default {
 			},
 			immediate: true,
 		},
-	},
-	mounted() {
-		if (this.authorId) {
-			this.fetchDocUser(this.authorId);
-		}
 	},
 };
 </script>

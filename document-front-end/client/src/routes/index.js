@@ -61,6 +61,27 @@ const router = createRouter({
                 },
             ]
         },
+        {
+            path: '/admin',
+            name: 'Admin',
+            children: [
+                {
+                    path: "documents/:link",
+                    name: 'Admin Documents',
+                    component: () => import('@/components/Admin/Documents.vue')
+                },
+                {
+                    path: "accounts",
+                    name: 'Admin Accounts',
+                    component: () => import('@/components/Admin/Accounts.vue')
+                },
+                {
+                    path: "history-download",
+                    name: 'Admin History Downloads',
+                    component: () => import('@/components/Admin/HistoryDownload.vue')
+                },
+            ]
+        },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {
