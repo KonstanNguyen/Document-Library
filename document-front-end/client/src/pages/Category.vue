@@ -37,8 +37,7 @@ export default {
             categoryName: "",
             cards: [],
             page: {
-                current: 0,
-                size: 6,
+                current: 1,
                 max: 1,
             },
             isLoading: false,
@@ -48,7 +47,7 @@ export default {
         "$route.params.id": {
             handler(newCategoryId) {
                 this.categoryId = newCategoryId;
-                this.page.current = 0; // Reset trang về 0
+                this.page.current = 0;
                 this.loadCategoryData();
             },
             immediate: true,
@@ -58,27 +57,25 @@ export default {
         async fetchCategoryName() {
             try {
                 const response = await apiClient.get(`/category/${this.categoryId}`);
-                this.categoryName = response.data.name; // Thay 'name' bằng trường trả về từ API
+                this.categoryName = response.data.name; 
             } catch (error) {
                 console.error("Error fetching category name:", error);
-                this.categoryName = "Không xác định"; // Giá trị mặc định nếu API lỗi
+                this.categoryName = "Không xác định"; 
             }
         },
         async fetchData() {
             const paginationRequest = {
                 page: this.page.current,
-                size: 6,
-                sortBy: "id",
-                sortDirection: "asc",
+                size: 9,
+                sortBy: "views",
+                sortDirection: "desc",
+                status: 1,
             };
 
             try {
-                const response = await apiClient.get('/api/documents', { params: paginationRequest });
+                const response = await apiClient.get(`/category/${this.categoryId}/documents`, { params: paginationRequest });
                 const data = await response.data;
                 if (data && data.content) {
-                    const start = (this.page.current - 1) * paginationRequest.size;
-                    const end = this.page.current * paginationRequest.size;
-
                     this.cards = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
                             try {
@@ -112,9 +109,7 @@ export default {
                     this.cards = this.cards
                         .map((result) => (result.status === 'fulfilled' ? result.value : null))
                         .filter(Boolean);
-                    console.log("DATA", cards);
-                    this.cards = this.cards.slice(start, end);
-                    this.page.max = Math.ceil(data.totalElements / paginationRequest.size);
+                    this.page.max = data.totalPages;
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);

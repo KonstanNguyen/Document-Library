@@ -10,6 +10,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import * as pdfWorker from "pdfjs-dist/build/pdf.worker.mjs";
 import "pdfjs-dist/web/pdf_viewer.css";
 import axios from 'axios';
+import apiClient from "@/api/service";
 
 export default {
   props: {
@@ -17,10 +18,19 @@ export default {
       type: String,
       required: true,
     },
+    documentId: {
+      type: Number,
+      required: true,
+    },
     pageNumber: {
       type: Number,
       default: 5,
     },
+  },
+  data() {
+    return {
+      accountId: localStorage.getItem("userId") || "",
+    }
   },
   async mounted() {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.worker.min.js';
@@ -87,8 +97,16 @@ export default {
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = pdfPath; 
+        link.download = pdfPath;
         link.click();
+
+        await apiClient.post('/api/history-downloads', null, {
+          params: {
+            accountId: this.accountId,
+            documentId: this.$props.documentId,
+          },
+        });
+        console.log("Lịch sử tải xuống đã được lưu");
       } catch (error) {
         console.error("Lỗi khi tải PDF:", error);
       }
@@ -104,6 +122,7 @@ export default {
   width: 100%;
   height: auto;
 }
+
 .download-btn {
   position: relative;
   padding: 10px 20px;

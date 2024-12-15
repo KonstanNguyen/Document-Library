@@ -99,10 +99,11 @@ export default {
     methods: {
         async fetchData() {
             const paginationRequest = {
-                page: this.page.current,
-                size: 6,
-                sortBy: "id",
-                sortDirection: "asc",
+                page: this.page.current - 1,
+                size: 9,
+                sortBy: "views",
+                sortDirection: "desc", 
+                status: 1,
             };
 
             try {
@@ -110,9 +111,6 @@ export default {
                 const data = await response.data;
 
                 if (data && data.content) {
-                    const start = (this.page.current - 1) * paginationRequest.size;
-                    const end = this.page.current * paginationRequest.size;
-
                     this.cards = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
                             try {
@@ -126,7 +124,7 @@ export default {
 
                                 const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
                                 const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
-
+                                
                                 return {
                                     ...doc,
                                     thumbnail: thumbnailData,
@@ -146,9 +144,7 @@ export default {
                     this.cards = this.cards
                         .map((result) => (result.status === 'fulfilled' ? result.value : null))
                         .filter(Boolean);
-
-                    this.cards = this.cards.slice(start, end);
-                    this.page.max = Math.ceil(data.totalElements / paginationRequest.size);
+                    this.page.max = data.totalPages;
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);

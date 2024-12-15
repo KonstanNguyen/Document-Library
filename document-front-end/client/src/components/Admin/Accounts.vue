@@ -16,7 +16,7 @@
                 <tr v-for="(item, index) in listAccounts" :key="item.id">
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.name }}</td>
-                    <td>{{ item.gender ? "Nam" : "Nữ" }}</td>
+                    <td>{{ item.gender ? "Nữ" : "Nam" }}</td>
                     <td>{{ formatDate(item.dateOfBirth) }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.roleName }}</td>
@@ -49,10 +49,10 @@ export default {
     methods: {
         async fetchData() {
             const paginationRequest = {
-                page: this.page.current,
-                size: 6,
+                page: this.page.current - 1,
+                size: 9,
                 sortBy: "id",
-                sortDirection: "asc",
+                sortDirection: "desc",
             };
 
             try {
