@@ -70,7 +70,9 @@
 		</div>
 		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ post.authorName }}</div>
 		<div class="post-content"><span class="fw-bold">Danh mục:</span> {{ post.categoryName }}</div>
-		<PdfView v-if="post.content" class="mt-3" :pdfPath="post.content" />
+		<PdfView v-if="post.content" class="mt-3" 
+		:pdfPath="post.content"
+		:documentId="post.id" />
 	</div>
 </template>
 

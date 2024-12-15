@@ -1,10 +1,6 @@
 <template>
     <div class="container d-flex justify-content-around pt-5" style="width: 30%;">
-        <Block v-for="item in Options" 
-            :link="item.link"
-            :name="item.name"
-            @click="fetchDocuments(item.link)"
-        />
+        <Block v-for="item in Options" :link="item.link" :name="item.name" @click="fetchDocuments(item.link)" />
     </div>
     <div class="m-auto mt-5" style="width: 90%;">
         <table class="table table-striped table-hover" v-if="selectedLink === 'request'">
@@ -19,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in listDocRequest" :key="item.id">
+                <tr v-for="(item, index) in listDocRequest">
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.title }}</td>
                     <td>{{ item.categoryName }}</td>
@@ -27,7 +23,10 @@
                     <td>{{ item.authorName }}</td>
 
                     <td class="d-flex gap-2">
-                        <button class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Duyệt</button>
+                        <button class="btn btn-primary btn-sm"
+                        @click="approveDocument(item.id)">
+                            <i class="bi bi-pencil-square"></i> Duyệt
+                        </button>
                         <button class="btn btn-danger btn-sm"><i class="bi bi-trash3-fill"></i> Từ chối</button>
                         <button class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> Xem </button>
                     </td>
@@ -47,7 +46,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in listDocAll" :key="item.id">
+                <tr v-for="(item, index) in listDocAll">
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.title }}</td>
                     <td>{{ item.categoryName }}</td>
@@ -58,7 +57,7 @@
                 </tr>
             </tbody>
         </table>
-        <Pagination/>
+        <Pagination />
     </div>
 </template>
 
@@ -87,7 +86,7 @@ export default {
             ],
             page: {
                 current: 1,
-                max: 3,
+                max: 1,
             },
         }
     },
@@ -102,10 +101,11 @@ export default {
         },
         async fetchData() {
             const paginationRequest = {
-                page: this.page.current,
-                size: 6,
-                sortBy: "id",
-                sortDirection: "asc",
+                page: this.page.current - 1,
+                size: 9,
+                sortBy: "createAt",
+                sortDirection: "desc",
+                status: 0,
             };
 
             try {
@@ -113,7 +113,7 @@ export default {
                 const data = response.data;
 
                 if (data && data.content) {
-                    this.listDocRequest = data.content.filter(doc => doc.status === 0);
+                    this.listDocRequest = data.content;
                     this.page.max = data.totalPages;
                 }
             } catch (error) {
@@ -122,10 +122,11 @@ export default {
         },
         async fetchAllData() {
             const paginationRequest = {
-                page: this.page.current,
-                size: 6,
-                sortBy: "id",
-                sortDirection: "asc",
+                page: this.page.current - 1,
+                size: 9,
+                sortBy: "createAt",
+                sortDirection: "desc",
+                status: 1,
             };
 
             try {
@@ -133,28 +134,52 @@ export default {
                 const data = response.data;
 
                 if (data && data.content) {
-                    this.listDocAll = data.content.filter(doc => doc.status === 1);
+                    this.listDocAll = data.content;
                     this.page.max = data.totalPages;
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         },
+        async approveDocument(documentId) {
+            try {
+                const updatedDocument = { status: 1 };
+                console.log("Sending request:", updatedDocument);
+                const response = await apiClient.put(`/api/documents/${documentId}/update`, updatedDocument);
+                console.log("Response from server:", response.data);
+                this.fetchDocuments(this.selectedLink);
+                alert("Tài liệu đã được duyệt!");
+            } catch (error) {
+                console.error('Error approving document:', error);
+                alert("Có lỗi xảy ra khi duyệt tài liệu!");
+            }
+        },
         formatDate(date) {
             const d = new Date(date);
-            return d.toLocaleString();
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
         },
         async gotoPage(page) {
             if (page >= 1 && page <= this.page.max) {
                 this.page.current = page;
-                await this.fetchData();
+                if (this.selectedLink === "request") {
+                    await this.fetchData();
+                } else if (this.selectedLink === "all") {
+                    await this.fetchAllData();
+                }
                 this.scrollToTop();
             }
         },
         async gotoPrePage() {
             if (this.page.current > 1) {
                 this.page.current--;
-                await this.fetchData();
+                if (this.selectedLink === "request") {
+                    await this.fetchData();
+                } else if (this.selectedLink === "all") {
+                    await this.fetchAllData();
+                }
                 this.scrollToTop();
             }
         },
@@ -162,7 +187,11 @@ export default {
         async gotoNxtPage() {
             if (this.page.current < this.page.max) {
                 this.page.current++;
-                await this.fetchData();
+                if (this.selectedLink === "request") {
+                    await this.fetchData();
+                } else if (this.selectedLink === "all") {
+                    await this.fetchAllData();
+                }
                 this.scrollToTop();
             }
         },
@@ -178,8 +207,11 @@ export default {
             page: computed(() => this.page),
         };
     },
+    created() {
+        this.fetchDocuments("all");
+    },
     mounted() {
-        this.fetchDocuments("all"); 
+        this.fetchDocuments("all");
     }
 };
 </script>

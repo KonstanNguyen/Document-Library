@@ -41,16 +41,16 @@ export default {
     methods: {
         async fetchData() {
             const paginationRequest = {
-                page: this.page.current,
-                size: 6,
-                sortBy: "id",
-                sortDirection: "asc",
+                page: this.page.current - 1,
+                size: 9,
+                sortBy: "date",
+                sortDirection: "desc",
             };
 
             try {
                 const response = await apiClient.get('api/history-downloads', { params: paginationRequest });
                 const data = response.data;
-                this.listHistoryDownload = data;
+                this.listHistoryDownload = data.content;
                 this.page.max = data.totalPages;
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -58,7 +58,10 @@ export default {
         },
         formatDate(date) {
             const d = new Date(date);
-            return d.toLocaleString();
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
         },
         async gotoPage(page) {
             if (page >= 1 && page <= this.page.max) {
