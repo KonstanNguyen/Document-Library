@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,6 +22,17 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        return pathMatcher.match("/api/accounts/login", path) ||
+                pathMatcher.match("/api/accounts/getUserIdByUsername/{username}", path) ||
+                pathMatcher.match("/api/accounts/register", path) ||
+                pathMatcher.match("/api/documents", path) ||
+                pathMatcher.match("/api/documents/{documentId}", path);
+    }
 
     @Override
     protected void doFilterInternal(

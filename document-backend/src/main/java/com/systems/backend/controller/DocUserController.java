@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -57,7 +58,8 @@ public class DocUserController {
         
         return docUserMapper.toDTOPage(docUserPage);
     }
-    
+
+    @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -80,6 +82,7 @@ public class DocUserController {
         return docUserService.updateDocUser(docUserId, docUser);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @DeleteMapping("{docUserId}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDocUser(@PathVariable(name = "docUserId") Long accountId) {

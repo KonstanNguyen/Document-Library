@@ -11,12 +11,12 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
-SERVER = 'DESKTOP-SVEFPRH\\MSSQLSERVER_TN'
+SERVER = 'LAPTOP-KJ4L2LKH'
 DATABASE = 'HTTM'
 USERNAME = 'sa'
-PASSWORD = 'sa'
+PASSWORD = 'Ntn123'
 
-cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + SERVER + ';DATABASE=' +
+cnxn = pyodbc.connect('DRIVER={FreeTDS};SERVER=' + SERVER + ';DATABASE=' +
                       DATABASE + ';UID=' + USERNAME + ';PWD=' + PASSWORD)
 cursor = cnxn.cursor()
 

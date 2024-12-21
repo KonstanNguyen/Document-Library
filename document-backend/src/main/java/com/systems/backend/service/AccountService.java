@@ -1,6 +1,7 @@
 package com.systems.backend.service;
 
 import com.systems.backend.model.Account;
+import com.systems.backend.requests.CreateRatingRequest;
 import com.systems.backend.requests.LoginRequest;
 import com.systems.backend.requests.RegisterRequest;
 import com.systems.backend.responses.LoginResponse;
@@ -21,4 +22,5 @@ public interface AccountService {
     void deleteAccount(Long id);
     RegisterResponse registerAccount(RegisterRequest registerRequest);
     LoginResponse loginAccount(LoginRequest loginRequest);
+//    void rateDocument(CreateRatingRequest createRatingRequest);
 }

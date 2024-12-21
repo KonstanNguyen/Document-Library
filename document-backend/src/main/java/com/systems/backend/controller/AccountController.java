@@ -4,25 +4,26 @@ import com.systems.backend.mapper.AccountMapper;
 import com.systems.backend.model.Account;
 import com.systems.backend.model.Document;
 import com.systems.backend.model.Role;
+import com.systems.backend.requests.CreateRatingRequest;
 import com.systems.backend.requests.LoginRequest;
 import com.systems.backend.requests.PaginationRequest;
 import com.systems.backend.requests.RegisterRequest;
 import com.systems.backend.responses.AccountResponse;
 import com.systems.backend.responses.ApiResponse;
 import com.systems.backend.responses.HistoryDownloadResponse;
-import com.systems.backend.service.AccountService;
-import com.systems.backend.service.DocumentService;
-import com.systems.backend.service.RoleService;
-import com.systems.backend.service.HistoryDownloadService;
+import com.systems.backend.responses.RatingResponse;
+import com.systems.backend.service.*;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,6 +44,9 @@ public class AccountController {
     @Autowired
     private HistoryDownloadService historyDownloadService;
 
+    @Autowired
+    private RatingService ratingService;
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -51,7 +55,7 @@ public class AccountController {
         if (pageRequest == null) {
             pageable = PageRequest.of(0, 6, Sort.by("username").ascending());
         } else {
-            int page = pageRequest.getPage() > 0 ? pageRequest.getPage() : 0;
+            int page = Math.max(pageRequest.getPage(), 0);
             int size = pageRequest.getSize() > 0 ? pageRequest.getSize() : 10;
             String sortBy = pageRequest.getSortBy() != null ? pageRequest.getSortBy() : "username";
             String sortDir = pageRequest.getSortDirection() != null ? pageRequest.getSortDirection() : "asc";
@@ -64,6 +68,7 @@ public class AccountController {
         return accountMapper.toDTOPage(accountPage);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -89,6 +94,7 @@ public class AccountController {
         return accountService.updateAccount(accountId, account);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @DeleteMapping("{accountId}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAccount(@PathVariable Long accountId) {
@@ -130,7 +136,7 @@ public class AccountController {
                 .build();
     }
 
-    @GetMapping("getRoleById/{accountId}")
+    @GetMapping("getRoleByAccountId/{accountId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ApiResponse<Object> getRoleById(@PathVariable("accountId") Long accountId) {
@@ -147,5 +153,11 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     public List<HistoryDownloadResponse> getHistoryByAccountId(@PathVariable Long accountId) {
         return historyDownloadService.getHistoryByAccountId(accountId);
+    }
+
+    @PostMapping("rate")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public RatingResponse rateAccount(@Valid @RequestBody CreateRatingRequest request) {
+        return ratingService.createRating(request);
     }
 }

@@ -23,6 +23,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -37,6 +39,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Autowired
     private JwtAuthEntryPoint jwtAuthEntryPoint;
@@ -57,20 +60,23 @@ public class SecurityConfig {
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .authorizeHttpRequests(authorizeRequests -> {
-                    authorizeRequests.anyRequest().permitAll();
-                    // .requestMatchers(HttpMethod.GET,"api/documents").permitAll()
-                    // .requestMatchers(HttpMethod.GET, "/api/accounts/**").permitAll()
-                    // .requestMatchers(HttpMethod.POST, "/api/accounts/**").permitAll()
-                    // .requestMatchers(HttpMethod.PUT, "/api/accounts/**").permitAll()
-                    // .requestMatchers(HttpMethod.DELETE, "/api/accounts/**").permitAll()
-                    // .requestMatchers(HttpMethod.POST, "/api/roles").permitAll()
-                    // .anyRequest()
-                    // .authenticated();
-                })
-                // .authenticationProvider(authenticationProvider())
-                .httpBasic(AbstractHttpConfigurer::disable);
-        // http.addFilterBefore(jwtAuthenticationFilter(),
-        // UsernamePasswordAuthenticationFilter.class);
+                    authorizeRequests
+                            // Api cho người dùng khách
+                            .requestMatchers(
+                                    "/api/documents",
+                                    "/api/documents/{documentId}",
+                                    "/api/accounts/getUserIdByUsername/{username}",
+                                    "/api/accounts/login",
+                                    "/api/accounts/register"
+                            ).permitAll()
+                            .anyRequest().authenticated();
+
+                }).formLogin(AbstractHttpConfigurer::disable)
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(
+                        jwtAuthenticationFilter(),
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

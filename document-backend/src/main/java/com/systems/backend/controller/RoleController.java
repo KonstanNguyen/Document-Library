@@ -5,11 +5,13 @@ import com.systems.backend.requests.CreateRoleRequest;
 import com.systems.backend.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
 @RequestMapping(value = "/api/roles")
 public class RoleController {
     @Autowired

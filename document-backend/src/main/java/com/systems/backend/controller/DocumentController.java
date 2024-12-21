@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +42,7 @@ public class DocumentController {
 
     @Autowired
     private DocumentMapper documentMapper;
-    
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -50,7 +51,7 @@ public class DocumentController {
         if (pageRequest == null) {
             pageable = PageRequest.of(0, 6, Sort.by("createAt").descending());
         } else {
-            int page = pageRequest.getPage() > 0 ? pageRequest.getPage() : 0;
+            int page = Math.max(pageRequest.getPage(), 0);
             int size = pageRequest.getSize() > 1 ? pageRequest.getSize() : 6;
             String sortBy = pageRequest.getSortBy() != null ? pageRequest.getSortBy() : "createAt";
             String sortDir = pageRequest.getSortDirection() != null ? pageRequest.getSortDirection() : "desc";
@@ -106,6 +107,7 @@ public class DocumentController {
         return ratingService.getRatingByDocumentId(documentId);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @GetMapping("{documentId}/list-account")
     @ResponseStatus(HttpStatus.OK)
     public List<HistoryDownloadResponse> getHistoryByDocumentId(@PathVariable Long documentId) {

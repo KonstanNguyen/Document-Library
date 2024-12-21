@@ -6,6 +6,7 @@ import com.systems.backend.model.DocUser;
 import com.systems.backend.model.Role;
 import com.systems.backend.repository.AccountRepository;
 import com.systems.backend.repository.RoleRepository;
+import com.systems.backend.requests.CreateRatingRequest;
 import com.systems.backend.requests.LoginRequest;
 import com.systems.backend.requests.RegisterRequest;
 import com.systems.backend.responses.LoginResponse;
@@ -112,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
                 .gender(registerRequest.getGender())
                 .build();
 
-        Role userRole = roleRepository.findByName("USER")
+        Role userRole = roleRepository.findByName("user")
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         Account account = Account.builder()
@@ -155,5 +156,12 @@ public class AccountServiceImpl implements AccountService {
                 .build();
     }
 
-
+//    @Override
+//    public void rateDocument(CreateRatingRequest createRatingRequest) {
+//        Account account = accountRepository.findById(accountId).orElseThrow(() ->
+//                new ResourceNotFoundException("Account not found")
+//        );
+//
+//
+//    }
 }
