@@ -29,7 +29,7 @@ const router = createRouter({
             name: 'my documents',
             children: [
                 {
-                    path: "",
+                    path: ":link",
                     name: 'Documents List',
                     component: () => import('@/pages/MyDocuments/List.vue')
                 },

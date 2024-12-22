@@ -6,10 +6,10 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
-SERVER = 'LAPTOP-KJ4L2LKH'
+SERVER = 'DESKTOP-SVEFPRH\\MSSQLSERVER_TN'
 DATABASE = 'HTTM'
 USERNAME = 'sa'
-PASSWORD = 'Ntn@2003'
+PASSWORD = 'sa'
 
 cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + SERVER + ';DATABASE=' +
                       DATABASE + ';UID=' + USERNAME + ';PWD=' + PASSWORD)
