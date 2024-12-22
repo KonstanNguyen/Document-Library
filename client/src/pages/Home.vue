@@ -70,18 +70,66 @@ export default {
             try {
                 const response = await axios.get(`http://127.0.0.1:5000`, {
                     params: {
-                        user_id: this.userId
-                    }
+                        user_id: this.userId,
+                    },
                 });
+
+                const recommendedDocumentIds = response.data.recommended_document_id || [];
+                console.log("Danh sách ID tài liệu được đề xuất:", recommendedDocumentIds);
+
+                if (recommendedDocumentIds.length > 0) {
+                    await this.fetchDocumentsDetails(recommendedDocumentIds);
+                } else {
+                    console.warn("Không có tài liệu đề xuất!");
+                }
+
                 this.categoryId = response.data.recommended_category_id;
             } catch (error) {
-                console.error('Error fetching recommend category:', error);
+                console.error("Lỗi khi lấy danh mục đề xuất:", error);
             }
         },
+        async fetchDocumentsDetails(documentIds) {
+            try {
+                const documentDetails = await Promise.all(
+                    documentIds.map(async (id) => {
+                        try {
+                            const response = await apiClient.get(`/api/documents/${id}`);
+                            const data = response.data;
+                            const thumbnailFilename = data.thumbnail?.replace('uploads/', '') || '/imgs/students.png';
+                            const thumbnailResponse = thumbnailFilename
+                                ? await apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' })
+                                : null;
+
+                            const thumbnailData = thumbnailResponse
+                                ? URL.createObjectURL(new Blob([thumbnailResponse.data]))
+                                : '/imgs/students.png';
+
+                            return {
+                                id: data.id,
+                                title: data.title,
+                                thumbnail: thumbnailData,
+                                content: data.content,
+                                authorName: data.authorName,
+                                views: data.views,
+                                ratingAvg: data.ratingAvg,
+                            };
+                        } catch (error) {
+                            console.error(`Lỗi khi xử lý tài liệu ID ${id}:`, error);
+                            return null;
+                        }
+                    })
+                );
+                this.cardsR = documentDetails.filter((doc) => doc !== null);
+                console.log("Danh sách tài liệu chi tiết:", this.cardsR);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin chi tiết tài liệu:", error);
+            }
+        },
+
         async fetchRecommendDocs() {
             const paginationRequest = {
                 page: this.page.current - 1,
-                size: 6,
+                size: 10,
                 sortBy: "views",
                 sortDirection: "desc",
                 status: 1,
