@@ -3,9 +3,10 @@ import numpy as np
 from flask import Flask, request, jsonify
 from final import df, cnxn
 from sklearn.neighbors import NearestNeighbors
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"])
+CORS(app)
 
 @app.route('/')
 def index():

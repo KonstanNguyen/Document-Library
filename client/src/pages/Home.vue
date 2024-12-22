@@ -41,29 +41,44 @@ export default {
             titleR: "Tài liệu đề xuất",
             cardsR: [] as DataCard[],
             categoryId: null,
+            accountId: localStorage.getItem("userId") || "",
+            userId: null,
         };
     },
     methods: {
+        async fetchDocUserId(accountId) {
+            try {
+                const response = await apiClient.get(`/api/accounts/${accountId}`);
+                this.userId = response.data.userId;
+                if (this.userId) {
+                    await this.fetchRecommendCategory(this.userId);
+                } else {
+                    this.message = "Không tìm thấy userId!";
+                }
+            } catch (error) {
+                console.error("Lỗi khi gọi API lấy thông tin tài khoản:", error);
+                this.message = "Không thể tải thông tin người dùng.";
+            }
+        },
         async initializeRecommendations() {
             await this.fetchRecommendCategory();
             if (this.categoryId) {
                 await this.fetchRecommendDocs();
             }
         },
-        async fetchRecommendCategory() {
+        async fetchRecommendCategory(userId) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000');
+                const response = await axios.get(`http://127.0.0.1:5000`, {
+                    params: {
+                        user_id: this.userId
+                    }
+                });
                 this.categoryId = response.data.recommended_category_id;
             } catch (error) {
                 console.error('Error fetching recommend category:', error);
             }
         },
         async fetchRecommendDocs() {
-            if (!this.categoryId) {
-                console.warn("Category ID is not set. Cannot fetch recommended documents.");
-                return;
-            }
-
             const paginationRequest = {
                 page: this.page.current - 1,
                 size: 6,
@@ -80,16 +95,16 @@ export default {
                     this.cardsR = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
                             try {
-                                const thumbnailFilename = doc.thumbnail?.replace('uploads/', '') || null;
-                                const contentFilename = doc.content?.replace('uploads/', '') || null;
+                                const thumbnailFilename = doc.thumbnail?.replace('uploads/', '') || '/imgs/students.png';
+                                const contentFilename = doc.content?.replace('uploads/', '') || 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
 
                                 const [thumbnailResponse, contentResponse] = await Promise.all([
                                     thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
                                     contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
                                 ]);
 
-                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
-                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
+                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : '/imgs/students.png';
+                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
 
                                 return {
                                     ...doc,
@@ -100,8 +115,8 @@ export default {
                                 console.error(`Error processing document ID ${doc.id}:`, error);
                                 return {
                                     ...doc,
-                                    thumbnail: null,
-                                    content: null,
+                                    thumbnail: '/imgs/students.png',
+                                    content: 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf',
                                 };
                             }
                         })
@@ -110,7 +125,6 @@ export default {
                     this.cardsR = this.cardsR
                         .map((result) => (result.status === 'fulfilled' ? result.value : null))
                         .filter(Boolean);
-                    this.page.max = data.totalPages || 1;
                 } else {
                     console.warn("No content found in the recommendation response:", data);
                 }
@@ -135,16 +149,16 @@ export default {
                     this.cards = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
                             try {
-                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
-                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
+                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : '/imgs/students.png';
+                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
 
                                 const [thumbnailResponse, contentResponse] = await Promise.all([
                                     thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
                                     contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
                                 ]);
 
-                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
-                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
+                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : '/imgs/students.png';
+                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
 
                                 return {
                                     ...doc,
@@ -155,8 +169,8 @@ export default {
                                 console.error(`Error processing document ID ${doc.id}:`, error);
                                 return {
                                     ...doc,
-                                    thumbnail: null,
-                                    content: null,
+                                    thumbnail: '/imgs/students.png',
+                                    content: 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf',
                                 };
                             }
                         })
@@ -206,8 +220,10 @@ export default {
             page: computed(() => this.page),
         };
     },
-    created() {
-        this.fetchData();
+    async created() {
+        await this.fetchDocUserId(this.accountId);
+        await this.fetchRecommendCategory(this.userId);
+        await this.fetchData();
         this.initializeRecommendations();
     },
 };
