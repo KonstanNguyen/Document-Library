@@ -81,14 +81,14 @@ kmeans = KMeans(n_clusters=find_K(df), random_state=42)
 
 df['cluster'] = kmeans.fit_predict(scaled_data)
 
-user_data = np.array([[1, 20]])
-nn = NearestNeighbors(n_neighbors=1)
-nn.fit(df[['gender', 'age']])
-_, indices = nn.kneighbors(user_data)
+# user_data = np.array([[1, 20]])
+# nn = NearestNeighbors(n_neighbors=1)
+# nn.fit(df[['gender', 'age']])
+# _, indices = nn.kneighbors(user_data)
 
-user_cluster = df.iloc[indices[0][0]]['cluster']
-user_category = df.iloc[indices[0][0]]['category_id']
-print(f"User belongs to cluster {user_cluster} and suggested category is {user_category}")
+# user_cluster = df.iloc[indices[0][0]]['cluster']
+# user_category = df.iloc[indices[0][0]]['category_id']
+# print(f"User belongs to cluster {user_cluster} and suggested category is {user_category}")
 
-cluster_summary = df.groupby('cluster').mean()
-print(cluster_summary)
+# cluster_summary = df.groupby('cluster').mean()
+# print(cluster_summary)
