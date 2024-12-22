@@ -11,7 +11,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
-SERVER = 'DESKTOP-SVEFPRH\\MSSQLSERVER_TN'
+SERVER = 'MSI,16240'
 DATABASE = 'HTTM'
 USERNAME = 'sa'
 PASSWORD = 'sa'

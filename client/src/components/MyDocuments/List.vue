@@ -108,8 +108,8 @@ export default {
                 <th scope="row">{{ index + 1 }}</th> <!-- Đổi ID thành số thứ tự -->
                 <td>{{ item.title }}</td>
                 <td>{{ item.categoryName }}</td>
-                <td>{{ formatDate(item.createAt) }}</td>
-                <td>{{ formatDate(item.updateAt) }}</td>
+                <td>{{ item.createAt }}</td>
+                <td>{{ item.updateAt }}</td>
                 <td>
                     <span class="badge" :class="item.status === 1 ? 'badge-success' : 'badge-warning'">
                         {{ item.status === 1 ? 'Hiển thị' : 'Chờ duyệt' }}
@@ -134,7 +134,7 @@ export default {
             <tr v-for="(item, index) in listHistoryDownload">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ item.documentName }}</td>
-                <td>{{ formatDate(item.date) }}</td>
+                <td>{{ item.date }}</td>
             </tr>
         </tbody>
     </table>

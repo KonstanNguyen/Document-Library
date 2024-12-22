@@ -104,7 +104,7 @@ def index():
         pd.Series(user_documents.values.flatten().tolist()),
         pd.Series(recommended_document_based_on_Kmeans.values.flatten().tolist())
     ], ignore_index=True).drop_duplicates()
-    
+    print("final_recommendations: ", final_recommendations)
     return app.json.response({
         "recommended_document_id": final_recommendations.tolist()
     })

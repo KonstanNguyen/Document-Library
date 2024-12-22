@@ -49,6 +49,7 @@ export default {
         async fetchDocUserId(accountId) {
             try {
                 const response = await apiClient.get(`/api/accounts/${accountId}`);
+                
                 this.userId = response.data.userId;
                 if (this.userId) {
                     await this.fetchRecommendCategory(this.userId);
@@ -68,11 +69,7 @@ export default {
         },
         async fetchRecommendCategory(userId) {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000`, {
-                    params: {
-                        user_id: this.userId,
-                    },
-                });
+                const response = await axios.get(`http://127.0.0.1:5000?user_id=${this.userId}`);
 
                 const recommendedDocumentIds = response.data.recommended_document_id || [];
                 console.log("Danh sách ID tài liệu được đề xuất:", recommendedDocumentIds);
