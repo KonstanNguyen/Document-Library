@@ -136,7 +136,7 @@ export default {
 									</router-link>
 								</li>
 								<li>
-									<router-link to="/my-documents">
+									<router-link to="/my-documents/documents">
 										Thư viện của tôi
 									</router-link>
 								</li>

@@ -78,10 +78,12 @@ export default {
                 {
                     name: "Tất cả tài liệu",
                     link: "all",
+                    path: "/admin/documents/",
                 },
                 {
                     name: "Tài liệu cần duyệt",
-                    link: "request"
+                    link: "request",
+                    path: "/admin/documents/",
                 },
             ],
             page: {

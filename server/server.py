@@ -5,6 +5,7 @@ from final import df, cnxn
 from sklearn.neighbors import NearestNeighbors
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:5173"])
 
 @app.route('/')
 def index():
