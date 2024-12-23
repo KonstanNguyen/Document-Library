@@ -65,14 +65,17 @@
 			<div class="d-flex gap-2 page-view">
 				<span>{{ post.views }} views</span>
 				-
-				<span>{{ post.ratingAvg }} <i class="bi bi-star-fill" style="color:darkgoldenrod;"></i></span>
+				<span>{{ post.ratingAvg }} <i class="bi bi-star-fill" style="color:#FFDB00;"></i></span>
 			</div>
 		</div>
 		<div class="post-author"><span class="fw-bold">Người đăng:</span> {{ post.authorName }}</div>
 		<div class="post-content"><span class="fw-bold">Danh mục:</span> {{ post.categoryName }}</div>
-		<PdfView v-if="post.content" class="mt-3" 
-		:pdfPath="post.content"
-		:documentId="post.id" />
+
+		<div>
+			<star-rating v-model="userRating" :max-stars="5" @ratingData="updateRating" />
+			<p>Đánh giá của bạn: {{ userRating }}</p>
+		</div>
+		<PdfView v-if="post.content" class="mt-3" :pdfPath="post.content" :documentId="post.id" />
 	</div>
 </template>
 
@@ -81,25 +84,78 @@ import { PropType } from 'vue';
 import { DataCard } from '@/type/DataCard';
 import PdfView from "@/components/PdfView.vue";
 import apiClient from "@/api/service";
+import StarRating from "@/components/StarRating.vue";
 
 export default {
 	name: 'DataBlog',
 	components: {
 		PdfView,
+		StarRating
+	},
+	data() {
+		return {
+			userRating: 0,
+			accountId: localStorage.getItem("userId") || "",
+		};
 	},
 	props: {
 		post: { type: Object as PropType<DataCard>, required: true },
 	},
 	methods: {
+		updateRating(newRating) {
+			this.userRating = newRating;
+			this.sendRating(newRating);
+		},
+		async sendRating(rating) {
+			try {
+				const requestData = {
+					accountId: this.accountId,
+					documentId: this.post.id,
+					rate: rating
+				};
+
+				const response = await apiClient.post('/api/ratings', requestData);
+				alert("Cảm ơn bạn đã đánh giá!")
+			} catch (error) {
+				console.error('Lỗi khi gửi đánh giá:', error);
+			}
+		},
+		async fetchRatingByAccount(accountId: string) {
+			try {
+				const response = await apiClient.get(`/api/ratings/${accountId}`);
+				const ratings = response.data; 
+				const ratingForDocument = ratings.find(
+					(rating: { documentId: number; accountId: number; rate: number }) =>
+						rating.documentId === this.post.id
+				);
+
+				if (ratingForDocument) {
+					this.userRating = ratingForDocument.rate;
+				} else {
+					this.userRating = 0;
+				}
+
+			} catch (error) {
+				console.error("Lỗi khi gọi API lấy tài liệu:", error);
+				this.message = "Lỗi khi tải đánh giá!";
+			}
+		},
+
 		getCurrentLink() {
 			return window.location.origin;
 		},
 	},
+	mounted() {
+		if (this.accountId) {
+			this.fetchRatingByAccount(this.accountId);
+		}
+	},
+
 	watch: {
 		post: {
 			handler(newPost) {
 				if (newPost && newPost.authorId) {
-					this.fetchDocUser(newPost.authorId); 
+					this.fetchDocUser(newPost.authorId);
 				}
 			},
 			immediate: true,

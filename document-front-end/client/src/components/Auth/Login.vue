@@ -73,7 +73,7 @@ export default {
 
                 this.message = response.data.message;
                 this.isSuccess = true;
-                localStorage.setItem("token", response.data.data.token);
+                localStorage.setItem("token", `Bearer ` + response.data.data.token);
                 localStorage.setItem("username", this.username);
 
                 const userResponse = await apiClient.get(`/api/accounts/getUserIdByUsername/${this.username}`);

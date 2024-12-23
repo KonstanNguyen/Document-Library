@@ -19,7 +19,7 @@
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.title }}</td>
                     <td>{{ item.categoryName }}</td>
-                    <td>{{ formatDate(item.createAt) }}</td>
+                    <td>{{ item.createAt }}</td>
                     <td>{{ item.authorName }}</td>
 
                     <td class="d-flex gap-2">
@@ -50,7 +50,7 @@
                     <th scope="row">{{ index + 1 }}</th>
                     <td>{{ item.title }}</td>
                     <td>{{ item.categoryName }}</td>
-                    <td>{{ formatDate(item.updateAt) }}</td>
+                    <td>{{ item.updateAt }}</td>
                     <td>{{ item.authorName }}</td>
                     <td>{{ item.views }}</td>
                     <td>{{ item.ratingAvg }}</td>
@@ -78,10 +78,12 @@ export default {
                 {
                     name: "Tất cả tài liệu",
                     link: "all",
+                    path: "/admin/documents/",
                 },
                 {
                     name: "Tài liệu cần duyệt",
-                    link: "request"
+                    link: "request",
+                    path: "/admin/documents/",
                 },
             ],
             page: {

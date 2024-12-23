@@ -16,7 +16,7 @@ export default {
   props: {
     pdfPath: {
       type: String,
-      required: true,
+      default: 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf',
     },
     documentId: {
       type: Number,

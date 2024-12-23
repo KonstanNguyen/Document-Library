@@ -17,6 +17,7 @@ import { computed, defineAsyncComponent } from "vue";
 import Categories from "@/components/Categories/Index.vue";
 import apiClient from "@/api/service";
 import Pagination from "@/components/BlogEtc/Pagination.vue";
+import axios from "axios";
 export default {
     components: {
         MainContent: defineAsyncComponent(
@@ -38,71 +39,150 @@ export default {
             cards: [] as DataCard[],
 
             titleR: "Tài liệu đề xuất",
-            cardsR: [
-                {
-                    "id": 1,
-                    "title": "Chương 4: Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
-                    "authorName": "Le Nguyen Truong Giang",
-                    "description": "Dự Báo Với Phương Pháp Bình Quân Di Động Và San Bằng Số Mũ",
-                    "content": "",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/chuong4binhquandidong-sanbangsomu-170425121551-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 5,
-	                "ratingAvg": 3.2,
-                },
-                {
-                    "id": 2,
-                    "title": "Đề tài: Lập dự án quán cafe sinh viên, 9 ĐIỂM!",
-                    "authorName": "Viết thuê",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/tieuluanquantrihoc20054-190922033524-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 9,
-	                "ratingAvg": 3.9,
-                },
-                {
-                    "id": 3,
-                    "title": "[NCKH] thiết kế nghiên cứu khoa học",
-                    "authorName": "CLBSVHTTCNCKH",
-                    "content": "Content",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/nckhthitknghincukhoahc-151227113101-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 12,
-	                "ratingAvg": 4.8,
-                },
-                {
-                    "id": 4,
-                    "title": "KINH TẾ HỌC VĨ MÔ - Chương 5 CHÍNH SÁCH TÀI CHÍNH VÀ NGOẠI THƯƠNG",
-                    "authorName": "Digiword Ha Noi",
-                    "content": "Content",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/5-chinhsachtaichinhngoaithuong-091225213241-phpapp02-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 9,
-	                "ratingAvg": 4.0,
-                },
-                {
-                    "id": 5,
-                    "title": "2024 Trend Updates: What Really Works In SEO & Content Marketing",
-                    "authorName": "Search Engine Journal",
-                    "content": "Content",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/conductor-webinar-6182024-presentation-240618152603-d6c54198-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 7,
-	                "ratingAvg": 4.5,
-                },
-                {
-                    "id": 6,
-                    "title": "Tổng hợp các công thức kinh tế vi mô.",
-                    "authorName": "Hoa Trò",
-                    "content": "Content",
-                    "thumbnail": "https://cdn.slidesharecdn.com/ss_thumbnails/tnghpcccngthckinhtvim-120912111052-phpapp01-thumbnail.jpg?width=560&fit=bounds",
-                    "views": 5,
-	                "ratingAvg": 4.2,
-                },
-            ] as DataCard[],
+            cardsR: [] as DataCard[],
+            categoryId: null,
+            accountId: localStorage.getItem("userId") || "",
+            userId: null,
         };
     },
     methods: {
+        async fetchDocUserId(accountId) {
+            try {
+                const response = await apiClient.get(`/api/accounts/${accountId}`);
+                
+                this.userId = response.data.userId;
+                if (this.userId) {
+                    await this.fetchRecommendCategory(this.userId);
+                } else {
+                    this.message = "Không tìm thấy userId!";
+                }
+            } catch (error) {
+                console.error("Lỗi khi gọi API lấy thông tin tài khoản:", error);
+                this.message = "Không thể tải thông tin người dùng.";
+            }
+        },
+        async initializeRecommendations() {
+            await this.fetchRecommendCategory();
+            if (this.categoryId) {
+                await this.fetchRecommendDocs();
+            }
+        },
+        async fetchRecommendCategory(userId) {
+            try {
+                const response = await axios.get(`http://127.0.0.1:5000?user_id=${this.userId}`);
+
+                const recommendedDocumentIds = response.data.recommended_document_id || [];
+                console.log("Danh sách ID tài liệu được đề xuất:", recommendedDocumentIds);
+
+                if (recommendedDocumentIds.length > 0) {
+                    await this.fetchDocumentsDetails(recommendedDocumentIds);
+                } else {
+                    console.warn("Không có tài liệu đề xuất!");
+                }
+
+                this.categoryId = response.data.recommended_category_id;
+            } catch (error) {
+                console.error("Lỗi khi lấy danh mục đề xuất:", error);
+            }
+        },
+        async fetchDocumentsDetails(documentIds) {
+            try {
+                const documentDetails = await Promise.all(
+                    documentIds.map(async (id) => {
+                        try {
+                            const response = await apiClient.get(`/api/documents/${id}`);
+                            const data = response.data;
+                            const thumbnailFilename = data.thumbnail?.replace('uploads/', '') || '/imgs/students.png';
+                            const thumbnailResponse = thumbnailFilename
+                                ? await apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' })
+                                : null;
+
+                            const thumbnailData = thumbnailResponse
+                                ? URL.createObjectURL(new Blob([thumbnailResponse.data]))
+                                : '/imgs/students.png';
+
+                            return {
+                                id: data.id,
+                                title: data.title,
+                                thumbnail: thumbnailData,
+                                content: data.content,
+                                authorName: data.authorName,
+                                views: data.views,
+                                ratingAvg: data.ratingAvg,
+                            };
+                        } catch (error) {
+                            console.error(`Lỗi khi xử lý tài liệu ID ${id}:`, error);
+                            return null;
+                        }
+                    })
+                );
+                this.cardsR = documentDetails.filter((doc) => doc !== null);
+                console.log("Danh sách tài liệu chi tiết:", this.cardsR);
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin chi tiết tài liệu:", error);
+            }
+        },
+
+        async fetchRecommendDocs() {
+            const paginationRequest = {
+                page: this.page.current - 1,
+                size: 10,
+                sortBy: "views",
+                sortDirection: "desc",
+                status: 1,
+            };
+
+            try {
+                const response = await apiClient.get(`/category/${this.categoryId}/documents`, { params: paginationRequest });
+                const data = response.data;
+
+                if (data && Array.isArray(data.content)) {
+                    this.cardsR = await Promise.allSettled(
+                        data.content.map(async (doc: any) => {
+                            try {
+                                const thumbnailFilename = doc.thumbnail?.replace('uploads/', '') || '/imgs/students.png';
+                                const contentFilename = doc.content?.replace('uploads/', '') || 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
+
+                                const [thumbnailResponse, contentResponse] = await Promise.all([
+                                    thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
+                                    contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
+                                ]);
+
+                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : '/imgs/students.png';
+                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
+
+                                return {
+                                    ...doc,
+                                    thumbnail: thumbnailData,
+                                    content: contentData,
+                                };
+                            } catch (error) {
+                                console.error(`Error processing document ID ${doc.id}:`, error);
+                                return {
+                                    ...doc,
+                                    thumbnail: '/imgs/students.png',
+                                    content: 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf',
+                                };
+                            }
+                        })
+                    );
+
+                    this.cardsR = this.cardsR
+                        .map((result) => (result.status === 'fulfilled' ? result.value : null))
+                        .filter(Boolean);
+                } else {
+                    console.warn("No content found in the recommendation response:", data);
+                }
+            } catch (error) {
+                console.error('Error fetching recommended documents:', error.message);
+            }
+        },
         async fetchData() {
             const paginationRequest = {
                 page: this.page.current - 1,
                 size: 9,
                 sortBy: "views",
-                sortDirection: "desc", 
+                sortDirection: "desc",
                 status: 1,
             };
 
@@ -114,17 +194,17 @@ export default {
                     this.cards = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
                             try {
-                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
-                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
+                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : '/imgs/students.png';
+                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
 
                                 const [thumbnailResponse, contentResponse] = await Promise.all([
                                     thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
                                     contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
                                 ]);
 
-                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
-                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
-                                
+                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : '/imgs/students.png';
+                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf';
+
                                 return {
                                     ...doc,
                                     thumbnail: thumbnailData,
@@ -134,8 +214,8 @@ export default {
                                 console.error(`Error processing document ID ${doc.id}:`, error);
                                 return {
                                     ...doc,
-                                    thumbnail: null,
-                                    content: null,
+                                    thumbnail: '/imgs/students.png',
+                                    content: 'fakeData/20191_DATN_PHAN_XUAN_PHUC_20156248.pdf',
                                 };
                             }
                         })
@@ -185,8 +265,11 @@ export default {
             page: computed(() => this.page),
         };
     },
-    created() {
-        this.fetchData();
+    async created() {
+        await this.fetchDocUserId(this.accountId);
+        await this.fetchRecommendCategory(this.userId);
+        await this.fetchData();
+        this.initializeRecommendations();
     },
 };
 </script>

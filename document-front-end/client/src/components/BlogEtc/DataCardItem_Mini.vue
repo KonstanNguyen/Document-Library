@@ -85,13 +85,13 @@
 <template>
 	<div class="card-wrap">
 		<div class="card-thumbnail">
-			<router-link
-				:to="cardContent.href"
+			<a
+				:href="`/documents/${cardContent.id}`"
 				class="card-link">
 				<img
 					class="fit-image"
 					:src="cardContent.thumbnail" />
-			</router-link>
+			</a>
 		</div>
 		<div class="card-content-wrap pt-3 pb-2">
 			<h3 class="title">

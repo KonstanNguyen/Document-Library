@@ -1,5 +1,6 @@
 <script>
 import apiClient from "@/api/service";
+import axios from "axios";
 export default {
     data() {
         return {
@@ -13,10 +14,26 @@ export default {
             Categories: [],
             accountId: localStorage.getItem("userId") || "",
             isLoading: false,
+            selectedFile: null,
         };
     },
 
     methods: {
+        async getRoleByAccount(accountId) {
+            try {
+                const response = await apiClient.get(`/api/accounts/getRoleById/${accountId}`);
+                const roles = response.data.data;
+                if (roles && roles.length > 0) {
+                    const role = roles[0].id;
+                    this.formData.status = role === 1 ? 1 : 0;
+                } else {
+                    console.warn("No roles found for this account.");
+                }
+            }
+            catch (error) {
+                console.error("Error role:", error);
+            }
+        },
         async fetchCategories() {
             try {
                 const response = await apiClient.get("/category");
@@ -35,17 +52,19 @@ export default {
             }
         },
         handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) {
+            // this.formData.file = file;
+            // const file = event.target.files[0];
+            this.selectedFile = event.target.files[0];
+            if (!this.selectedFile) {
                 alert("Vui lòng chọn một file hợp lệ.");
                 return;
             }
-            this.formData.file = file;
-            console.log("File được chọn:", file.name);
+            console.log("File được chọn:", this.selectedFile);
         },
         async submitForm() {
             this.isLoading = true;
             try {
+                await this.getRoleByAccount(this.accountId);
                 const formDataToSend = new FormData();
 
                 const data = {
@@ -55,16 +74,24 @@ export default {
                     description: this.formData.description,
                     status: this.formData.status,
                 };
+                this.formData.file = this.selectedFile;
+                formDataToSend.append("file", this.selectedFile);
                 formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
-                formDataToSend.append("file", this.formData.file);
 
                 console.log("Payload:", JSON.stringify(this.formData));
 
                 // Gửi dữ liệu đến backend
-                const response = await apiClient.post("/api/documents", formDataToSend, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
+                // const response = await apiClient.post("/api/documents", formDataToSend, {
+                //     headers: {
+                //         "Content-Type": "multipart/form-data"
+                //     },
+                // });
+                const response = await axios.post('http://localhost:5454/api/documents/create', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+    "Access-Control-Allow-Origin": "*",
+    'Authorization': localStorage.getItem("token"),
+                },
                 });
                 alert("Tải lên thành công!");
                 console.log("Kết quả:", response.data);
@@ -75,8 +102,10 @@ export default {
                 this.isLoading = false;
             }
         },
+
     },
     mounted() {
+        this.getRoleByAccount(this.accountId);
         this.fetchAuthorId(this.accountId);
         this.fetchCategories();
     },
@@ -103,7 +132,7 @@ export default {
                     </div>
                     <div class="col-12 mb-3">
                         <label for="formFile" class="form-label">Upload file</label>
-                        <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload" />
+                        <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload"/>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Mô tả</label>

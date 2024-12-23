@@ -1,5 +1,5 @@
 <template>
-	<router-link :to="`/admin/documents/${link}`">
+	<router-link :to="`${path}${link}`">
 		<div class="container-category" :class="{ active: isActive }">
 			<div class="name">{{ name }}</div>
 		</div>
@@ -18,6 +18,10 @@ const props = defineProps({
         type: Number,
         default: '',
     },
+	path: {
+		type: String,
+		default: '',
+	}
 });
 
 const route = useRoute();

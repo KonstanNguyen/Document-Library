@@ -11,7 +11,11 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
+<<<<<<< HEAD
 SERVER = 'LAPTOP-KJ4L2LKH'
+=======
+SERVER = 'MSI,16240'
+>>>>>>> d3730e03ce48955e944ac6b31e1d9cd954224e30
 DATABASE = 'HTTM'
 USERNAME = 'sa'
 PASSWORD = 'Ntn123'
@@ -22,26 +26,37 @@ cursor = cnxn.cursor()
 
 
 def find_K(df):
-    distortions = []
-    max_clusters = min(10, len(df))
-    K = range(1, max_clusters + 1)
+    # distortions = []
+    # max_clusters = min(10, len(df))
+    # K = range(1, max_clusters + 1)
        
-    for k in K:
-        kmeanModel = KMeans(n_clusters=k,
-                            init='k-means++',
-                            max_iter=300,
-                            n_init=10,
-                            random_state=0)
-        kmeanModel.fit(df)
-        distortions.append(kmeanModel.inertia_)
-        print(f'Inertia for {k} clusters: {kmeanModel.inertia_}')
+    # for k in K:
+    #     kmeanModel = KMeans(n_clusters=k,
+    #                         init='k-means++',
+    #                         max_iter=300,
+    #                         n_init=10,
+    #                         random_state=0)
+    #     kmeanModel.fit(df)
+    #     distortions.append(kmeanModel.inertia_)
+    #     print(f'Inertia for {k} clusters: {kmeanModel.inertia_}')
     
+    # for i in range(1, len(distortions)):
+    #     if distortions[i - 1] != 0 and distortions[i] / distortions[i - 1] > 0.93:
+    #         return i + 1
+
+    # # Nếu không có sự giảm nhanh, trả về số cụm lớn nhất
+    # return max_clusters
+    distortions = []
+    K = range(1, min(10, len(df)) + 1)
+    for k in K:
+        kmeans = KMeans(n_clusters=k, init='k-means++', max_iter=300, n_init=10, random_state=42)
+        kmeans.fit(df)
+        distortions.append(kmeans.inertia_)
+    # "Elbow" method
     for i in range(1, len(distortions)):
         if distortions[i - 1] != 0 and distortions[i] / distortions[i - 1] > 0.93:
             return i + 1
-
-    # Nếu không có sự giảm nhanh, trả về số cụm lớn nhất
-    return max_clusters
+    return max(K)
 
 query = '''
 	SELECT
@@ -70,14 +85,14 @@ kmeans = KMeans(n_clusters=find_K(df), random_state=42)
 
 df['cluster'] = kmeans.fit_predict(scaled_data)
 
-user_data = np.array([[1, 27]])
-nn = NearestNeighbors(n_neighbors=1)
-nn.fit(df[['gender', 'age']])
-_, indices = nn.kneighbors(user_data)
+# user_data = np.array([[1, 20]])
+# nn = NearestNeighbors(n_neighbors=1)
+# nn.fit(df[['gender', 'age']])
+# _, indices = nn.kneighbors(user_data)
 
-user_cluster = df.iloc[indices[0][0]]['cluster']
-user_category = df.iloc[indices[0][0]]['category_id']
-print(f"User belongs to cluster {user_cluster} and suggested category is {user_category}")
+# user_cluster = df.iloc[indices[0][0]]['cluster']
+# user_category = df.iloc[indices[0][0]]['category_id']
+# print(f"User belongs to cluster {user_cluster} and suggested category is {user_category}")
 
-cluster_summary = df.groupby('cluster').mean()
-print(cluster_summary)
+# cluster_summary = df.groupby('cluster').mean()
+# print(cluster_summary)
