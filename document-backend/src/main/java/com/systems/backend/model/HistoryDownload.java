@@ -49,5 +49,5 @@ public class HistoryDownload {
 
     @Column(name = "date", nullable = false)
     @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 }

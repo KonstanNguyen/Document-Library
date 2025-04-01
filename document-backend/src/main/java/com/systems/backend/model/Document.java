@@ -44,23 +44,23 @@ public class Document {
     @Column(name ="description")
     private String description;
 
-    @ColumnDefault("0")
+//    @ColumnDefault("0")
     @Column(name ="views")
-    private int views;
+    private int views = 0;
 
-    @ColumnDefault("0")
+//    @ColumnDefault("0")
     @Column(name = "status", nullable = false)
-    private Short status;
+    private Short status = 0;
 
-    @ColumnDefault("getdate()")
+//    @ColumnDefault("getdate()")
     @Column(name = "create_at", nullable = false)
     @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
-    @ColumnDefault("getdate()")
+//    @ColumnDefault("getdate()")
     @Column(name = "update_at", nullable = false)
     @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
-    private LocalDateTime updateAt;
+    private LocalDateTime updateAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "historyDownloadId.document", fetch = FetchType.LAZY)
     private Collection<HistoryDownload> historyDownloads;

@@ -31,7 +31,7 @@ public class DocUser {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @ColumnDefault("0")
+//    @ColumnDefault("0")
     @Column(name = "gender", nullable = false)
     private Boolean gender = false;
 
