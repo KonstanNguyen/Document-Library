@@ -32,11 +32,13 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document getDocumentById(Long id) {
         Optional<Document> documentOptional = documentRepository.findById(id);
-        return documentOptional.orElse(null);
+        return documentOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Document is not found!")
+        );
     }
 
     @Override
-    public Page<Document> gettDocumentByCategory(Category category, Pageable pageable) {
+    public Page<Document> getDocumentByCategory(Category category, Pageable pageable) {
         return documentRepository.findByCategory(category, pageable);
     }
 
@@ -59,7 +61,7 @@ public class DocumentServiceImpl implements DocumentService {
     public List<Document> searchDocuments(String keywords) {
         return documentRepository.findByTitleContaining(keywords);
     }
-    
+
     @Override
     public Page<Document> getAllDocuments(Pageable pageable) {
         return documentRepository.findAll(pageable);
@@ -68,10 +70,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Document createDocument(CreateDocumentRequest createDocumentRequest) {
         if (documentRepository.existsByTitle(createDocumentRequest.getTitle())) {
-            throw new RuntimeException("This document has already existed");
+            throw new IllegalStateException("This document has already existed");
         }
 
-        DocUser author = docUserRepository.findById(createDocumentRequest.getAuthorId()).orElseThrow(() -> new ResourceNotFoundException("Not found user by ID" + createDocumentRequest.getAuthorId())) ;
+        DocUser author = docUserRepository.findById(createDocumentRequest.getAuthorId()).orElseThrow(() -> new ResourceNotFoundException("Not found user by ID" + createDocumentRequest.getAuthorId()));
         Category category = categoryRepository.findById(createDocumentRequest.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Not found category by ID" + createDocumentRequest.getCategoryId()));
 
         Document document = Document.builder()
@@ -92,16 +94,16 @@ public class DocumentServiceImpl implements DocumentService {
     public void deleteDocument(Long id) {
         Document checkDocument = getDocumentById(id);
         if (checkDocument == null) {
-            throw new RuntimeException("Document is not found!");
+            throw new ResourceNotFoundException("Document is not found!");
         }
         documentRepository.delete(checkDocument);
     }
-    
+
     @Override
     public Document updateDocument(Long id, Document document) {
         Document updatedDocument = getDocumentById(id);
         if (updatedDocument == null) {
-            throw new RuntimeException("This document is not found");
+            throw new ResourceNotFoundException("This document is not found");
         }
 
 
@@ -114,6 +116,6 @@ public class DocumentServiceImpl implements DocumentService {
         updatedDocument.setUpdateAt(LocalDateTime.now());
 
         return documentRepository.save(updatedDocument);
-        
+
     }
 }

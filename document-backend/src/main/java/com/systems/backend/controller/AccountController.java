@@ -49,7 +49,6 @@ public class AccountController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Page<AccountResponse> getAllAccounts(@RequestBody(required = false) PaginationRequest pageRequest) {
         Pageable pageable;
         if (pageRequest == null) {
@@ -71,14 +70,12 @@ public class AccountController {
     @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public Account createAccount(@RequestBody Account account) {
         return accountService.createAccount(account);
     }
 
     @GetMapping("{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public AccountResponse getAccount(@PathVariable Long accountId) {
         Account account = accountService.getAccountById(accountId);
         return accountMapper.toDTO(account);
@@ -87,7 +84,6 @@ public class AccountController {
     @RequestMapping(value = "{accountId}/update", method = { RequestMethod.PUT, RequestMethod.POST,
             RequestMethod.PATCH })
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Account updateAccount(
             @PathVariable Long accountId,
             @RequestBody Account account) {
@@ -103,8 +99,7 @@ public class AccountController {
 
     @PostMapping("login")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ApiResponse<Object> loginAccount(@RequestBody LoginRequest loginRequest) {
+    public ApiResponse<Object> loginAccount(@Valid @RequestBody LoginRequest loginRequest) {
         return ApiResponse.builder()
                 .data(accountService.loginAccount(loginRequest))
                 .message("Login successful")
@@ -114,7 +109,6 @@ public class AccountController {
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public ApiResponse<Object> registerAccount(@RequestBody RegisterRequest registerRequest) {
         return ApiResponse.builder()
                 .data(accountService.registerAccount(registerRequest))
@@ -125,7 +119,6 @@ public class AccountController {
 
     @GetMapping("getUserIdByUsername/{username}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public ApiResponse<Object> getUserIdByUsername(@PathVariable String username) {
         Account account = accountService.getAccountByUsername(username);
 
@@ -138,9 +131,8 @@ public class AccountController {
 
     @GetMapping("getRoleByAccountId/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public ApiResponse<Object> getRoleById(@PathVariable("accountId") Long accountId) {
-        List<Role> role = roleService.getRoleByAccountId(accountId);
+        List<Role> role = roleService.getRolesByAccountId(accountId);
 
         return ApiResponse.builder()
                 .data(role)

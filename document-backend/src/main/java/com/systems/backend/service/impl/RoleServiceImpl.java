@@ -29,31 +29,34 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleById(Long roleId) {
-        return roleRepository.findById(roleId).orElseThrow(() ->
-            new ResourceNotFoundException("Role not found!")
-        );
+        return roleRepository
+                .findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role is not found!"));
     }
 
     @Override
-    public List<Role> getRoleByAccountId(Long accountId) {
+    public List<Role> getRolesByAccountId(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(() ->
-            new ResourceNotFoundException("Account not found!")
+                new ResourceNotFoundException("Account not found!")
         );
-        return account.getRoles().stream().toList();
+        return account.getRoles()
+                .stream().toList();
     }
 
     @Override
     public Role findByName(String roleName) {
-        return roleRepository.findByName(roleName).orElseThrow(() ->
-                new RuntimeException("Role not found!")
-        );
+        return roleRepository
+                .findByName(roleName)
+                .orElse(null);
     }
 
     @Override
     public Role createRole(CreateRoleRequest createRoleRequest) {
-        if (roleRepository.existsByName(createRoleRequest.getName())) {
-            throw new RuntimeException("Role already exists");
+        Optional<Role> existingRole = roleRepository.findByName(createRoleRequest.getName());
+        if (existingRole.isPresent()) {
+            throw new RuntimeException("Role with name '" + createRoleRequest.getName() + "' already exists!");
         }
+
         Role role = Role.builder()
                 .name(createRoleRequest.getName())
                 .description(createRoleRequest.getDescription())
@@ -63,35 +66,41 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(Long roleId, Role role) {
-        Role updateRole = getRoleById(role.getId());
-        if (updateRole == null) {
-            throw new RuntimeException("Role is not exists");
-        }
+        Role existingRole = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException("Role is not found!")
+        );
 
-        updateRole.setName(role.getName());
-        updateRole.setDescription(role.getDescription());
+        roleRepository.findByName(role.getName()).ifPresent(duplicateRole -> {
+            if (!duplicateRole.getId().equals(roleId)) {
+                throw new IllegalStateException("Role name '" + role.getName() + "' is already in use!");
+            }
+        });
 
-        return null;
+        role.setId(existingRole.getId());
+
+        return roleRepository.saveAndFlush(role);
     }
 
     @Override
     public void deleteRole(Long roleId) {
-        Role role = getRoleById(roleId);
-        if (role == null) {
-            throw new RuntimeException("Role is not found!");
-        }
+        Role role = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException("Role not found!")
+        );
         roleRepository.delete(role);
     }
 
     @Override
     public void grantRole(Long roleId, Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(() ->
-                new RuntimeException("Account not found!")
+                new ResourceNotFoundException("Account is not found!")
         );
 
-        Role role = getRoleById(roleId);
-        if (role == null) {
-            throw new RuntimeException("Role is not found!");
+        Role role = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException("Role is not found!")
+        );
+
+        if (account.getRoles().contains(role)) {
+            throw new IllegalStateException("Role is already granted!");
         }
 
         Set<Account> accounts = new HashSet<>(role.getAccounts());

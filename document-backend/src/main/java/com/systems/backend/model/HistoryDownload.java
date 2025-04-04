@@ -1,30 +1,33 @@
 package com.systems.backend.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.Hibernate;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "History_Download")
 public class HistoryDownload {
     @Embeddable
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class HistoryDownloadId implements java.io.Serializable {
         @Serial
         private static final long serialVersionUID = 7789561099938143923L;
 
-        @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         @JoinColumn(name = "account_id")
         protected Account account;
 
-        @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
         @JoinColumn(name = "document_id")
         protected Document document;
 
@@ -48,6 +51,6 @@ public class HistoryDownload {
     private HistoryDownloadId historyDownloadId;
 
     @Column(name = "date", nullable = false)
-    @JsonFormat(pattern="HH:mm:ss dd-MM-yyyy")
+    @JsonFormat(pattern = "HH:mm:ss dd-MM-yyyy")
     private LocalDateTime date = LocalDateTime.now();
 }

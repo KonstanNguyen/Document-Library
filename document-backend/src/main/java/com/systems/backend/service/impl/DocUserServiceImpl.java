@@ -7,6 +7,7 @@ import com.systems.backend.service.DocUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,20 +44,13 @@ public class DocUserServiceImpl implements DocUserService {
 
     @Override
     public DocUser updateDocUser(Long docUserId, DocUser docUser) {
-        DocUser updateDocUser = getDocUserById(docUserId);
-        if (updateDocUser == null) {
-            throw new RuntimeException("User not found!");
-        }
+        DocUser updateDocUser = docUserRepository.findById(docUserId).orElseThrow(() ->
+                new ResourceNotFoundException("Doc User Not Found")
+        );
 
-        updateDocUser.setDateOfBirth(docUser.getDateOfBirth());
-        updateDocUser.setName(docUser.getName());
-        updateDocUser.setEmail(docUser.getEmail());
-        updateDocUser.setAddress(docUser.getAddress());
-        updateDocUser.setPhone(docUser.getPhone());
-        updateDocUser.setGender(docUser.getGender());
-        updateDocUser.setAddress(docUser.getAddress());
+        updateDocUser.setId(docUserId);
 
-        return docUserRepository.save(docUser);
+        return docUserRepository.save(updateDocUser);
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.systems.backend.requests;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest extends CreateDocUserRequest {
@@ -15,4 +12,10 @@ public class RegisterRequest extends CreateDocUserRequest {
     private String username;
     @NotBlank(message = "Password is required!")
     private String password;
+
+    public RegisterRequest(String name, String email, String phone, String birthday, Boolean gender, String username, String password) {
+        super(name, email, phone, birthday, gender);
+        this.username = username;
+        this.password = password;
+    }
 }

@@ -6,7 +6,6 @@ import com.systems.backend.model.DocUser;
 import com.systems.backend.model.Role;
 import com.systems.backend.repository.AccountRepository;
 import com.systems.backend.repository.RoleRepository;
-import com.systems.backend.requests.CreateRatingRequest;
 import com.systems.backend.requests.LoginRequest;
 import com.systems.backend.requests.RegisterRequest;
 import com.systems.backend.responses.LoginResponse;
@@ -15,18 +14,18 @@ import com.systems.backend.security.JwtGenerator;
 import com.systems.backend.service.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 @Service
 @Transactional
@@ -48,18 +47,30 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean existsByUsername(String username) {
+        if (username == null || username.isBlank() || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null");
+        }
+
         return accountRepository.existsByUsername(username);
     }
 
     @Override
     public Account getAccountById(Long id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Id cannot be negative");
+        }
+
         return accountRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Account not found")
+                new ResourceNotFoundException("Account is not found!")
         );
     }
 
     @Override
     public Account getAccountByUsername(String username) {
+        if (username == null || username.isBlank() || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null");
+        }
+
         return accountRepository.findByUsername(username).orElseThrow(() ->
                 new ResourceNotFoundException("Account with username " + username + " not found")
         );
@@ -73,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account createAccount(Account account) {
         if (existsByUsername(account.getUsername())) {
-            throw new RuntimeException("Account with username " + account.getUsername() + " already exists");
+            throw new IllegalStateException("Account with username " + account.getUsername() + " already exists");
         }
 
         account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -102,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public RegisterResponse registerAccount(RegisterRequest registerRequest) {
         if (existsByUsername(registerRequest.getUsername())) {
-            throw new RuntimeException("Account with username " + registerRequest.getUsername() + " already exists");
+            throw new IllegalStateException("Account with username " + registerRequest.getUsername() + " already exists");
         }
 
         DocUser docUser = DocUser.builder()

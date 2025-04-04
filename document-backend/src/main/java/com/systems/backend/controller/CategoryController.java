@@ -103,7 +103,7 @@ public class CategoryController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "category not found");
         }
 
-        Page<Document> documentPage = documentService.gettDocumentByCategory(category, pageable);
+        Page<Document> documentPage = documentService.getDocumentByCategory(category, pageable);
         
         return documentMapper.toDTOPage(documentPage);
     }

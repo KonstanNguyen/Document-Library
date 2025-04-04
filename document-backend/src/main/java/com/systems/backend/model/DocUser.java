@@ -33,7 +33,7 @@ public class DocUser {
 
 //    @ColumnDefault("0")
     @Column(name = "gender", nullable = false)
-    private Boolean gender = false;
+    private boolean gender = false;
 
     @Lob
     @Column(name = "address")

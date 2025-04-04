@@ -9,10 +9,10 @@ import com.systems.backend.requests.CreateCategoryRequest;
 
 @Service
 public interface CategoryService {
-    Category getCategoryById(Long id);
+    Category getCategoryById(long id);
     List<Category> getCategoryByName(String name);
     List<Category> getAllCategory();
     Category createCategory(CreateCategoryRequest createCategoryRequest);
-    void deleteCategory(Long id);
-    Category updateCategory(Long id, Category category);
+    void deleteCategory(long id);
+    Category updateCategory(long id, Category category);
 }

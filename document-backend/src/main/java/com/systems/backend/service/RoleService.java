@@ -9,11 +9,18 @@ import java.util.List;
 @Service
 public interface RoleService {
     List<Role> getAllRoles();
+
     Role getRoleById(Long roleId);
+
     Role findByName(String roleName);
+
     Role createRole(CreateRoleRequest createRoleRequest);
+
     Role updateRole(Long roleId, Role role);
+
     void deleteRole(Long roleId);
+
     void grantRole(Long roleId, Long userId);
-    List<Role> getRoleByAccountId(Long accountId);
+
+    List<Role> getRolesByAccountId(Long accountId);
 }

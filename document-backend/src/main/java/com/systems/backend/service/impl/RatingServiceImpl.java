@@ -72,7 +72,7 @@ public class RatingServiceImpl implements RatingService {
 
         Rating rating = Rating.builder()
             .ratingId(id)
-            .rate(createRatingRequest.getRate())
+            .rate((short) createRatingRequest.getRate())
             .build();
 
         return ratingMapper.toDTO(ratingRepository.save(rating));

@@ -1,6 +1,8 @@
 package com.systems.backend.service;
 
+import com.systems.backend.model.Account;
 import com.systems.backend.model.Role;
+import com.systems.backend.repository.AccountRepository;
 import com.systems.backend.repository.RoleRepository;
 import com.systems.backend.requests.CreateRoleRequest;
 import com.systems.backend.service.impl.RoleServiceImpl;
@@ -10,161 +12,328 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RoleServiceTest {
+    private final List<Role> roles = List.of(
+            new Role(1L, "admin", "Admin role", null),
+            new Role(2L, "user", "User role", null),
+            new Role(3L, "guest", "Guest role", null)
+    );
 
     @Mock
     private RoleRepository roleRepository;
 
+    @Mock
+    private AccountRepository accountRepository;
+
     @InjectMocks
     private RoleServiceImpl roleService;
 
+    private final long roleId = 1L;
+    private final long accountId = 1L;
+
     private Role role;
+    private Account account;
 
     @BeforeEach
     void setUp() {
-        // Set up a mock role
-        role = new Role(1L, "admin", "Admin role", null);
+        role = new Role(roleId, "admin", "Admin role", new HashSet<>());
+        account = new Account(accountId, "account", "password", null, null, null, null);
     }
 
     @Test
     void getAllRoles() {
-        // Set up mock behavior
-        when(roleRepository.findAll()).thenReturn(List.of(role));
+        when(roleRepository.findAll()).thenReturn(roles);
 
-        // Call the method under test
-        var roles = roleService.getAllRoles();
+        List<Role> result = roleService.getAllRoles();
 
-        // Assertions
-        assertNotNull(roles);
-        assertEquals(1, roles.size());
-        assertEquals("admin", roles.get(0).getName());
+        assertAll(
+                () -> assertNotNull(result, "The result list should not be null"),
+                () -> assertFalse(result.isEmpty(), "The result list should not be empty"),
+                () -> assertEquals(roles.size(), result.size(), "The result list should contain exactly one role"),
+                () -> assertEquals(roleId, result.get(0).getId(), "The result list should contain exactly one role"),
+                () -> assertEquals("admin", result.get(0).getName(), "The role name should match"),
+                () -> assertEquals("Admin role", result.get(0).getDescription(), "The role description should match")
+        );
 
-        // Verify interaction with the mock
         verify(roleRepository).findAll();
     }
 
     @Test
-    void getRoleById() {
-        // Set up mock behavior
-        when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
+    void getRoleById_whenSuccess() {
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
 
-        // Call the method under test
-        Role foundRole = roleService.getRoleById(1L);
+        Role foundRole = roleService.getRoleById(roleId);
 
-        // Assertions
-        assertEquals("admin", foundRole.getName());
+        assertAll(
+                () -> assertNotNull(foundRole),
+                () -> assertEquals("admin", foundRole.getName()),
+                () -> assertEquals("Admin role", foundRole.getDescription())
+        );
 
-        // Verify interaction with the mock
-        verify(roleRepository).findById(1L);
+        verify(roleRepository).findById(roleId);
+    }
+
+    @Test
+    void getRoleById_whenNotFound() {
+        when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.getRoleById(roleId);
+        });
+
+        assertEquals("Role is not found!", thrown.getMessage(), "Exception message should match");
+        verify(roleRepository).findById(roleId);
     }
 
     @Test
     void findByName() {
-        // Set up mock behavior
         when(roleRepository.findByName("admin")).thenReturn(Optional.of(role));
 
-        // Call the method under test
-        Optional<Role> foundRole = Optional.ofNullable(roleService.findByName("admin"));
+        Role foundRole = roleService.findByName("admin");
 
-        // Assertions
-        assertTrue(foundRole.isPresent());
-        assertEquals("admin", foundRole.get().getName());
+        assertAll(
+                () -> assertNotNull(foundRole, "The role should not be null"),
+                () -> assertEquals("admin", foundRole.getName(), "The role name should match"),
+                () -> assertEquals("Admin role", foundRole.getDescription(), "The role description should match")
+        );
 
-        // Verify interaction with the mock
         verify(roleRepository).findByName("admin");
     }
 
     @Test
-    void createRole() {
-        // Prepare input CreateRoleRequest
-        CreateRoleRequest createRoleRequest = new CreateRoleRequest("admin", null);
-
-        // Set up mock behavior for saving the role
-        Role roleToCreate = new Role(null, "admin", null, null); // Role object to be saved
+    void createRole_whenSuccess() {
+        CreateRoleRequest createRoleRequest = new CreateRoleRequest("admin", "Admin role");
+        Role roleToCreate = Role.builder()
+                .name(createRoleRequest.getName())
+                .description(createRoleRequest.getDescription())
+                .build();
         when(roleRepository.save(any(Role.class))).thenReturn(roleToCreate);
 
-        // Call the method under test
         Role createdRole = roleService.createRole(createRoleRequest);
 
-        // Assertions
-        assertNotNull(createdRole);
-        assertEquals("admin", createdRole.getName());
-        assertNull(createdRole.getDescription());  // Since description is null
+        assertAll(
+                () -> assertNotNull(createdRole, "The role should not be null"),
+                () -> assertEquals("admin", createdRole.getName(), "The role name should match"),
+                () -> assertEquals("Admin role", createdRole.getDescription(), "The role description should match")
+        );
 
-        // Verify interaction with the mock
-        verify(roleRepository).save(any(Role.class)); // Ensure save was called with a Role
+        verify(roleRepository).save(any(Role.class));
     }
 
-//    @Test
-//    void updateRole() {
-//        // Set up mock behavior for updating the role
-//        when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
-//        when(roleRepository.save(role)).thenReturn(role);
-//
-//        // Update role
-//        role.setName("admin_updated");
-//        Role updatedRole = roleService.updateRole(1L, role);
-//
-//        // Assertions
-//        assertNotNull(updatedRole);
-//        assertEquals("admin_updated", updatedRole.getName());
-//
-//        // Verify interactions with the mock
-//        verify(roleRepository).findById(1L);
-//        verify(roleRepository).save(role);
-//    }
+    @Test
+    void createRole_whenAlreadyExists() {
+        CreateRoleRequest createRoleRequest = new CreateRoleRequest("admin", "Admin role");
+        when(roleRepository.findByName("admin")).thenReturn(Optional.of(role));
 
-//    @Test
-//    void deleteRole() {
-//        // Set up mock behavior for finding and deleting the role
-//        when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
-//
-//        // Call the method under test
-//        roleService.deleteRole(1L);
-//
-//        // Verify interaction with the mock
-//        verify(roleRepository).findById(1L);
-//        verify(roleRepository).delete(role);
-//    }
-//
-//    @Test
-//    void grantRole() {
-//        // This test could be for a method where roles are granted to users (example based on business logic).
-//        // For simplicity, assume we have a grantRole method (you can replace it with actual logic).
-//
-//        // Example of mocked behavior if grantRole were implemented:
-//        // when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
-//        // roleService.grantRole(1L, user); // assuming 'user' is some user object
-//
-//        // Verify interactions if implemented.
-//        // verify(roleRepository).findById(1L);
-//    }
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            roleService.createRole(createRoleRequest);
+        });
+
+        assertEquals("Role with name 'admin' already exists!", thrown.getMessage(), "Exception message should match");
+        verify(roleRepository).findByName("admin");
+        verify(roleRepository, never()).save(any(Role.class));
+    }
 
     @Test
-    void getRoleByAccountId() {
-        // Example: Get role by account ID logic (assumes roleRepository.findByAccountId exists)
+    void updateRole_whenSuccess() {
+        // Set up mock behavior for updating the role
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
+        when(roleRepository.saveAndFlush(any(Role.class))).thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
 
-        // Set up mock behavior
-        // when(roleRepository.findByAccountId(1L)).thenReturn(Optional.of(role));
+        // Update role
+        role.setName("admin_updated");
+        Role updatedRole = roleService.updateRole(roleId, role);
 
-        // Call the method under test
-        // Optional<Role> foundRole = roleService.getRoleByAccountId(1L);
+        assertAll(
+                () -> assertNotNull(updatedRole, "The role should not be null"),
+                () -> assertEquals("admin_updated", updatedRole.getName(), "The role name should be updated correctly"),
+                () -> assertEquals("Admin role", updatedRole.getDescription(), "The role description should be updated correctly")
+        );
 
-        // Assertions
-        // assertTrue(foundRole.isPresent());
-        // assertEquals("admin", foundRole.get().getName());
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository).saveAndFlush(role);
+    }
 
-        // Verify interaction with the mock
-        // verify(roleRepository).findByAccountId(1L);
+    @Test
+    void updateRole_NotFound() {
+        when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.updateRole(roleId, new Role(roleId, "new_admin", "Updated description", null));
+        });
+
+        assertEquals("Role is not found!", thrown.getMessage(), "Exception message should match");
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository, never()).saveAndFlush(any(Role.class));
+    }
+
+    @Test
+    void updateRole_AlreadyExists() {
+        Role existingRole = new Role(2L, "admin", "Another role", null); // Different ID but same name
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("admin")).thenReturn(Optional.of(existingRole));
+
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+            roleService.updateRole(roleId, new Role(roleId, "admin", "Updated description", null));
+        });
+
+        assertEquals("Role name 'admin' is already in use!", thrown.getMessage(), "Exception message should match");
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository).findByName("admin");
+        verify(roleRepository, never()).saveAndFlush(any(Role.class));
+    }
+
+    @Test
+    void deleteRole_whenSuccess() {
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
+
+        roleService.deleteRole(roleId);
+
+        doReturn(Optional.empty()).when(roleRepository).findById(roleId);
+
+        Optional<Role> deletedRole = roleRepository.findById(roleId);
+        assertTrue(deletedRole.isEmpty(), "The role should be null after deletion");
+
+        verify(roleRepository, times(2)).findById(roleId); // Allowing 2 calls
+        verify(roleRepository).delete(role);
+    }
+
+    @Test
+    void deleteRole_whenNotFound() {
+        when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.deleteRole(roleId);
+        });
+
+        assertEquals("Role not found!", thrown.getMessage(), "Exception message should match");
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository, never()).delete(any(Role.class));
+    }
+
+    @Test
+    void grantRole_whenSuccess() {
+        account.setRoles(new HashSet<>(roles));
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
+        when(roleRepository.save(any(Role.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Return modified role
+
+        roleService.grantRole(roleId, accountId);
+
+        Role chekedRole = roleRepository.findById(roleId).orElse(null);
+
+        assertAll(
+                () -> assertNotNull(chekedRole.getAccounts(), "The role's accounts should not be null"),
+                () -> assertTrue(chekedRole.getAccounts().contains(account), "The role should now contain the account"),
+                () -> assertEquals("admin", chekedRole.getName(), "The role name should match"),
+                () -> assertEquals("Admin role", chekedRole.getDescription(), "The role description should match"),
+                () -> assertEquals("account", chekedRole.getAccounts().iterator().next().getUsername(), "The account should match"),
+                () -> assertEquals("password", chekedRole.getAccounts().iterator().next().getPassword(), "The password should match")
+        );
+
+        verify(accountRepository).findById(accountId);
+        verify(roleRepository, times(2)).findById(roleId);
+        verify(roleRepository).save(role);
+    }
+
+    @Test
+    void grantRole_whenRoleNotFound() {
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.grantRole(roleId, accountId);
+        });
+
+        assertEquals("Role is not found!", thrown.getMessage(), "Exception message should match");
+        verify(accountRepository).findById(accountId);
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository, never()).save(any(Role.class));
+    }
+
+    @Test
+    void grantRole_whenAccountNotFound() {
+        when(accountRepository.findById(accountId)).thenReturn(Optional.empty()); // ✅ Keep only this
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.grantRole(roleId, accountId);
+        });
+
+        assertEquals("Account is not found!", thrown.getMessage(), "Exception message should match");
+
+        verify(accountRepository).findById(accountId);
+        verify(roleRepository, never()).findById(anyLong()); // Role lookup should NOT happen
+        verify(roleRepository, never()).save(any(Role.class));
+    }
+
+    @Test
+    void grantRole_AlreadyAssigned() {
+        account.setRoles(Set.of(role)); // Account already has the role
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+        when(roleRepository.findById(roleId)).thenReturn(Optional.of(role));
+
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            roleService.grantRole(roleId, accountId);
+        });
+
+        assertEquals("Role is already granted!", thrown.getMessage(), "Exception message should match");
+        verify(accountRepository).findById(accountId);
+        verify(roleRepository).findById(roleId);
+        verify(roleRepository, never()).save(any(Role.class));
+    }
+
+    @Test
+    void getRolesByAccountId_whenSuccess() {
+        account.setRoles(new HashSet<>(roles));
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+
+        List<Role> rolesByAccountId = roleService.getRolesByAccountId(accountId);
+
+        assertAll(
+                () -> assertNotNull(rolesByAccountId, "The roles should not be null"),
+                () -> assertEquals(3, rolesByAccountId.size(), "The role size should be match"),
+                () -> assertTrue(rolesByAccountId.containsAll(roles), "The account should contain the roles")
+        );
+
+        verify(accountRepository, times(1)).findById(accountId);
+    }
+
+    @Test
+    void getRolesByAccountId_NotFound() {
+        when(accountRepository.findById(accountId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> {
+            roleService.getRolesByAccountId(accountId);
+        });
+
+        assertEquals("Account not found!", thrown.getMessage(), "Exception message should match");
+        verify(accountRepository).findById(accountId);
+    }
+
+    @Test
+    void getRolesByAccountId_NoRoles() {
+        account.setRoles(new HashSet<>()); // Empty roles
+        when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
+
+        List<Role> rolesByAccountId = roleService.getRolesByAccountId(accountId);
+
+        assertAll(
+                () -> assertNotNull(rolesByAccountId, "The result should not be null"),
+                () -> assertTrue(rolesByAccountId.isEmpty(), "The account should have no roles assigned")
+        );
+
+        verify(accountRepository).findById(accountId);
     }
 }

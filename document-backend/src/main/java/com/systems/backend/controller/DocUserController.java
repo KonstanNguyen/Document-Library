@@ -39,7 +39,6 @@ public class DocUserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Page<DocUserResponse> getAllDocUsers( @RequestBody(required = false) PaginationRequest pageRequest) {
         Pageable pageable;
         if (pageRequest == null) {
@@ -62,14 +61,12 @@ public class DocUserController {
     @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public DocUser createDocUser(@RequestBody CreateDocUserRequest createDocUserRequest) {
         return docUserService.createDocUser(createDocUserRequest);
     }
 
     @GetMapping("{docUserId}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public DocUserResponse getDocUser(@PathVariable(name = "docUserId") Long docUserId) {
         DocUser docUser = docUserService.getDocUserById(docUserId);
         return docUserMapper.toDTO(docUser);
@@ -77,7 +74,6 @@ public class DocUserController {
 
     @RequestMapping(value = "{docUserId}/update", method = {RequestMethod.PUT, RequestMethod.POST, RequestMethod.PATCH})
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public DocUser updateDocUser(@PathVariable(name = "docUserId") Long docUserId, @RequestBody DocUser docUser) {
         return docUserService.updateDocUser(docUserId, docUser);
     }
@@ -92,7 +88,6 @@ public class DocUserController {
 
     @GetMapping("{docUserId}/documents")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Page<DocumentResponse> getDocumentsByAuthor(
         @PathVariable(name ="docUserId") Long docuserId,
         @RequestBody(required = false) PaginationRequest pageRequest) {

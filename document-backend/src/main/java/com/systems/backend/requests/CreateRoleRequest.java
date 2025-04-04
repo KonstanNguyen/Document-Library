@@ -1,5 +1,6 @@
 package com.systems.backend.requests;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRoleRequest {
+    @NotBlank(message = "Role name can't be empty")
     private String name;
+    @NotBlank(message = "Description can't be empty")
     private String description;
 }

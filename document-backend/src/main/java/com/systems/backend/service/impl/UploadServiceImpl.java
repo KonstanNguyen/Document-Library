@@ -2,16 +2,17 @@ package com.systems.backend.service.impl;
 
 import com.systems.backend.service.UploadService;
 import com.systems.backend.utils.UploadResult;
-import org.springframework.stereotype.Service;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class UploadServiceImpl implements UploadService {

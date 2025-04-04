@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface DocumentService {
     Document getDocumentById(Long id);
-    Page<Document> gettDocumentByCategory(Category category, Pageable pageable);
+    Page<Document> getDocumentByCategory(Category category, Pageable pageable);
     Page<Document> getDocumentsByAuthor(DocUser author, Pageable pageable);
     List<Document> getDocumentsByStatus(Short status);
     List<Document> getDocumentsByCreateAt(LocalDateTime time);

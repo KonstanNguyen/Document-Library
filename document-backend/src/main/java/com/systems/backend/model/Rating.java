@@ -54,6 +54,6 @@ public class Rating {
 
     @Range(min = 1, max = 5, message = "Rate is incorrect")
     @Column(name = "rate", nullable = false)
-    private Short rate;
+    private short rate;
 
 }

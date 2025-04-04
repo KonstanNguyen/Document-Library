@@ -3,6 +3,7 @@ package com.systems.backend.controller;
 import com.systems.backend.model.Role;
 import com.systems.backend.requests.CreateRoleRequest;
 import com.systems.backend.service.RoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,28 +20,24 @@ public class RoleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public List<Role> getAllRoles() {
         return roleService.getAllRoles();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public Role createRole(@RequestBody CreateRoleRequest createRoleRequest) {
+    public Role createRole(@Valid @RequestBody CreateRoleRequest createRoleRequest) {
         return roleService.createRole(createRoleRequest);
     }
 
     @GetMapping("{roleId}")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Role getRole(@PathVariable Long roleId) {
         return roleService.getRoleById(roleId);
     }
 
     @RequestMapping(value = "{roleId}/update", method = {RequestMethod.PUT, RequestMethod.POST, RequestMethod.PATCH})
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Role updateRole(@PathVariable Long roleId, @RequestBody Role role) {
         return roleService.updateRole(roleId, role);
     }
