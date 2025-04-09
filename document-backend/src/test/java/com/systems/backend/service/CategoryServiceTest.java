@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,8 +27,7 @@ class CategoryServiceTest {
     private List<Category> categories = List.of(
             new Category(1L, null, "category1", null),
             new Category(2L, null, "category2", null),
-            new Category(3L, null, "category3", null)
-    );
+            new Category(3L, null, "category3", null));
 
     private Category category;
 
@@ -54,8 +54,7 @@ class CategoryServiceTest {
 
         assertAll(
                 () -> assertNotNull(existingCategory, "The category should not be null"),
-                () -> assertEquals("category1", existingCategory.getName(), "The category name should match")
-        );
+                () -> assertEquals("category1", existingCategory.getName(), "The category name should match"));
 
         verify(categoryRepository).findById(CATEGORY_ID);
     }
@@ -96,8 +95,7 @@ class CategoryServiceTest {
         assertAll(
                 () -> assertNotNull(result, "The result should not be null"),
                 () -> assertEquals(1, result.size(), "List should contain one category"),
-                () -> assertEquals(CATEGORY_NAME, result.get(0).getName(), "The category name should match")
-        );
+                () -> assertEquals(CATEGORY_NAME, result.get(0).getName(), "The category name should match"));
 
         verify(categoryRepository).findByName(CATEGORY_NAME);
     }
@@ -108,11 +106,14 @@ class CategoryServiceTest {
 
         List<Category> result = categoryService.getAllCategory();
 
+        System.out.println("Total categories retrieved: " + result.size());
+        result.forEach(category -> System.out.println(" - Category name: " + category.getName()));
+
         assertAll(
-                () -> assertNotNull(result, "Result should not be null"),
-                () -> assertEquals(3, result.size(), "Should return all categories"),
-                () -> assertEquals("category1", result.get(0).getName(), "First category name should match")
-        );
+                () -> assertNotNull(result, "Result list should not be null"),
+                () -> assertEquals(3, result.size(), "Should return exactly 3 categories"),
+                () -> assertEquals("category1", result.get(0).getName(),
+                        "First category name should be 'category1'"));
 
         verify(categoryRepository).findAll();
     }
@@ -127,8 +128,7 @@ class CategoryServiceTest {
 
         assertAll(
                 () -> assertNotNull(createdCategory, "Created category should not be null"),
-                () -> assertEquals("category1", createdCategory.getName(), "Category name should match")
-        );
+                () -> assertEquals("category1", createdCategory.getName(), "Category name should match"));
 
         verify(categoryRepository).existsByName(request.getName());
         verify(categoryRepository).save(any(Category.class));
@@ -188,8 +188,7 @@ class CategoryServiceTest {
         assertAll(
                 () -> assertNotNull(result, "Updated category should not be null"),
                 () -> assertEquals("updatedName", result.getName(), "Category name should be updated"),
-                () -> assertEquals("updatedDesc", result.getDescription(), "Category description should be updated")
-        );
+                () -> assertEquals("updatedDesc", result.getDescription(), "Category description should be updated"));
 
         verify(categoryRepository).findById(CATEGORY_ID);
         verify(categoryRepository).save(any(Category.class));
