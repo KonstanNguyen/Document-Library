@@ -139,6 +139,28 @@ class UploadServiceTest {
     }
 
     @Test
+    void processFile_withNonPdfFile_shouldThrowException() throws Exception {
+        // Arrange
+        String originalFilename = "test.txt";
+
+        when(mockFile.getOriginalFilename()).thenReturn(originalFilename);
+
+        // Act & Assert
+        Exception exception = assertThrows(Exception.class, () -> {
+            uploadService.processFile(mockFile);
+        });
+
+        System.out.println("Exception thrown: " + exception.getMessage());
+
+        assertEquals("Invalid file type. Only PDF files are supported.", exception.getMessage());
+
+        System.out.println("Assertions passed for test: processFile_withNonPdfFile_shouldThrowException");
+
+        // Verify
+        verify(mockFile).getOriginalFilename();
+    }
+
+    @Test
     void processFile_withIOException_shouldThrowException() throws IOException {
         // Arrange
         when(mockFile.getOriginalFilename()).thenReturn("test.pdf");

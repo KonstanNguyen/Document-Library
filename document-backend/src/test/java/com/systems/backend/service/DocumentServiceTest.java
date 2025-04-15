@@ -105,6 +105,8 @@ class DocumentServiceTest {
 
                 Document result = documentService.getDocumentById(DOCUMENT_ID);
 
+                System.out.println("Document retrieved: " + result.getTitle());
+
                 assertAll(
                                 () -> assertNotNull(result, "Document should not be null"),
                                 () -> assertEquals("title1", result.getTitle(), "Title should match"));
@@ -120,6 +122,8 @@ class DocumentServiceTest {
                         documentService.getDocumentById(DOCUMENT_ID);
                 });
 
+                System.out.println(thrown.getMessage());
+
                 assertEquals("Document is not found!", thrown.getMessage());
                 verify(documentRepository).findById(DOCUMENT_ID);
         }
@@ -131,6 +135,9 @@ class DocumentServiceTest {
                 when(documentRepository.findByCategory(category, pageable)).thenReturn(page);
 
                 Page<Document> result = documentService.getDocumentByCategory(category, pageable);
+
+                System.out.println("Number of documents retrieved: " + result.getContent().size());
+                result.getContent().forEach(doc -> System.out.println(" - Document: " + doc.getTitle()));
 
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
@@ -149,6 +156,8 @@ class DocumentServiceTest {
 
                 Page<Document> result = documentService.getDocumentByCategory(category, pageable);
 
+                System.out.println("Number of documents retrieved: " + result.getContent().size());
+
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
                                 () -> assertEquals(0, result.getContent().size(), "Should be empty"));
@@ -163,6 +172,9 @@ class DocumentServiceTest {
                 when(documentRepository.findByAuthor(author, pageable)).thenReturn(page);
 
                 Page<Document> result = documentService.getDocumentsByAuthor(author, pageable);
+
+                System.out.println("Number of documents retrieved: " + result.getContent().size());
+                result.getContent().forEach(doc -> System.out.println(" - Document: " + doc.getTitle()));
 
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
@@ -179,6 +191,8 @@ class DocumentServiceTest {
 
                 Page<Document> result = documentService.getDocumentsByAuthor(author, pageable);
 
+                System.out.println("Number of documents retrieved: " + result.getContent().size());
+
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
                                 () -> assertEquals(0, result.getContent().size(), "Should be empty"));
@@ -192,6 +206,9 @@ class DocumentServiceTest {
                 when(documentRepository.findByStatus(status)).thenReturn(List.of(document));
 
                 List<Document> result = documentService.getDocumentsByStatus(status);
+
+                System.out.println("Number of documents retrieved: " + result.size());
+                result.forEach(doc -> System.out.println(" - Document: " + doc.getTitle()));
 
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
@@ -207,6 +224,8 @@ class DocumentServiceTest {
 
                 List<Document> result = documentService.getDocumentsByStatus(status);
 
+                System.out.println("Number of documents retrieved: " + result.size());
+
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
                                 () -> assertEquals(0, result.size(), "Should be empty"));
@@ -221,6 +240,9 @@ class DocumentServiceTest {
 
                 List<Document> result = documentService.getDocumentsByCreateAt(time);
 
+                System.out.println("Number of documents retrieved: " + result.size());
+                result.forEach(doc -> System.out.println(" - Document: " + doc.getTitle()));
+
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
                                 () -> assertEquals(1, result.size(), "Should contain one document"));
@@ -234,6 +256,8 @@ class DocumentServiceTest {
                 when(documentRepository.findByCreateAt(time)).thenReturn(List.of());
 
                 List<Document> result = documentService.getDocumentsByCreateAt(time);
+
+                System.out.println("Number of documents retrieved: " + result.size());
 
                 assertAll(
                                 () -> assertNotNull(result, "Result should not be null"),
@@ -291,14 +315,16 @@ class DocumentServiceTest {
 
         @Test
         void createDocument_whenTitleExists_shouldThrowIllegalStateException() {
-                CreateDocumentRequest request = new CreateDocumentRequest(1L, 1L, "title1",
-                                (short) 1, "thumbnail1", "content1", "description1", LocalDateTime.now(),
-                                LocalDateTime.now());
+                CreateDocumentRequest request = new CreateDocumentRequest(1L, 1L,
+                        "title1", (short) 1, "thumbnail1", "content1",
+                        "description1", LocalDateTime.now(), LocalDateTime.now());
                 when(documentRepository.existsByTitle("title1")).thenReturn(true);
 
                 IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
                         documentService.createDocument(request);
                 });
+
+                System.out.println(thrown.getMessage());
 
                 assertEquals("This document has already existed", thrown.getMessage());
         }
@@ -309,6 +335,8 @@ class DocumentServiceTest {
                 doNothing().when(documentRepository).delete(document);
 
                 documentService.deleteDocument(DOCUMENT_ID);
+
+                System.out.println("\n\n\nDocument deleted successfully: " + DOCUMENT_ID);
 
                 verify(documentRepository).findById(DOCUMENT_ID);
                 verify(documentRepository).delete(document);
@@ -325,10 +353,15 @@ class DocumentServiceTest {
 
                 Document result = documentService.updateDocument(DOCUMENT_ID, updates);
 
+                System.out.println("Document updated successfully!: " + result.getTitle() + 
+                        ", Content: " + result.getContent());
+
                 assertAll(
-                                () -> assertNotNull(result, "Updated document should not be null"),
-                                () -> assertEquals("updatedTitle", result.getTitle(), "Title should be updated"),
-                                () -> assertEquals("updatedContent", result.getContent(), "Content should be updated"));
+                        () -> assertNotNull(result, () -> "Updated document is null. Expected a non-null document."),
+                        () -> assertEquals("updatedTitle", result.getTitle(), 
+                                () -> "Title mismatch. Expected: 'updatedTitle', Actual: '" + result.getTitle() + "'"),
+                        () -> assertEquals("updatedContent", result.getContent(), 
+                                () -> "Content mismatch. Expected: 'updatedContent', Actual: '" + result.getContent() + "'"));
 
                 verify(documentRepository).save(any(Document.class));
         }
