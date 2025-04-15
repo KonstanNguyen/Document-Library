@@ -75,10 +75,14 @@ class HistoryDownloadServiceTest {
 
         List<HistoryDownloadResponse> result = historyDownloadService.getAllHistoryDownloads();
 
+        System.out.println("Number of history downloads retrieved: " + result.size());
+
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
-                () -> assertEquals(1, result.size(), "Should contain one history download"),
-                () -> assertEquals(historyDownloadResponse, result.get(0), "Response should match mapped DTO")
+                () -> assertEquals(1, result.size(),
+                        () -> "Expected 1 history download, but got: " + result.size()),
+                () -> assertEquals(historyDownloadResponse, result.get(0),
+                        () -> "Expected response does not match actual response.")
         );
 
         verify(historyDownloadRepository).findAll();
@@ -94,10 +98,15 @@ class HistoryDownloadServiceTest {
 
         List<HistoryDownloadResponse> result = historyDownloadService.getHistoryByAccountId(ACCOUNT_ID);
 
+        System.out.println("Number of history downloads for account " + ACCOUNT_ID + ": " + result.size());
+        result.forEach(res -> System.out.println(" - HistoryDownloadResponse: " + res));
+
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
-                () -> assertEquals(1, result.size(), "Should contain one history download"),
-                () -> assertEquals(historyDownloadResponse, result.get(0), "Response should match mapped DTO")
+                () -> assertEquals(1, result.size(),
+                        () -> "Expected 1 history download, but got: " + result.size()),
+                () -> assertEquals(historyDownloadResponse, result.get(0),
+                        () -> "Expected response does not match actual response.")
         );
 
         verify(accountRepository).findById(ACCOUNT_ID);
@@ -113,7 +122,10 @@ class HistoryDownloadServiceTest {
             historyDownloadService.getHistoryByAccountId(ACCOUNT_ID);
         });
 
-        assertEquals("Account " + ACCOUNT_ID + " not found", thrown.getMessage());
+        System.out.println("Exception thrown: " + thrown.getMessage());
+
+        assertEquals("Account " + ACCOUNT_ID + " not found", thrown.getMessage(),
+                () -> "Expected exception message does not match actual message.");
 
         verify(accountRepository).findById(ACCOUNT_ID);
         verify(historyDownloadRepository, never()).findByHistoryDownloadId_Account(any());
@@ -129,10 +141,15 @@ class HistoryDownloadServiceTest {
 
         List<HistoryDownloadResponse> result = historyDownloadService.getHistoryByDocumentId(DOCUMENT_ID);
 
+        System.out.println("Number of history downloads for document " + DOCUMENT_ID + ": " + result.size());
+        result.forEach(res -> System.out.println(" - HistoryDownloadResponse: " + res));
+
         assertAll(
                 () -> assertNotNull(result, "Result should not be null"),
-                () -> assertEquals(1, result.size(), "Should contain one history download"),
-                () -> assertEquals(historyDownloadResponse, result.get(0), "Response should match mapped DTO")
+                () -> assertEquals(1, result.size(),
+                        () -> "Expected 1 history download, but got: " + result.size()),
+                () -> assertEquals(historyDownloadResponse, result.get(0),
+                        () -> "Expected response does not match actual response.")
         );
 
         verify(documentRepository).findById(DOCUMENT_ID);
@@ -148,7 +165,10 @@ class HistoryDownloadServiceTest {
             historyDownloadService.getHistoryByDocumentId(DOCUMENT_ID);
         });
 
-        assertEquals("Document " + DOCUMENT_ID + " not found", thrown.getMessage());
+        System.out.println("Exception thrown: " + thrown.getMessage());
+
+        assertEquals("Document " + DOCUMENT_ID + " not found", thrown.getMessage(),
+                () -> "Expected exception message does not match actual message.");
 
         verify(documentRepository).findById(DOCUMENT_ID);
         verify(historyDownloadRepository, never()).findByHistoryDownloadId_Document(any());

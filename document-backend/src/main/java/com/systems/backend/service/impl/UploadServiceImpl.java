@@ -18,13 +18,17 @@ import java.nio.charset.StandardCharsets;
 public class UploadServiceImpl implements UploadService {
     @Override
     public UploadResult processFile(MultipartFile file) throws Exception {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".pdf")) {
+            throw new Exception("Invalid file type. Only PDF files are supported.");
+        }
+
         String uploadDir = "uploads/";
         File folder = new File(uploadDir);
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
-        String originalFilename = file.getOriginalFilename();
         String sanitizedFilename = originalFilename.replaceAll("\\s+", "_"); // Thay khoảng trắng bằng _
         String encodedFilename = URLEncoder.encode(sanitizedFilename, StandardCharsets.UTF_8.toString());
         String filePath = uploadDir + encodedFilename;

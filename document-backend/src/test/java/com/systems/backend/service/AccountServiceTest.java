@@ -177,8 +177,18 @@ class AccountServiceTest {
     void createAccount() {
         when(passwordEncoder.encode(account.getPassword())).thenReturn("encodedPassword");
         when(accountRepository.save(any())).thenReturn(account);
+
         Account result = accountService.createAccount(account);
-        assertEquals("encodedPassword", result.getPassword(), "Password should be encoded");
+
+        System.out.println("Account created: " + result.getUsername() + "\n"
+                + "Account ID: " + result.getId() + "\n"
+                + "Encoded Password: " + result.getPassword());
+
+        assertAll(
+            () -> assertNotNull(result, "The returned Account should not be null"),
+            () -> assertEquals("encodedPassword", result.getPassword(), "Password should be encoded")
+        );
+
         verify(accountRepository).save(any());
     }
 
@@ -186,8 +196,17 @@ class AccountServiceTest {
     void updateAccount() {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
         when(accountRepository.save(any())).thenReturn(account);
+
         Account result = accountService.updateAccount(ACCOUNT_ID, account);
-        assertNotNull(result, "Expected non-null updated account.");
+
+        System.out.println("Account updated successfully: " + result.getUsername() + "\n"
+                + "Account ID: " + result.getId());
+
+        assertAll(
+            () -> assertNotNull(result, "Expected non-null updated account."),
+            () -> assertEquals(account.getUsername(), result.getUsername(), "Username should match")
+        );
+
         verify(accountRepository).save(any());
     }
 
@@ -195,7 +214,11 @@ class AccountServiceTest {
     void deleteAccount() {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
         doNothing().when(accountRepository).delete(account);
+
         accountService.deleteAccount(ACCOUNT_ID);
+
+        System.out.println("\n\n\nAccount deleted successfully: " + ACCOUNT_ID);
+
         verify(accountRepository).delete(account);
     }
 
@@ -218,5 +241,41 @@ class AccountServiceTest {
         when(jwtGenerator.generateToken(any())).thenReturn("mockToken");
         LoginResponse response = accountService.loginAccount(loginRequest);
         assertEquals("mockToken", response.getToken(), "Token should match");
+    }
+
+    @Test
+    void loginAccount_whenUsernameIsMissing_ShouldThrowIllegalArgumentException() {
+        LoginRequest loginRequest = new LoginRequest(null, "password");
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            accountService.loginAccount(loginRequest);
+        });
+        System.out.println("Login failed: " + thrown.getMessage());
+        assertEquals("Username must not be null or empty", thrown.getMessage(), 
+        "Exception message should match");
+    }
+
+    @Test
+    void loginAccount_whenPasswordIsMissing_ShouldThrowIllegalArgumentException() {
+        LoginRequest loginRequest = new LoginRequest("username", null);
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            accountService.loginAccount(loginRequest);
+        });
+        System.out.println("Login failed: " + thrown.getMessage());
+        assertEquals("Password must not be null or empty", thrown.getMessage(), 
+        "Exception message should match");
+    }
+
+    @Test
+    void loginAccount_whenCredentialsAreIncorrect_ShouldThrowAuthenticationException() {
+        LoginRequest loginRequest = new LoginRequest("wrongUsername",
+             "wrongPassword");
+        when(authenticationManager.authenticate(any())).thenThrow(new 
+            RuntimeException("Invalid username or password"));
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            accountService.loginAccount(loginRequest);
+        });
+        System.out.println("Login failed: " + thrown.getMessage());
+        assertEquals("Invalid username or password", thrown.getMessage(),
+             "Exception message should match");
     }
 }
