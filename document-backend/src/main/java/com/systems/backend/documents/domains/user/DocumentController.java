@@ -10,7 +10,7 @@ import com.systems.backend.ratings.responses.RatingResponse;
 import com.systems.backend.documents.services.DocumentService;
 import com.systems.backend.download.services.HistoryDownloadService;
 import com.systems.backend.ratings.services.RatingService;
-import com.systems.backend.service.UploadService;
+import com.systems.backend.upload.services.UploadService;
 import com.systems.backend.common.utils.UploadResult;
 
 import java.util.List;

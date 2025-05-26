@@ -1,6 +1,6 @@
 package com.systems.backend.upload.services.impl;
 
-import com.systems.backend.service.UploadService;
+import com.systems.backend.upload.services.UploadService;
 import com.systems.backend.common.utils.UploadResult;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
