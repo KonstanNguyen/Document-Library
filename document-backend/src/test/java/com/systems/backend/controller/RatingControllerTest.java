@@ -1,9 +1,10 @@
 package com.systems.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.systems.backend.requests.CreateRatingRequest;
-import com.systems.backend.responses.RatingResponse;
-import com.systems.backend.service.RatingService;
+import com.systems.backend.ratings.domains.user.RatingController;
+import com.systems.backend.ratings.resquests.CreateRatingRequest;
+import com.systems.backend.ratings.responses.RatingResponse;
+import com.systems.backend.ratings.services.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

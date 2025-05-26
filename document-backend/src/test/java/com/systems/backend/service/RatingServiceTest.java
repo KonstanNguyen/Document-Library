@@ -1,15 +1,15 @@
 package com.systems.backend.service;
 
-import com.systems.backend.mapper.RatingMapper;
-import com.systems.backend.model.Account;
-import com.systems.backend.model.Document;
-import com.systems.backend.model.Rating;
-import com.systems.backend.repository.AccountRepository;
-import com.systems.backend.repository.DocumentRepository;
-import com.systems.backend.repository.RatingRepository;
-import com.systems.backend.requests.CreateRatingRequest;
-import com.systems.backend.responses.RatingResponse;
-import com.systems.backend.service.impl.RatingServiceImpl;
+import com.systems.backend.ratings.mappers.RatingMapper;
+import com.systems.backend.users.models.Account;
+import com.systems.backend.documents.models.Document;
+import com.systems.backend.ratings.models.Rating;
+import com.systems.backend.users.repositories.AccountRepository;
+import com.systems.backend.documents.repositories.DocumentRepository;
+import com.systems.backend.ratings.repositories.RatingRepository;
+import com.systems.backend.ratings.resquests.CreateRatingRequest;
+import com.systems.backend.ratings.responses.RatingResponse;
+import com.systems.backend.ratings.services.impl.RatingServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

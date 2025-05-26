@@ -1,11 +1,11 @@
 package com.systems.backend.service;
 
-import com.systems.backend.model.Account;
-import com.systems.backend.model.Role;
-import com.systems.backend.repository.AccountRepository;
-import com.systems.backend.repository.RoleRepository;
-import com.systems.backend.requests.CreateRoleRequest;
-import com.systems.backend.service.impl.RoleServiceImpl;
+import com.systems.backend.users.models.Account;
+import com.systems.backend.users.models.Role;
+import com.systems.backend.users.repositories.AccountRepository;
+import com.systems.backend.users.repositories.RoleRepository;
+import com.systems.backend.users.resquests.CreateRoleRequest;
+import com.systems.backend.users.services.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,6 +1,7 @@
 package com.systems.backend.repository;
 
-import com.systems.backend.model.Role;
+import com.systems.backend.users.models.Role;
+import com.systems.backend.users.repositories.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

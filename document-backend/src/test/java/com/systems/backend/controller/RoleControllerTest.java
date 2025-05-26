@@ -1,10 +1,11 @@
 package com.systems.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.systems.backend.model.Role;
-import com.systems.backend.requests.CreateRoleRequest;
-import com.systems.backend.service.AccountService;
-import com.systems.backend.service.RoleService;
+import com.systems.backend.users.domains.common.RoleController;
+import com.systems.backend.users.models.Role;
+import com.systems.backend.users.resquests.CreateRoleRequest;
+import com.systems.backend.users.services.AccountService;
+import com.systems.backend.users.services.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

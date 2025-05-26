@@ -1,9 +1,9 @@
 package com.systems.backend.service;
 
-import com.systems.backend.model.DocUser;
-import com.systems.backend.repository.DocUserRepository;
-import com.systems.backend.requests.CreateDocUserRequest;
-import com.systems.backend.service.impl.DocUserServiceImpl;
+import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.repositories.DocUserRepository;
+import com.systems.backend.users.resquests.CreateDocUserRequest;
+import com.systems.backend.users.services.impl.DocUserServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

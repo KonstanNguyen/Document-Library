@@ -1,16 +1,17 @@
 package com.systems.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.systems.backend.mapper.DocUserMapper;
-import com.systems.backend.mapper.DocumentMapper;
-import com.systems.backend.model.DocUser;
-import com.systems.backend.model.Document;
-import com.systems.backend.requests.CreateDocUserRequest;
-import com.systems.backend.requests.PaginationRequest;
-import com.systems.backend.responses.DocUserResponse;
-import com.systems.backend.responses.DocumentResponse;
-import com.systems.backend.service.DocUserService;
-import com.systems.backend.service.DocumentService;
+import com.systems.backend.users.domains.common.DocUserController;
+import com.systems.backend.users.mappers.DocUserMapper;
+import com.systems.backend.documents.mappers.DocumentMapper;
+import com.systems.backend.users.models.DocUser;
+import com.systems.backend.documents.models.Document;
+import com.systems.backend.users.resquests.CreateDocUserRequest;
+import com.systems.backend.common.requests.PaginationRequest;
+import com.systems.backend.users.responses.DocUserResponse;
+import com.systems.backend.documents.responses.DocumentResponse;
+import com.systems.backend.users.services.DocUserService;
+import com.systems.backend.documents.services.DocumentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

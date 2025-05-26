@@ -1,11 +1,10 @@
 package com.systems.backend.service;
 
-import com.systems.backend.service.impl.UploadServiceImpl;
-import com.systems.backend.utils.UploadResult;
+import com.systems.backend.upload.services.impl.UploadServiceImpl;
+import com.systems.backend.common.utils.UploadResult;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
-import org.apache.pdfbox.rendering.PDFRenderer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

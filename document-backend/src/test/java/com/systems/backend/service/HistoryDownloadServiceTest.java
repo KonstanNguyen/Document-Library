@@ -1,14 +1,14 @@
 package com.systems.backend.service;
 
-import com.systems.backend.mapper.HistoryDownloadMapper;
-import com.systems.backend.model.Account;
-import com.systems.backend.model.Document;
-import com.systems.backend.model.HistoryDownload;
-import com.systems.backend.repository.AccountRepository;
-import com.systems.backend.repository.DocumentRepository;
-import com.systems.backend.repository.HistoryDownloadRepository;
-import com.systems.backend.responses.HistoryDownloadResponse;
-import com.systems.backend.service.impl.HistoryDownloadServiceImpl;
+import com.systems.backend.download.mappers.HistoryDownloadMapper;
+import com.systems.backend.users.models.Account;
+import com.systems.backend.documents.models.Document;
+import com.systems.backend.download.models.HistoryDownload;
+import com.systems.backend.users.repositories.AccountRepository;
+import com.systems.backend.documents.repositories.DocumentRepository;
+import com.systems.backend.download.repositories.HistoryDownloadRepository;
+import com.systems.backend.download.responses.HistoryDownloadResponse;
+import com.systems.backend.download.services.impl.HistoryDownloadServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,9 @@
 package com.systems.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.systems.backend.responses.HistoryDownloadResponse;
-import com.systems.backend.service.HistoryDownloadService;
+import com.systems.backend.download.domains.common.HistoryDownloadController;
+import com.systems.backend.download.responses.HistoryDownloadResponse;
+import com.systems.backend.download.services.HistoryDownloadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

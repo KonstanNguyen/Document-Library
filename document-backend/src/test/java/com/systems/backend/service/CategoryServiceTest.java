@@ -1,9 +1,9 @@
 package com.systems.backend.service;
 
-import com.systems.backend.model.Category;
-import com.systems.backend.repository.CategoryRepository;
-import com.systems.backend.requests.CreateCategoryRequest;
-import com.systems.backend.service.impl.CategoryServiceImpl;
+import com.systems.backend.documents.models.Category;
+import com.systems.backend.documents.repositories.CategoryRepository;
+import com.systems.backend.documents.resquests.CreateCategoryRequest;
+import com.systems.backend.documents.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

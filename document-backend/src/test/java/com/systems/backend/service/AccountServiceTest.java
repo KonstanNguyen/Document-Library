@@ -1,15 +1,15 @@
 package com.systems.backend.service;
 
-import com.systems.backend.model.Account;
-import com.systems.backend.model.Role;
-import com.systems.backend.repository.AccountRepository;
-import com.systems.backend.repository.RoleRepository;
-import com.systems.backend.requests.LoginRequest;
-import com.systems.backend.requests.RegisterRequest;
-import com.systems.backend.responses.LoginResponse;
-import com.systems.backend.responses.RegisterResponse;
-import com.systems.backend.security.JwtGenerator;
-import com.systems.backend.service.impl.AccountServiceImpl;
+import com.systems.backend.users.models.Account;
+import com.systems.backend.users.models.Role;
+import com.systems.backend.users.repositories.AccountRepository;
+import com.systems.backend.users.repositories.RoleRepository;
+import com.systems.backend.users.resquests.LoginRequest;
+import com.systems.backend.users.resquests.RegisterRequest;
+import com.systems.backend.users.responses.LoginResponse;
+import com.systems.backend.users.responses.RegisterResponse;
+import com.systems.backend.common.security.JwtGenerator;
+import com.systems.backend.users.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package com.systems.backend.controller;
 
-import com.systems.backend.utils.PdfPageExtractor;
+import com.systems.backend.common.utils.PdfPageExtractor;
+import com.systems.backend.download.domains.common.PdfController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

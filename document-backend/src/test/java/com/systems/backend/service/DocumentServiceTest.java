@@ -1,13 +1,13 @@
 package com.systems.backend.service;
 
-import com.systems.backend.model.Category;
-import com.systems.backend.model.DocUser;
-import com.systems.backend.model.Document;
-import com.systems.backend.repository.CategoryRepository;
-import com.systems.backend.repository.DocUserRepository;
-import com.systems.backend.repository.DocumentRepository;
-import com.systems.backend.requests.CreateDocumentRequest;
-import com.systems.backend.service.impl.DocumentServiceImpl;
+import com.systems.backend.documents.models.Category;
+import com.systems.backend.users.models.DocUser;
+import com.systems.backend.documents.models.Document;
+import com.systems.backend.documents.repositories.CategoryRepository;
+import com.systems.backend.users.repositories.DocUserRepository;
+import com.systems.backend.documents.repositories.DocumentRepository;
+import com.systems.backend.documents.resquests.CreateDocumentRequest;
+import com.systems.backend.documents.services.impl.DocumentServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
