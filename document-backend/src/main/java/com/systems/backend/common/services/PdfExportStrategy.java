@@ -34,7 +34,7 @@ class PdfExportStrategy<T> extends ExportStrategy<T> {
             Font cellFont = FontFactory.getFont(FontFactory.HELVETICA, 11);
 
             // Extract fields dynamically
-            Field[] fields = data.getFirst().getClass().getDeclaredFields();
+            Field[] fields = data.get(0).getClass().getDeclaredFields();
 
             PdfPTable table = new PdfPTable(fields.length);
             table.setWidthPercentage(100);

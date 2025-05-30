@@ -34,9 +34,9 @@ class XmlExportStrategy<T> extends ExportStrategy<T> {
             Document doc = dBuilder.newDocument();
 
             // Root element
-            Element rootElement = doc.createElement(data.getFirst().getClass().getSimpleName() + "s");
+            Element rootElement = doc.createElement(data.get(0).getClass().getSimpleName() + "s");
             doc.appendChild(rootElement);
-            Field[] fields = data.getFirst().getClass().getDeclaredFields();
+            Field[] fields = data.get(0).getClass().getDeclaredFields();
             for (T item : data) {
                 Element itemElement = doc.createElement(item.getClass().getSimpleName());
 

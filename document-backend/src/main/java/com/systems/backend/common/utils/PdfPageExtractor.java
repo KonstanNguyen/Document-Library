@@ -2,14 +2,14 @@ package com.systems.backend.common.utils;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageTree;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 public class PdfPageExtractor {
     public static byte[] extractPage(String pdfPath, int pageNumber) throws IOException {
-        try (PDDocument document = PDDocument.load(new java.io.File(pdfPath))) {
+        try (PDDocument document = PDDocument.load(new File(pdfPath))) {
             if (pageNumber < 1 || pageNumber > document.getNumberOfPages()) {
                 throw new IllegalArgumentException("Invalid page number");
             }

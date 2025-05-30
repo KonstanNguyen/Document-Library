@@ -38,7 +38,7 @@ class ExcelExportStrategy<T> extends ExportStrategy<T> {
             XSSFSheet sheet = workbook.createSheet("Reports");
 
             if (!data.isEmpty()) {
-                T first = data.getFirst();
+                T first = data.get(0);
                 var properties = Introspector.getBeanInfo(first.getClass(), Object.class).getPropertyDescriptors();
 
                 XSSFRow headerRow = sheet.createRow(0);

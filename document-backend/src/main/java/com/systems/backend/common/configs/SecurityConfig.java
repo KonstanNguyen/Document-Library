@@ -63,7 +63,13 @@ public class SecurityConfig {
                                     "/api/documents/{documentId}",
                                     "/api/accounts/getUserIdByUsername/{username}",
                                     "/api/accounts/login",
-                                    "/api/accounts/register"
+                                    "/api/accounts/register",
+                                    // Swagger endpoints
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/swagger-resources/**",
+                                    "/webjars/**"
                             ).permitAll()
                             .anyRequest().authenticated();
 

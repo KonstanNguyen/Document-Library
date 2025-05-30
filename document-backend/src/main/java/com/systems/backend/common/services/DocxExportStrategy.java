@@ -24,7 +24,7 @@ class DocxExportStrategy<T> extends ExportStrategy<T> {
             XWPFDocument document = new XWPFDocument();
 
             if (!data.isEmpty()) {
-                T first = data.getFirst();
+                T first = data.get(0);
                 PropertyDescriptor[] properties = Introspector.getBeanInfo(first.getClass(), Object.class)
                         .getPropertyDescriptors();
 

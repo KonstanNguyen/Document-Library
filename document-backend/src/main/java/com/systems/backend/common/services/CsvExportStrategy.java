@@ -28,7 +28,7 @@ class CsvExportStrategy<T> extends ExportStrategy<T> {
             ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 
             // Extract field names dynamically from the first object
-            T sample = data.getFirst();
+            T sample = data.get(0);
             Field[] fields = sample.getClass().getDeclaredFields();
             String[] fieldNames = Arrays.stream(fields).map(Field::getName).toArray(String[]::new);
 
