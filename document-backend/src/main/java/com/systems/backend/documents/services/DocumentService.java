@@ -24,4 +24,5 @@ public interface DocumentService {
     Document createDocument(CreateDocumentRequest createDocumentRequest);
     void deleteDocument(Long id);
     Document updateDocument(Long id, Document document);
+    List<Document> getDocumentsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 }

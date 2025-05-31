@@ -118,4 +118,9 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.save(updatedDocument);
 
     }
+
+    @Override
+    public List<Document> getDocumentsByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        return documentRepository.findByCreateAtBetween(startDate, endDate);
+    }
 }

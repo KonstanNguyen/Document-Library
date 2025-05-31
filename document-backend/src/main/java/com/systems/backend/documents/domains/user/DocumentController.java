@@ -12,7 +12,10 @@ import com.systems.backend.download.services.HistoryDownloadService;
 import com.systems.backend.ratings.services.RatingService;
 import com.systems.backend.upload.services.UploadService;
 import com.systems.backend.common.utils.UploadResult;
+import com.systems.backend.common.services.ExportStrategy;
+import com.systems.backend.common.services.ExportStrategyFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("api/documents")
@@ -112,5 +117,35 @@ public class DocumentController {
     @ResponseStatus(HttpStatus.OK)
     public List<HistoryDownloadResponse> getHistoryByDocumentId(@PathVariable Long documentId) {
         return historyDownloadService.getHistoryByDocumentId(documentId);
+    }
+
+    @GetMapping("/export/{format}")
+    @ResponseStatus(HttpStatus.OK)
+    public void exportDocuments(
+            @PathVariable String format,
+            @RequestParam(required = false) String fileName,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            HttpServletResponse response) {
+        String exportFileName = fileName != null ? fileName : "documents";
+        
+        List<DocumentResponse> documentResponses;
+        
+        if (startDate != null && endDate != null) {
+            LocalDateTime start = LocalDateTime.parse(startDate);
+            LocalDateTime end = LocalDateTime.parse(endDate);
+            List<Document> documents = documentService.getDocumentsByDateRange(start, end);
+            documentResponses = documents.stream()
+                    .map(documentMapper::toDTO)
+                    .toList();
+        } else {
+            documentResponses = documentService.getAllDocuments(Pageable.unpaged())
+                    .map(documentMapper::toDTO)
+                    .getContent();
+        }
+
+        ExportStrategyFactory<DocumentResponse> factory = new ExportStrategyFactory<>();
+        ExportStrategy<DocumentResponse> strategy = factory.getExportStrategy(format, response, exportFileName);
+        strategy.export(documentResponses);
     }
 }

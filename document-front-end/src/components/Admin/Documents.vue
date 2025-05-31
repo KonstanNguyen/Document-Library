@@ -3,6 +3,39 @@
         <Block v-for="item in Options" :link="item.link" :name="item.name" @click="fetchDocuments(item.link)" />
     </div>
     <div class="m-auto mt-5" style="width: 90%;">
+        <div class="d-flex justify-content-end mb-3 gap-2">
+            <input 
+                type="datetime-local" 
+                class="form-control" 
+                style="width: auto;"
+                v-model="startDate" 
+                placeholder="Từ ngày"
+            />
+            <input 
+                type="datetime-local" 
+                class="form-control" 
+                style="width: auto;"
+                v-model="endDate" 
+                placeholder="Đến ngày"
+            />
+            <select class="form-select" style="width: auto;" v-model="selectedFormat">
+                <option value="">Chọn định dạng</option>
+                <option value="csv">CSV</option>
+                <option value="excel">Excel</option>
+                <option value="pdf">PDF</option>
+                <option value="docx">DOCX</option>
+                <option value="json">JSON</option>
+                <option value="xml">XML</option>
+                <option value="txt">TXT</option>
+            </select>
+            <button 
+                class="btn btn-success" 
+                @click="exportDocuments"
+                :disabled="!selectedFormat">
+                <i class="bi bi-download"></i> Xuất file
+            </button>
+        </div>
+        
         <table class="table table-striped table-hover" v-if="selectedLink === 'request'">
             <thead class="thead-dark">
                 <tr>
@@ -90,6 +123,9 @@ export default {
                 current: 1,
                 max: 1,
             },
+            startDate: '',
+            endDate: '',
+            selectedFormat: '',
         }
     },
     methods: {
@@ -154,6 +190,26 @@ export default {
             } catch (error) {
                 console.error('Error approving document:', error);
                 alert("Có lỗi xảy ra khi duyệt tài liệu!");
+            }
+        },
+        async exportDocuments() {
+            if (!this.selectedFormat) {
+                alert('Vui lòng chọn định dạng xuất file!');
+                return;
+            }
+            
+            try {
+                const fileName = `documents_${new Date().toISOString().slice(0,10)}`;
+                let url = `/api/documents/export/${this.selectedFormat}?fileName=${fileName}`;
+                
+                if (this.startDate && this.endDate) {
+                    url += `&startDate=${this.startDate}&endDate=${this.endDate}`;
+                }
+                
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error('Error exporting documents:', error);
+                alert('Có lỗi xảy ra khi xuất file!');
             }
         },
         formatDate(date) {
@@ -262,5 +318,18 @@ export default {
 .btn-danger {
     background-color: #dc3545;
     border-color: #dc3545;
+}
+
+.form-select {
+    min-width: 150px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    &:disabled {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
 }
 </style>

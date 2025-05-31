@@ -10,6 +10,7 @@ import com.systems.backend.download.repositories.HistoryDownloadRepository;
 import com.systems.backend.download.responses.HistoryDownloadResponse;
 import com.systems.backend.download.services.HistoryDownloadService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,13 @@ public class HistoryDownloadServiceImpl implements HistoryDownloadService {
         return historyDownloads.stream().map(
             historyDownload -> historyDownloadMapper.toDTO(historyDownload)
         ).toList();
+    }
+
+    @Override
+    public List<HistoryDownloadResponse> getHistoryByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        List<HistoryDownload> historyDownloads = historyDownloadRepository.findByDateBetween(startDate, endDate);
+        return historyDownloads.stream()
+                .map(historyDownload -> historyDownloadMapper.toDTO(historyDownload))
+                .toList();
     }
 }

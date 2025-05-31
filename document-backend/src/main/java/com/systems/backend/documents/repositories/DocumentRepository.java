@@ -21,4 +21,5 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findByStatus(Short status);
     List<Document> findByCreateAt(LocalDateTime createAt);
     Boolean existsByTitle(String title);
+    List<Document> findByCreateAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 }
