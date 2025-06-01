@@ -2,7 +2,7 @@ package com.systems.backend.users.services.impl;
 
 import com.systems.backend.common.constants.JwtConstants;
 import com.systems.backend.users.models.Account;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import com.systems.backend.users.models.Role;
 import com.systems.backend.users.repositories.AccountRepository;
 import com.systems.backend.users.repositories.RoleRepository;
@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalStateException("Account with username " + registerRequest.getUsername() + " already exists");
         }
 
-        DocUser docUser = DocUser.builder()
+        User user = User.builder()
                 .name(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .phone(registerRequest.getPhone())
@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Account.builder()
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .user(docUser)
+                .user(user)
                 .roles(List.of(userRole))
                 .build();
 

@@ -1,14 +1,14 @@
 package com.systems.backend.users.domains.common;
 
-import com.systems.backend.users.mappers.DocUserMapper;
+import com.systems.backend.users.mappers.UserMapper;
 import com.systems.backend.documents.mappers.DocumentMapper;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import com.systems.backend.documents.models.Document;
-import com.systems.backend.users.resquests.CreateDocUserRequest;
+import com.systems.backend.users.resquests.CreateUserRequest;
 import com.systems.backend.common.requests.PaginationRequest;
-import com.systems.backend.users.responses.DocUserResponse;
+import com.systems.backend.users.responses.UserResponse;
 import com.systems.backend.documents.responses.DocumentResponse;
-import com.systems.backend.users.services.DocUserService;
+import com.systems.backend.users.services.UserService;
 import com.systems.backend.documents.services.DocumentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +24,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/doc-users")
-public class DocUserController {
+public class UserController {
     @Autowired
-    private DocUserService docUserService;
+    private UserService userService;
 
     @Autowired
     private DocumentService documentService;
 
     @Autowired
-    private DocUserMapper docUserMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private DocumentMapper documentMapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<DocUserResponse> getAllDocUsers( @RequestBody(required = false) PaginationRequest pageRequest) {
+    public Page<UserResponse> getAllDocUsers(@RequestBody(required = false) PaginationRequest pageRequest) {
         Pageable pageable;
         if (pageRequest == null) {
             pageable = PageRequest.of(0, 6, Sort.by("id").ascending());
@@ -53,36 +53,36 @@ public class DocUserController {
             pageable = PageRequest.of(page, size, sort);
         }
 
-        Page<DocUser> docUserPage = docUserService.getAllDocUsers(pageable);
+        Page<User> docUserPage = userService.getAllDocUsers(pageable);
         
-        return docUserMapper.toDTOPage(docUserPage);
+        return userMapper.toDTOPage(docUserPage);
     }
 
     @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DocUser createDocUser(@RequestBody CreateDocUserRequest createDocUserRequest) {
-        return docUserService.createDocUser(createDocUserRequest);
+    public User createDocUser(@RequestBody CreateUserRequest createUserRequest) {
+        return userService.createDocUser(createUserRequest);
     }
 
     @GetMapping("{docUserId}")
     @ResponseStatus(HttpStatus.OK)
-    public DocUserResponse getDocUser(@PathVariable(name = "docUserId") Long docUserId) {
-        DocUser docUser = docUserService.getDocUserById(docUserId);
-        return docUserMapper.toDTO(docUser);
+    public UserResponse getDocUser(@PathVariable(name = "docUserId") Long docUserId) {
+        User user = userService.getDocUserById(docUserId);
+        return userMapper.toDTO(user);
     }
 
     @RequestMapping(value = "{docUserId}/update", method = {RequestMethod.PUT, RequestMethod.POST, RequestMethod.PATCH})
     @ResponseStatus(HttpStatus.OK)
-    public DocUser updateDocUser(@PathVariable(name = "docUserId") Long docUserId, @RequestBody DocUser docUser) {
-        return docUserService.updateDocUser(docUserId, docUser);
+    public User updateDocUser(@PathVariable(name = "docUserId") Long docUserId, @RequestBody User user) {
+        return userService.updateDocUser(docUserId, user);
     }
 
     @PreAuthorize("hasAnyAuthority('admin') or hasAnyAuthority('ADMIN')")
     @DeleteMapping("{docUserId}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDocUser(@PathVariable(name = "docUserId") Long accountId) {
-        docUserService.deleteDocUser(accountId);
+        userService.deleteDocUser(accountId);
     }
 
 
@@ -103,12 +103,12 @@ public class DocUserController {
             Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
             pageable = PageRequest.of(page, size, sort);
         }
-        DocUser docUser = docUserService.getDocUserById(docuserId);
-        if (docUser == null) {
+        User user = userService.getDocUserById(docuserId);
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DocUser not found");
         }
 
-        Page<Document> documentPage = documentService.getDocumentsByAuthor(docUser, pageable);
+        Page<Document> documentPage = documentService.getDocumentsByAuthor(user, pageable);
         
         return documentMapper.toDTOPage(documentPage);
     }

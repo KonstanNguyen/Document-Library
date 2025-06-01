@@ -7,7 +7,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest extends CreateDocUserRequest {
+public class RegisterRequest extends CreateUserRequest {
     @NotBlank(message = "Username is required!")
     private String username;
     @NotBlank(message = "Password is required!")

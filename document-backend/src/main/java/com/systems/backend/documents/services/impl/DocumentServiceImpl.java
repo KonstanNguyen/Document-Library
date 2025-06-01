@@ -1,10 +1,10 @@
 package com.systems.backend.documents.services.impl;
 
 import com.systems.backend.documents.models.Category;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import com.systems.backend.documents.models.Document;
 import com.systems.backend.documents.repositories.CategoryRepository;
-import com.systems.backend.users.repositories.DocUserRepository;
+import com.systems.backend.users.repositories.UserRepository;
 import com.systems.backend.documents.repositories.DocumentRepository;
 import com.systems.backend.documents.resquests.CreateDocumentRequest;
 import com.systems.backend.documents.services.DocumentService;
@@ -24,7 +24,7 @@ public class DocumentServiceImpl implements DocumentService {
     private DocumentRepository documentRepository;
 
     @Autowired
-    private DocUserRepository docUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -43,7 +43,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public Page<Document> getDocumentsByAuthor(DocUser author, Pageable pageable) {
+    public Page<Document> getDocumentsByAuthor(User author, Pageable pageable) {
         return documentRepository.findByAuthor(author, pageable);
     }
 
@@ -73,7 +73,7 @@ public class DocumentServiceImpl implements DocumentService {
             throw new IllegalStateException("This document has already existed");
         }
 
-        DocUser author = docUserRepository.findById(createDocumentRequest.getAuthorId()).orElseThrow(() -> new ResourceNotFoundException("Not found user by ID" + createDocumentRequest.getAuthorId()));
+        User author = userRepository.findById(createDocumentRequest.getAuthorId()).orElseThrow(() -> new ResourceNotFoundException("Not found user by ID" + createDocumentRequest.getAuthorId()));
         Category category = categoryRepository.findById(createDocumentRequest.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Not found category by ID" + createDocumentRequest.getCategoryId()));
 
         Document document = Document.builder()

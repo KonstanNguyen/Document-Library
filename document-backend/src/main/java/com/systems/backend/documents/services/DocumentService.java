@@ -1,7 +1,7 @@
 package com.systems.backend.documents.services;
 
 import com.systems.backend.documents.models.Category;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import com.systems.backend.documents.models.Document;
 import com.systems.backend.documents.resquests.CreateDocumentRequest;
 
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public interface DocumentService {
     Document getDocumentById(Long id);
     Page<Document> getDocumentByCategory(Category category, Pageable pageable);
-    Page<Document> getDocumentsByAuthor(DocUser author, Pageable pageable);
+    Page<Document> getDocumentsByAuthor(User author, Pageable pageable);
     List<Document> getDocumentsByStatus(Short status);
     List<Document> getDocumentsByCreateAt(LocalDateTime time);
     List<Document> searchDocuments(String keywords);

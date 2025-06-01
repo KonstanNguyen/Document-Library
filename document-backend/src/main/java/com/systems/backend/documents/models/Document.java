@@ -2,7 +2,7 @@ package com.systems.backend.documents.models;
 
 import com.systems.backend.download.models.HistoryDownload;
 import com.systems.backend.ratings.models.Rating;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
@@ -29,7 +29,7 @@ public class Document {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
-    private DocUser author;
+    private User author;
 
     @Nationalized
     @Column(name = "thumbnail", nullable = false)

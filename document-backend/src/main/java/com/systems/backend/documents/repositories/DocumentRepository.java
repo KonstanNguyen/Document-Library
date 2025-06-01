@@ -1,7 +1,7 @@
 package com.systems.backend.documents.repositories;
 
 import com.systems.backend.documents.models.Category;
-import com.systems.backend.users.models.DocUser;
+import com.systems.backend.users.models.User;
 import com.systems.backend.documents.models.Document;
 
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Page<Document> findByCategory(Category category, Pageable page);
-    Page<Document> findByAuthor(DocUser author, Pageable pageable);
+    Page<Document> findByAuthor(User author, Pageable pageable);
     List<Document> findByTitleContaining(String keywords);
     List<Document> findByStatus(Short status);
     List<Document> findByCreateAt(LocalDateTime createAt);

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocUserResponse {
+public class UserResponse {
     private Long id;
     @Column(name = "dateOfBirth", nullable = false)
     private LocalDate dateOfBirth;
