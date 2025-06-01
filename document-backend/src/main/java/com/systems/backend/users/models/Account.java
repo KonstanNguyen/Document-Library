@@ -4,6 +4,7 @@ import com.systems.backend.download.models.HistoryDownload;
 import com.systems.backend.ratings.models.Rating;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.Collection;
 
 @Entity
@@ -33,7 +34,8 @@ public class Account {
     @JoinTable(
             name = "Account_Role",
             joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"account_id", "role_id"}))
     private Collection<Role> roles;
 
     @OneToMany(mappedBy = "historyDownloadId.account", fetch = FetchType.LAZY)
