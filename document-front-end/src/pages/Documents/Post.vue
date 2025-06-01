@@ -131,11 +131,18 @@ export default {
         scrollToTop() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         },
+        async incrementView() {
+            try {
+                await apiClient.put(`/api/documents/${this.$route.params.id}/increment-view`);
+            } catch (error) {
+                console.error("Error incrementing view:", error);
+            }
+        },
     },
     async created() {
         await this.fetchDocUserId(this.accountId);
         if (this.userId) {
-            await this.fetchRecommendCategory(this.userId);
+            await this.incrementView();
             await this.fetchData();
             this.initializeRecommendations();
         } else {

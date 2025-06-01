@@ -9,7 +9,6 @@
 import * as pdfjsLib from "pdfjs-dist";
 import * as pdfWorker from "pdfjs-dist/build/pdf.worker.mjs";
 import "pdfjs-dist/web/pdf_viewer.css";
-import axios from 'axios';
 import apiClient from "@/api/service";
 
 export default {
@@ -36,7 +35,7 @@ export default {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.worker.min.js';
 
     try {
-      const response = await axios.get('http://localhost:5454/pdf/page', {
+      const response = await apiClient.get('/pdf/page', {
         params: {
           pdfPath: this.pdfPath,
           pageNumber: this.pageNumber,
@@ -87,7 +86,7 @@ export default {
     async downloadPdf() {
       try {
         const pdfPath = this.pdfPath.split('/').pop();
-        const response = await axios.get('http://localhost:5454/pdf/download', {
+        const response = await apiClient.get('/pdf/download', {
           params: {
             pdfPath: pdfPath,
           },

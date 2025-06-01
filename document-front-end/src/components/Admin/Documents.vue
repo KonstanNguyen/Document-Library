@@ -90,7 +90,7 @@
                 </tr>
             </tbody>
         </table>
-        <Pagination />
+        <!-- <Pagination /> -->
     </div>
 </template>
 
@@ -143,16 +143,17 @@ export default {
                 size: 9,
                 sortBy: "createAt",
                 sortDirection: "desc",
-                status: 0,
+                status: 0
             };
 
             try {
-                const response = await apiClient.get('/api/documents', { params: paginationRequest });
+                const response = await apiClient.get('/api/documents', { 
+                    params: paginationRequest,
+                });
                 const data = response.data;
-
                 if (data && data.content) {
-                    this.listDocRequest = data.content;
-                    this.page.max = data.totalPages;
+                    this.listDocRequest = data.content.filter(doc => doc.status === 0);
+                    this.page.max = Math.ceil(this.listDocRequest.length / paginationRequest.size);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -164,16 +165,17 @@ export default {
                 size: 9,
                 sortBy: "createAt",
                 sortDirection: "desc",
-                status: 1,
+                status: 1
             };
 
             try {
-                const response = await apiClient.get('/api/documents', { params: paginationRequest });
+                const response = await apiClient.get('/api/documents', { 
+                    params: paginationRequest,
+                });
                 const data = response.data;
-
                 if (data && data.content) {
-                    this.listDocAll = data.content;
-                    this.page.max = data.totalPages;
+                    this.listDocAll = data.content.filter(doc => doc.status === 1);
+                    this.page.max = Math.ceil(this.listDocAll.length / paginationRequest.size);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -200,13 +202,24 @@ export default {
             
             try {
                 const fileName = `documents_${new Date().toISOString().slice(0,10)}`;
-                let url = `/api/documents/export/${this.selectedFormat}?fileName=${fileName}`;
+                let params = { fileName };
                 
                 if (this.startDate && this.endDate) {
-                    url += `&startDate=${this.startDate}&endDate=${this.endDate}`;
+                    params.startDate = this.startDate;
+                    params.endDate = this.endDate;
                 }
                 
-                window.open(url, '_blank');
+                const response = await apiClient.get(`/api/documents/export/${this.selectedFormat}`, {
+                    params,
+                    responseType: 'blob'
+                });
+
+                const blob = new Blob([response.data]);
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${fileName}.${this.selectedFormat}`;
+                link.click();
+                URL.revokeObjectURL(link.href);
             } catch (error) {
                 console.error('Error exporting documents:', error);
                 alert('Có lỗi xảy ra khi xuất file!');

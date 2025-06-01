@@ -21,7 +21,7 @@ export default {
     methods: {
         async getRoleByAccount(accountId) {
             try {
-                const response = await apiClient.get(`/api/accounts/getRoleById/${accountId}`);
+                const response = await apiClient.get(`/api/accounts/getRoleByAccountId/${accountId}`);
                 const roles = response.data.data;
                 if (roles && roles.length > 0) {
                     const role = roles[0].id;
@@ -86,11 +86,11 @@ export default {
                 //         "Content-Type": "multipart/form-data"
                 //     },
                 // });
-                const response = await axios.post('http://localhost:5454/api/documents/create', formDataToSend, {
+                const response = await axios.post('http://localhost:8080/api/documents/create', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-    "Access-Control-Allow-Origin": "*",
-    'Authorization': localStorage.getItem("token"),
+                    "Access-Control-Allow-Origin": "*",
+                    'Authorization': localStorage.getItem("token"),
                 },
                 });
                 alert("Tải lên thành công!");

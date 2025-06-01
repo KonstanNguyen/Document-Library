@@ -52,7 +52,7 @@
                 </tr>
             </tbody>
         </table>
-        <Pagination />
+        <!-- <Pagination /> -->
     </div>
 </template>
 
@@ -85,9 +85,9 @@ export default {
             };
 
             try {
-                const response = await apiClient.get('api/history-downloads', { params: paginationRequest });
+                const response = await apiClient.get('/api/history-downloads', { params: paginationRequest });
                 const data = response.data;
-                this.listHistoryDownload = data.content;
+                this.listHistoryDownload = data;
                 this.page.max = data.totalPages;
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -133,13 +133,32 @@ export default {
             
             try {
                 const fileName = `history-downloads_${new Date().toISOString().slice(0,10)}`;
-                let url = `/api/history-downloads/export/${this.selectedFormat}?fileName=${fileName}`;
+                let params = { fileName };
                 
                 if (this.startDate && this.endDate) {
-                    url += `&startDate=${this.startDate}&endDate=${this.endDate}`;
+                    params.startDate = this.startDate;
+                    params.endDate = this.endDate;
                 }
                 
-                window.open(url, '_blank');
+                const response = await apiClient.get(
+                    `/api/history-downloads/export/${this.selectedFormat}`, 
+                    { 
+                        params,
+                        responseType: 'blob'
+                    }
+                );
+                
+                // Create blob link to download
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${fileName}.${this.selectedFormat}`);
+                document.body.appendChild(link);
+                link.click();
+                
+                // Clean up
+                link.parentNode.removeChild(link);
+                window.URL.revokeObjectURL(url);
             } catch (error) {
                 console.error('Error exporting history downloads:', error);
                 alert('Có lỗi xảy ra khi xuất file!');

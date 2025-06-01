@@ -35,7 +35,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+// @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Autowired
     private JwtAuthEntryPoint jwtAuthEntryPoint;
@@ -49,9 +49,9 @@ public class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> {
                     httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
                 })
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
-                    httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthEntryPoint);
-                })
+                // .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+                //     httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthEntryPoint);
+                // })
                 .sessionManagement(sessionManagement -> {
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
@@ -61,9 +61,10 @@ public class SecurityConfig {
                             .requestMatchers(
                                     "/api/documents",
                                     "/api/documents/{documentId}",
-                                    "/api/accounts/getUserIdByUsername/{username}",
+                                    "/api/accounts/getUserIdByUsername/*",
                                     "/api/accounts/login",
                                     "/api/accounts/register",
+                                    "/category",
                                     // Swagger endpoints
                                     "/v3/api-docs/**",
                                     "/swagger-ui/**",
@@ -74,7 +75,7 @@ public class SecurityConfig {
                             .anyRequest().authenticated();
 
                 }).formLogin(AbstractHttpConfigurer::disable)
-                .authenticationProvider(authenticationProvider())
+                // .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
                         jwtAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class
@@ -83,15 +84,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    // @Bean
+    // public DaoAuthenticationProvider authenticationProvider() {
+    //     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+    //     authProvider.setUserDetailsService(userDetailsService);
+    //     authProvider.setPasswordEncoder(passwordEncoder());
 
-        return authProvider;
-    }
+    //     return authProvider;
+    // }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

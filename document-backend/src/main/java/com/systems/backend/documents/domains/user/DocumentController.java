@@ -51,7 +51,7 @@ public class DocumentController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Page<DocumentResponse> getAllDocuments(@RequestBody(required = false) PaginationRequest pageRequest) {
+    public Page<DocumentResponse> getAllDocuments(@ModelAttribute PaginationRequest pageRequest) {
         Pageable pageable;
         if (pageRequest == null) {
             pageable = PageRequest.of(0, 6, Sort.by("createAt").descending());
@@ -70,7 +70,7 @@ public class DocumentController {
     }
 
 
-    @PostMapping
+    @PostMapping("create")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Document createDocument(
@@ -147,5 +147,13 @@ public class DocumentController {
         ExportStrategyFactory<DocumentResponse> factory = new ExportStrategyFactory<>();
         ExportStrategy<DocumentResponse> strategy = factory.getExportStrategy(format, response, exportFileName);
         strategy.export(documentResponses);
+    }
+
+    @PutMapping("{documentId}/increment-view")
+    @ResponseStatus(HttpStatus.OK)
+    public void incrementView(@PathVariable Long documentId) {
+        Document document = documentService.getDocumentById(documentId);
+        document.setViews(document.getViews() + 1);
+        documentService.updateDocument(documentId, document);
     }
 }

@@ -41,6 +41,6 @@ public class User {
     @Column(name = "email", length = 100)
     private String email;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Account account;
 }

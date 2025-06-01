@@ -26,7 +26,7 @@
                 </tr>
             </tbody>
         </table>
-        <Pagination />
+        <!-- <Pagination /> -->
     </div>
 </template>
 
@@ -76,7 +76,7 @@ export default {
         },
         async getRoleByAccount(accountId) {
             try {
-                const response = await apiClient.get(`/api/accounts/getRoleById/${accountId}`);
+                const response = await apiClient.get(`/api/accounts/getRoleByAccountId/${accountId}`);
                 const roles = response.data.data;
                 if (roles && roles.length > 0) {
                     const role = roles[0].id;
