@@ -201,6 +201,10 @@ export default {
 	},
 	methods: {
 		async fetchDocUser(authorId) { 
+			if(!authorId) {
+				this.authorName = "Không có thông tin người dùng.";
+				return;
+			}
 			try {
 				const response = await apiClient.get(`/api/doc-users/${authorId}`);
 				this.authorName = response.data.name;

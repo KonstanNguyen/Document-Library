@@ -64,6 +64,9 @@ public class SecurityConfig {
                                     "/api/accounts/getUserIdByUsername/*",
                                     "/api/accounts/login",
                                     "/api/accounts/register",
+                                    "/api/upload/thumbnail/*",
+                                    "/api/upload/content/*",
+                                    "/pdf/page",
                                     "/category",
                                     // Swagger endpoints
                                     "/v3/api-docs/**",

@@ -79,10 +79,29 @@ export default {
                 console.error("Lỗi khi gọi API lấy tài liệu:", error);
             }
         },
+        async deleteDocument(documentId) {
+            if (confirm('Bạn có chắc chắn muốn xóa tài liệu này?')) {
+                try {
+                    await apiClient.delete(`/api/documents/${documentId}/delete`);
+                    // Refresh documents list after deletion
+                    await this.fetchDocuments(this.accountId);
+                    alert('Xóa tài liệu thành công!');
+                } catch (error) {
+                    console.error('Lỗi khi xóa tài liệu:', error);
+                    alert('Đã xảy ra lỗi khi xóa tài liệu.');
+                }
+            }
+        },
         formatDate(date) {
             const d = new Date(date);
             return d.toLocaleString();
-        }
+        },
+        editDocument(document) {
+            this.$router.push({
+                name: 'edit-document',
+                params: { id: document.id }
+            });
+        },
     }
 };
 </script>
@@ -116,8 +135,12 @@ export default {
                     </span>
                 </td>
                 <td class="d-flex gap-2">
-                    <button class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Sửa</button>
-                    <button class="btn btn-danger btn-sm"><i class="bi bi-trash3-fill"></i> Xóa</button>
+                    <button class="btn btn-primary btn-sm" @click="editDocument(item)">
+                        <i class="bi bi-pencil-square"></i> Sửa
+                    </button>
+                    <button class="btn btn-danger btn-sm" @click="deleteDocument(item.id)">
+                        <i class="bi bi-trash3-fill"></i> Xóa
+                    </button>
                 </td>
             </tr>
         </tbody>

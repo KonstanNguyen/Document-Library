@@ -9,7 +9,7 @@
                     <th scope="col">Ngày sinh</th>
                     <th scope="col">Email</th>
                     <th scope="col">Vai trò</th>
-                    <th scope="col" style="width: 15%;">Thao tác</th>
+                    <th scope="col" style="width: 20%;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,13 +20,45 @@
                     <td>{{ formatDate(item.dateOfBirth) }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.roleName }}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i>Chỉnh sửa</button>
+                    <td class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm" @click="openEditModal(item)">
+                            <i class="bi bi-pencil-square"></i>Sửa quyền
+                        </button>
+                        <button class="btn btn-danger btn-sm" @click="deleteAccount(item.accountId)">
+                            <i class="bi bi-trash3-fill"></i> Xóa tài khoản
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <!-- <Pagination /> -->
+    </div>
+
+    <!-- Add Modal for Role Edit -->
+    <div v-if="showEditModal" class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa quyền người dùng</h5>
+                    <button type="button" class="btn-close" @click="showEditModal = false"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Quyền:</label>
+                        <select v-model="selectedAccount.roleName" class="form-select">
+                            <option v-for="role in availableRoles" :key="role.id" :value="role.name">
+                                {{ role.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="showEditModal = false">Đóng</button>
+                    <button type="button" class="btn btn-primary" @click="updateAccountRole">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
     </div>
 </template>
 
@@ -44,6 +76,12 @@ export default {
                 current: 1,
                 max: 1,
             },
+            showEditModal: false,
+            selectedAccount: null,
+            availableRoles: [
+                { id: 1, name: 'admin' },
+                { id: 2, name: 'user' }
+            ],
         }
     },
     methods: {
@@ -79,15 +117,13 @@ export default {
                 const response = await apiClient.get(`/api/accounts/getRoleByAccountId/${accountId}`);
                 const roles = response.data.data;
                 if (roles && roles.length > 0) {
-                    const role = roles[0].id;
-                    return role === 1 ? "admin" : "user";
+                    return roles[0].name.toLowerCase(); // Lấy tên role thay vì id
                 } else {
-                    console.warn("No roles found for this account.");
-                    return "unknown"; 
+                    return "user"; 
                 }
             } catch (error) {
                 console.error("Error role:", error);
-                return "unknown";
+                return "user";
             }
         },
         formatDate(date) {
@@ -119,6 +155,50 @@ export default {
         scrollToTop() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         },
+        openEditModal(account) {
+            this.selectedAccount = { ...account };
+            this.showEditModal = true;
+        },
+        async updateAccountRole() {
+            try {
+                const currentRole = await this.getRoleByAccount(this.selectedAccount.accountId);
+                const newRole = this.selectedAccount.roleName;
+                
+                if (currentRole === newRole) {
+                    alert('Không có thay đổi về quyền!');
+                    this.showEditModal = false;
+                    return;
+                }
+
+                const currentRoleId = currentRole === 'admin' ? 1 : 2;
+                const newRoleId = newRole === 'admin' ? 1 : 2;
+
+                // Revoke current role
+                await apiClient.patch(`/api/roles/${currentRoleId}/revoke/${this.selectedAccount.accountId}`);
+                
+                // Grant new role
+                await apiClient.patch(`/api/roles/${newRoleId}/grant/${this.selectedAccount.accountId}`);
+                
+                await this.fetchData(); // Refresh list
+                this.showEditModal = false;
+                alert('Cập nhật quyền thành công!');
+            } catch (error) {
+                console.error('Error updating account role:', error);
+                alert('Đã xảy ra lỗi khi cập nhật quyền.');
+            }
+        },
+        async deleteAccount(accountId) {
+            if (confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) {
+                try {
+                    await apiClient.delete(`/api/accounts/${accountId}/delete`);
+                    await this.fetchData(); // Refresh list
+                    alert('Xóa tài khoản thành công!');
+                } catch (error) {
+                    console.error('Error deleting account:', error);
+                    alert('Tài khoản này không thể xóa.');
+                }
+            }
+        }
     },
     provide() {
         return {
@@ -178,5 +258,19 @@ export default {
 .btn-danger {
     background-color: #dc3545;
     border-color: #dc3545;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
 }
 </style>

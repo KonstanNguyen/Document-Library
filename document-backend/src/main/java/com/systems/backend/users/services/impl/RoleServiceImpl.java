@@ -99,14 +99,28 @@ public class RoleServiceImpl implements RoleService {
                 new ResourceNotFoundException("Role is not found!")
         );
 
-        if (account.getRoles().contains(role)) {
-            throw new IllegalStateException("Role is already granted!");
-        }
+        // Cập nhật cả 2 chiều của relationship
+        account.getRoles().add(role);
+        role.getAccounts().add(account);
 
-        Set<Account> accounts = new HashSet<>(role.getAccounts());
-        accounts.add(account);
-        role.setAccounts(accounts);
+        accountRepository.save(account);
+        roleRepository.save(role);
+    }
 
+    @Override
+    public void revokeRole(Long roleId, Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(() ->
+                new ResourceNotFoundException("Account is not found!")
+        );
+
+        Role role = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException("Role is not found!")
+        );
+
+        account.getRoles().remove(role);
+        role.getAccounts().remove(account);
+
+        accountRepository.save(account);
         roleRepository.save(role);
     }
 }

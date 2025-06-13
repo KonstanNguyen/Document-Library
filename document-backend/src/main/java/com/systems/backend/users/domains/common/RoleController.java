@@ -53,4 +53,10 @@ public class RoleController {
     public void grantRole(@PathVariable Long roleId, @PathVariable Long docUserId) {
         roleService.grantRole(roleId, docUserId);
     }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PatchMapping("{roleId}/revoke/{docUserId}")
+    public void revokeRole(@PathVariable Long roleId, @PathVariable Long docUserId) {
+        roleService.revokeRole(roleId, docUserId);
+    }
 }

@@ -38,6 +38,11 @@ const router = createRouter({
                     name: 'Documents Upload',
                     component: () => import('@/pages/MyDocuments/Upload.vue')
                 },
+                {
+                    path: "edit/:id",
+                    name: 'edit-document',
+                    component: () => import('@/components/MyDocuments/Upload/Form.vue')
+                }
             ]
         },
         {

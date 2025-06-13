@@ -6,7 +6,6 @@
 import { DataCard } from "@/type/DataCard";
 import { defineAsyncComponent } from "vue";
 import apiClient from "@/api/service";
-import axios from "axios";
 export default {
     components: {
         MainContent: defineAsyncComponent(() =>
@@ -32,31 +31,36 @@ export default {
     },
     methods: {
         async fetchDocUserId(accountId) {
+            if (!accountId) {
+                await this.fetchRandomCategory();
+                return;
+            }
             try {
                 const response = await apiClient.get(`/api/accounts/${accountId}`);
                 this.userId = response.data.userId;
                 if (this.userId) {
-                    await this.fetchRecommendCategory(this.userId);
-                } else {
-                    this.message = "Không tìm thấy userId!";
+                    await this.fetchRandomCategory();
                 }
             } catch (error) {
                 console.error("Lỗi khi gọi API lấy thông tin tài khoản:", error);
-                this.message = "Không thể tải thông tin người dùng.";
+                await this.fetchRandomCategory();
             }
         },
-        async fetchRecommendCategory(userId) {
+
+        async fetchRandomCategory() {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000`, {
-                    params: {
-                        user_id: this.userId
-                    }
-                });
-                this.categoryId = response.data.recommended_category_id;
+                const response = await apiClient.get('/category');
+                const categories = response.data;
+                if (categories && categories.length > 0) {
+                    // Randomly select a category
+                    const randomIndex = Math.floor(Math.random() * categories.length);
+                    this.categoryId = categories[randomIndex].id;
+                }
             } catch (error) {
-                console.error('Error fetching recommend category:', error);
+                console.error('Error fetching random category:', error);
             }
         },
+
         async fetchRecommendDocs() {
             const paginationRequest = {
                 page: this.page.current - 1,
@@ -123,7 +127,6 @@ export default {
             }
         },
         async initializeRecommendations() {
-            await this.fetchRecommendCategory();
             if (this.categoryId) {
                 await this.fetchRecommendDocs();
             }
@@ -141,13 +144,9 @@ export default {
     },
     async created() {
         await this.fetchDocUserId(this.accountId);
-        if (this.userId) {
-            await this.incrementView();
-            await this.fetchData();
-            this.initializeRecommendations();
-        } else {
-            console.error("UserId is not set.");
-        }
+        await this.fetchData();
+        await this.incrementView();
+        await this.initializeRecommendations();
     },
 };
 </script>

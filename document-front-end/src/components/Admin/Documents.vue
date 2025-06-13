@@ -185,7 +185,7 @@ export default {
             try {
                 const updatedDocument = { status: 1 };
                 console.log("Sending request:", updatedDocument);
-                const response = await apiClient.put(`/api/documents/${documentId}/update`, updatedDocument);
+                const response = await apiClient.put(`/api/documents/${documentId}/update-status`, updatedDocument);
                 console.log("Response from server:", response.data);
                 this.fetchDocuments(this.selectedLink);
                 alert("Tài liệu đã được duyệt!");

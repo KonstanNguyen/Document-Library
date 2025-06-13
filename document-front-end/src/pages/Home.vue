@@ -47,7 +47,7 @@ export default {
         async fetchData() {
             const paginationRequest = {
                 page: this.page.current - 1,
-                size: 9,
+                size: 6,
                 sortBy: "views",
                 sortDirection: "desc",
                 status: 1,

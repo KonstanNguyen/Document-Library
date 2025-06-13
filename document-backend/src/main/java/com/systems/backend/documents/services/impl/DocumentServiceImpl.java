@@ -106,17 +106,53 @@ public class DocumentServiceImpl implements DocumentService {
             throw new ResourceNotFoundException("This document is not found");
         }
 
+        Category category = document.getCategory();
+        if (category != null && category.getId() != null) {
+            category = categoryRepository.findById(category.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            updatedDocument.setCategory(category);
+        }
 
         updatedDocument.setAuthor(Optional.ofNullable(document.getAuthor()).orElse(updatedDocument.getAuthor()));
-        updatedDocument.setCategory(Optional.ofNullable(document.getCategory()).orElse(updatedDocument.getCategory()));
         updatedDocument.setContent(Optional.ofNullable(document.getContent()).orElse(updatedDocument.getContent()));
         updatedDocument.setStatus(Optional.ofNullable(document.getStatus()).orElse(updatedDocument.getStatus()));
         updatedDocument.setThumbnail(Optional.ofNullable(document.getThumbnail()).orElse(updatedDocument.getThumbnail()));
         updatedDocument.setTitle(Optional.ofNullable(document.getTitle()).orElse(updatedDocument.getTitle()));
+        updatedDocument.setDescription(Optional.ofNullable(document.getDescription()).orElse(updatedDocument.getDescription()));
         updatedDocument.setUpdateAt(LocalDateTime.now());
 
         return documentRepository.save(updatedDocument);
 
+    }
+
+    @Override
+    public Document updateDocumentFromRequest(Long id, CreateDocumentRequest request) {
+        Document existingDocument = getDocumentById(id);
+        if (existingDocument == null) {
+            throw new ResourceNotFoundException("Document not found");
+        }
+
+        Category category = null;
+        if (request.getCategoryId() != null) {
+            category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        }
+
+        Document document = Document.builder()
+                .id(id)
+                .title(request.getTitle())
+                .category(category != null ? category : existingDocument.getCategory())
+                .author(existingDocument.getAuthor())
+                .content(request.getContent())
+                .thumbnail(request.getThumbnail())
+                .description(request.getDescription())
+                .status(request.getStatus())
+                .views(existingDocument.getViews())
+                .createAt(existingDocument.getCreateAt())
+                .updateAt(LocalDateTime.now())
+                .build();
+
+        return updateDocument(id, document);
     }
 
     @Override

@@ -5,16 +5,19 @@ export default {
     data() {
         return {
             formData: {
+                id: null,
                 title: "",
                 categoryId: null,
                 description: "",
                 authorId: null,
                 status: 0,
             },
+            isEditMode: false,
             Categories: [],
             accountId: localStorage.getItem("userId") || "",
             isLoading: false,
             selectedFile: null,
+            currentDocument: null, // Add this to store current document data
         };
     },
 
@@ -26,12 +29,14 @@ export default {
                 if (roles && roles.length > 0) {
                     const role = roles[0].id;
                     this.formData.status = role === 1 ? 1 : 0;
-                } else {
-                    console.warn("No roles found for this account.");
+                    return role; // Return the role for use in other methods
                 }
+                console.warn("No roles found for this account.");
+                return null;
             }
             catch (error) {
                 console.error("Error role:", error);
+                return null;
             }
         },
         async fetchCategories() {
@@ -51,6 +56,26 @@ export default {
                 this.message = "Không thể tải thông tin người dùng.";
             }
         },
+        async fetchDocumentData(id) {
+            try {
+                const response = await apiClient.get(`/api/documents/${id}`);
+                this.currentDocument = response.data;
+                console.log("Fetched document:", this.currentDocument);
+
+                this.formData = {
+                    id: this.currentDocument.id,
+                    title: this.currentDocument.title,
+                    categoryId: Number(this.currentDocument.categoryId), 
+                    description: this.currentDocument.description || '',
+                    authorId: this.currentDocument.authorId, 
+                    status: this.currentDocument.status
+                };
+                
+                console.log("Form data after update:", this.formData);
+            } catch (error) {
+                console.error("Error fetching document:", error);
+            }
+        },
         handleFileUpload(event) {
             // this.formData.file = file;
             // const file = event.target.files[0];
@@ -64,7 +89,7 @@ export default {
         async submitForm() {
             this.isLoading = true;
             try {
-                await this.getRoleByAccount(this.accountId);
+                const role = await this.getRoleByAccount(this.accountId);
                 const formDataToSend = new FormData();
 
                 const data = {
@@ -74,47 +99,90 @@ export default {
                     description: this.formData.description,
                     status: this.formData.status,
                 };
-                this.formData.file = this.selectedFile;
-                formDataToSend.append("file", this.selectedFile);
-                formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
-                console.log("Payload:", JSON.stringify(this.formData));
+                if (this.isEditMode) {
+                    if (this.selectedFile) {
+                        formDataToSend.append("file", this.selectedFile);
+                    }
+                    formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+                    
+                    await apiClient.put(`/api/documents/${this.formData.id}/update`, formDataToSend, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': localStorage.getItem("token"),
+                        },
+                    });
+                    alert("Cập nhật tài liệu thành công!");
+                } else {
+                    formDataToSend.append("file", this.selectedFile);
+                    formDataToSend.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+                    
+                    await axios.post('http://localhost:8080/api/documents/create', formDataToSend, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            "Access-Control-Allow-Origin": "*",
+                            'Authorization': localStorage.getItem("token"),
+                        },
+                    });
 
-                // Gửi dữ liệu đến backend
-                // const response = await apiClient.post("/api/documents", formDataToSend, {
-                //     headers: {
-                //         "Content-Type": "multipart/form-data"
-                //     },
-                // });
-                const response = await axios.post('http://localhost:8080/api/documents/create', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    "Access-Control-Allow-Origin": "*",
-                    'Authorization': localStorage.getItem("token"),
-                },
-                });
-                alert("Tải lên thành công!");
-                console.log("Kết quả:", response.data);
+                    if (role === 1) {
+                        alert("Tải lên thành công!");
+                    } else {
+                        alert("Tài liệu của bạn đã được gửi cho quản trị viên để duyệt!");
+                    }
+                }
+                
+                this.$router.push('/my-documents/documents');
             } catch (error) {
                 console.error("Error submitting form:", error);
-                alert("Đã xảy ra lỗi trong quá trình tải lên.");
+                alert("Đã xảy ra lỗi trong quá trình xử lý.");
             } finally {
                 this.isLoading = false;
             }
         },
+    },
+    async created() {
+        try {
+            await this.fetchCategories();
+            console.log("Categories loaded:", this.Categories); 
 
+            if (this.$route.params.id) {
+                this.isEditMode = true;
+                await this.fetchDocumentData(this.$route.params.id);
+            }
+
+            await this.getRoleByAccount(this.accountId);
+            await this.fetchAuthorId(this.accountId);
+        } catch (error) {
+            console.error("Error in created hook:", error);
+        }
     },
-    mounted() {
-        this.getRoleByAccount(this.accountId);
-        this.fetchAuthorId(this.accountId);
-        this.fetchCategories();
-    },
+    watch: {
+        Categories: {
+            handler(newCategories) {
+                console.log("Categories updated:", newCategories);
+            },
+            immediate: true
+        },
+        'formData.categoryId': {
+            handler(newVal) {
+                console.log("Category ID changed to:", newVal);
+            }
+        },
+        formData: {
+            deep: true,
+            handler(newVal) {
+                console.log("Form data changed:", newVal);
+            }
+        }
+    }
 };
 </script>
 
 <template>
     <div class="apply-course">
         <div class="wrapper">
+            <h2 class="text-center mb-4">{{ isEditMode ? 'Sửa tài liệu' : 'Tải lên tài liệu' }}</h2>
             <form @submit.prevent="submitForm" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-12 mb-3">
@@ -124,15 +192,30 @@ export default {
                     </div>
                     <div class="col-12 d-grid gap-1 mb-3">
                         <label>Danh mục</label>
-                        <select class="select-category" name="categoryId" id="categories" v-model="formData.categoryId">
-                            <option v-for="item in Categories" :value="item.id">
+                        <select 
+                            class="select-category" 
+                            name="categoryId" 
+                            id="categories" 
+                            v-model.number="formData.categoryId"
+                        >
+                            <option value="" disabled>Chọn danh mục</option>
+                            <option 
+                                v-for="item in Categories" 
+                                :key="item.id" 
+                                :value="item.id"
+                            >
                                 {{ item.name }}
                             </option>
                         </select>
                     </div>
                     <div class="col-12 mb-3">
-                        <label for="formFile" class="form-label">Upload file</label>
+                        <label for="formFile" class="form-label">
+                            {{ isEditMode ? 'Thay đổi file (không bắt buộc)' : 'Upload file' }}
+                        </label>
                         <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload"/>
+                        <small v-if="isEditMode && currentDocument" class="text-muted">
+                            File hiện tại: {{ currentDocument.content?.split('/').pop() }}
+                        </small>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Mô tả</label>

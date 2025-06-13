@@ -57,10 +57,10 @@ export default {
         async fetchCategoryName() {
             try {
                 const response = await apiClient.get(`/category/${this.categoryId}`);
-                this.categoryName = response.data.name; 
+                this.categoryName = response.data.name;
             } catch (error) {
                 console.error("Error fetching category name:", error);
-                this.categoryName = "Không xác định"; 
+                this.categoryName = "Không xác định";
             }
         },
         async fetchData() {
@@ -78,31 +78,34 @@ export default {
                 if (data && data.content) {
                     this.cards = await Promise.allSettled(
                         data.content.map(async (doc: any) => {
-                            try {
-                                const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
-                                const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
+                            if (doc.status === 1) {
+                                try {
+                                    const thumbnailFilename = doc.thumbnail ? doc.thumbnail.replace('uploads/', '') : null;
+                                    const contentFilename = doc.content ? doc.content.replace('uploads/', '') : null;
 
-                                const [thumbnailResponse, contentResponse] = await Promise.all([
-                                    thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
-                                    contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
-                                ]);
+                                    const [thumbnailResponse, contentResponse] = await Promise.all([
+                                        thumbnailFilename ? apiClient.get(`/api/upload/thumbnail/${thumbnailFilename}`, { responseType: 'arraybuffer' }) : null,
+                                        contentFilename ? apiClient.get(`/api/upload/content/${contentFilename}`, { responseType: 'arraybuffer' }) : null,
+                                    ]);
 
-                                const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
-                                const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
+                                    const thumbnailData = thumbnailResponse ? URL.createObjectURL(new Blob([thumbnailResponse.data])) : null;
+                                    const contentData = contentResponse ? URL.createObjectURL(new Blob([contentResponse.data])) : null;
 
-                                return {
-                                    ...doc,
-                                    thumbnail: thumbnailData,
-                                    content: contentData,
-                                };
-                            } catch (error) {
-                                console.error(`Error processing document ID ${doc.id}:`, error);
-                                return {
-                                    ...doc,
-                                    thumbnail: null,
-                                    content: null,
-                                };
+                                    return {
+                                        ...doc,
+                                        thumbnail: thumbnailData,
+                                        content: contentData,
+                                    };
+                                } catch (error) {
+                                    console.error(`Error processing document ID ${doc.id}:`, error);
+                                    return {
+                                        ...doc,
+                                        thumbnail: null,
+                                        content: null,
+                                    };
+                                }
                             }
+
                         })
                     );
 

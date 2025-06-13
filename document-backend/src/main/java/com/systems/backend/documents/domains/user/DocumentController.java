@@ -94,10 +94,37 @@ public class DocumentController {
     @RequestMapping(value = "{documentId}/update", method = {RequestMethod.PUT, RequestMethod.POST, RequestMethod.PATCH})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Document updateDocument(@PathVariable Long documentId, @RequestBody Document document) {
-        return documentService.updateDocument(documentId, document);
+    public Document updateDocument(
+        @PathVariable Long documentId,
+        @RequestPart(value = "file", required = false) MultipartFile file,
+        @RequestPart("data") CreateDocumentRequest updateRequest
+    ) throws Exception {
+        Document existingDocument = documentService.getDocumentById(documentId);
+        
+        if (file != null) {
+            UploadResult uploadResult = uploadService.processFile(file);
+            updateRequest.setContent(uploadResult.getOriginalFilePath());
+            updateRequest.setThumbnail(uploadResult.getThumbnailFilePath());
+        } else {
+            updateRequest.setContent(existingDocument.getContent());
+            updateRequest.setThumbnail(existingDocument.getThumbnail());
+        }
+
+        return documentService.updateDocumentFromRequest(documentId, updateRequest);
     }
 
+    @PutMapping("{documentId}/update-status")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Document updateDocumentStatus(
+        @PathVariable Long documentId,
+        @RequestBody CreateDocumentRequest updateRequest
+    ) {
+        Document existingDocument = documentService.getDocumentById(documentId);
+        updateRequest.setContent(existingDocument.getContent());
+        updateRequest.setThumbnail(existingDocument.getThumbnail());
+        return documentService.updateDocumentFromRequest(documentId, updateRequest);
+    }
 
     @DeleteMapping("{documentId}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)

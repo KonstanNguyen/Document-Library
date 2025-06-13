@@ -22,5 +22,7 @@ public interface RoleService {
 
     void grantRole(Long roleId, Long userId);
 
+    void revokeRole(Long roleId, Long userId);
+
     List<Role> getRolesByAccountId(Long accountId);
 }
