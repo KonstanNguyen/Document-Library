@@ -17,7 +17,13 @@ export default {
             accountId: localStorage.getItem("userId") || "",
             isLoading: false,
             selectedFile: null,
-            currentDocument: null, // Add this to store current document data
+            currentDocument: null, 
+            showModal: false,
+            showErrorModal: false,
+            errorMessage: "",
+            message: null,
+            isSuccess: false,
+            modalMessage: "",
         };
     },
 
@@ -87,6 +93,21 @@ export default {
             console.log("File được chọn:", this.selectedFile);
         },
         async submitForm() {
+            this.validateForm();
+            if (this.$refs.form.checkValidity() === false) {
+                this.isLoading = false;
+                this.message = "Vui lòng điền đầy đủ thông tin.";
+                this.isSuccess = false;
+                this.hideMessageAfterDelay();
+                return;
+            }
+            if (!this.isTitleValid()) {
+                this.isLoading = false;
+                this.message = "Vui lòng nhập tiêu đề hợp lệ.";
+                this.isSuccess = false;
+                this.hideMessageAfterDelay();
+                return;
+            }
             this.isLoading = true;
             try {
                 const role = await this.getRoleByAccount(this.accountId);
@@ -126,13 +147,13 @@ export default {
                     });
 
                     if (role === 1) {
-                        alert("Tải lên thành công!");
+                        this.modalMessage = "Tải lên thành công!";
                     } else {
-                        alert("Tài liệu của bạn đã được gửi cho quản trị viên để duyệt!");
+                        this.modalMessage = "Tài liệu của bạn đã được gửi cho quản trị viên để duyệt!";
                     }
+                    this.showModal = true;
                 }
                 
-                this.$router.push('/my-documents/documents');
             } catch (error) {
                 console.error("Error submitting form:", error);
                 alert("Đã xảy ra lỗi trong quá trình xử lý.");
@@ -140,6 +161,34 @@ export default {
                 this.isLoading = false;
             }
         },
+        isTitleValid() {
+            const startsWithSpecialChar = /^[!@#$%^&*(),.?":{}|<>]/.test(this.formData.title);
+            const exceedsMaxLength = this.formData.title.length > 100;
+            return !(startsWithSpecialChar || exceedsMaxLength);
+        },
+
+        closeModal() {
+            this.showModal = false;
+            this.showErrorModal = false;
+            this.$forceUpdate();
+        },
+        validateForm() {
+            const form = this.$refs.form;
+            if (form) {
+                form.classList.add('was-validated');
+            }
+        },
+        showErrorModal(message) {
+            this.errorMessage = message;
+            this.showErrorModal = true;
+            this.hideMessageAfterDelay();
+        },
+        hideMessageAfterDelay() {
+            setTimeout(() => {
+                this.message = null;
+                this.isSuccess = false;
+            }, 2000);
+        }
     },
     async created() {
         try {
@@ -183,12 +232,15 @@ export default {
     <div class="apply-course">
         <div class="wrapper">
             <h2 class="text-center mb-4">{{ isEditMode ? 'Sửa tài liệu' : 'Tải lên tài liệu' }}</h2>
-            <form @submit.prevent="submitForm" enctype="multipart/form-data">
+            <form ref="form" @submit.prevent="submitForm" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label for="title" class="form-label">Tiêu đề</label>
                         <input id="title" type="text" class="form-control" placeholder="Nhập tiêu đề"
-                            v-model="formData.title" />
+                            v-model="formData.title" required/>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập tiêu đề tài liệu.
+                        </div>
                     </div>
                     <div class="col-12 d-grid gap-1 mb-3">
                         <label>Danh mục</label>
@@ -196,7 +248,7 @@ export default {
                             class="select-category" 
                             name="categoryId" 
                             id="categories" 
-                            v-model.number="formData.categoryId"
+                            v-model.number="formData.categoryId" required
                         >
                             <option value="" disabled>Chọn danh mục</option>
                             <option 
@@ -207,12 +259,18 @@ export default {
                                 {{ item.name }}
                             </option>
                         </select>
+                        <div class="invalid-feedback">
+                            Vui lòng chọn danh mục tài liệu.
+                        </div>
                     </div>
                     <div class="col-12 mb-3">
                         <label for="formFile" class="form-label">
                             {{ isEditMode ? 'Thay đổi file (không bắt buộc)' : 'Upload file' }}
                         </label>
-                        <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload"/>
+                        <input class="upload form-control" type="file" id="formFile" @change="handleFileUpload" required/>
+                        <div class="invalid-feedback">
+                            Vui lòng upload file tài liệu.
+                        </div>
                         <small v-if="isEditMode && currentDocument" class="text-muted">
                             File hiện tại: {{ currentDocument.content?.split('/').pop() }}
                         </small>
@@ -221,6 +279,12 @@ export default {
                         <label class="form-label">Mô tả</label>
                         <textarea class="description form-control" type="text" placeholder="Nhập mô tả"
                             name="description" v-model="formData.description"></textarea>
+                    </div>
+                    <div class="message" v-if="message !== null && message !== ''">
+                        <div v-if="isSuccess" class="alert alert-success">
+                            {{ message }}
+                        </div>
+                        <div v-else class="alert alert-danger">{{ message }}</div>
                     </div>
                     <div class="col-12 text-center pt-4">
                         <button class="btn-apply" type="submit" :disabled="isLoading">
@@ -231,6 +295,29 @@ export default {
                 </div>
             </form>
         </div>
+        <div v-if="showModal" class="modal">
+        <div class="modal-content">
+            <span class="close" @click="closeModal">&times;</span>
+            <p>{{ modalMessage }}</p>
+            <div class="d-flex justify-content-around">
+                <button @click="closeModal" class="btn btn-outline-danger">Đóng</button>
+                <router-link to="/my-documents/documents">
+                    <button class="btn btn-outline-primary">
+                        Xem danh sách tài liệu
+                    </button>
+                </router-link>
+            </div>
+        </div>
+    </div>
+    <div v-show="showErrorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" @click="closeModal">&times;</span>
+            <p>{{ errorMessage }}</p>
+            <div class="d-flex justify-content-around">
+                <button @click="closeModal" class="btn btn-outline-danger">Đóng</button>
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 
@@ -283,5 +370,33 @@ export default {
     width: 1rem;
     height: 1rem;
     border-width: 0.2em;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
 }
 </style>
