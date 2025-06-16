@@ -17,10 +17,10 @@
 <template>
     <div class="form container mt-3">
         <h2>Đăng nhập</h2>
-        <form @submit.prevent="login">
+        <form ref="form" @submit.prevent="login" class="needs-validation" novalidate>
             <div class="form-group mb-4">
                 <label for="username">Tên tài khoản</label>
-                <input type="text" class="form-control" id="username" placeholder="Tài khoản" v-model="username"
+                <input type="text" class="form-control" id="username" placeholder="Tài khoản" v-model="username" 
                     required />
             </div>
             <div class="form-group mb-4">
@@ -65,6 +65,13 @@ export default {
     },
     methods: {
         async login() {
+            this.validateForm();
+            if (this.$refs.form.checkValidity() === false) {
+                this.message = "Yêu cầu nhập tên đăng nhập và mật khẩu.";
+                this.isSuccess = false;
+                this.hideMessageAfterDelay();
+                return;
+            };
             try {
                 const response = await apiClient.post("/api/accounts/login", {
                     username: this.username,
@@ -90,6 +97,19 @@ export default {
                     this.message = 'Có lỗi xảy ra, vui lòng thử lại';
                 }
             }
+        },
+        validateForm() {
+            const form = this.$refs.form;
+            if (form) {
+                form.classList.add('was-validated');
+            }
+        },
+        
+        hideMessageAfterDelay() {
+            setTimeout(() => {
+                this.message = null;
+                this.isSuccess = false;
+            }, 2000); // Hide message after 2 seconds
         },
     },
 };

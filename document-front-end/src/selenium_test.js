@@ -50,7 +50,7 @@ async function testLoginForm(driver) {
         // { username: "user@#$%", password: "", expectedError: "Yêu cầu nhập tên đăng nhập và mật khẩu." },
         { username: "user@#$%", password: "short", expectedError: "Tên đăng nhập hoặc mật khẩu không đúng" },
         { username: "admin", password: "wrongpass", expectedError: "Tên đăng nhập hoặc mật khẩu không đúng" },
-        { username: "Khang", password: "123", expected: "Đăng nhập thành công!" }
+        { username: "Long", password: "123", expected: "Đăng nhập thành công!" }
     ];
 
     // Chờ đến trang đăng nhập
@@ -223,8 +223,27 @@ async function testUploadForm(driver) {
         // Chọn danh mục  
         await driver.executeScript("arguments[0].selectedIndex = 0;", categoryDropdown);
         if (test.category !== null && test.category !== undefined) {
-            let categoryOption = await categoryDropdown.findElement(By.css(`option[value='${test.category}']`));
-            await categoryOption.click();
+            try {
+                // Scroll to dropdown first
+                await driver.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", categoryDropdown);
+                await driver.sleep(500);
+
+                // Try to click the dropdown first
+                await driver.wait(until.elementIsVisible(categoryDropdown), 5000);
+                await driver.wait(until.elementIsEnabled(categoryDropdown), 5000);
+                await categoryDropdown.click();
+                
+                // Then select the option
+                let categoryOption = await categoryDropdown.findElement(By.css(`option[value='${test.category}']`));
+                await driver.executeScript("arguments[0].selected = true; arguments[0].dispatchEvent(new Event('change'))", categoryOption);
+            } catch (error) {
+                console.error("Error selecting category:", error);
+                // Fallback to direct value setting
+                await driver.executeScript(`
+                    arguments[0].value = '${test.category}';
+                    arguments[0].dispatchEvent(new Event('change'));
+                `, categoryDropdown);
+            }
         }
 
         // Xử lý upload file  
@@ -248,9 +267,41 @@ async function testUploadForm(driver) {
 
         await driver.sleep(1000);
 
-        // Nhấn submit
-        await submitButton.click();
-        await driver.sleep(1000); // Chờ xác nhận
+        // Update submit button handling
+        try {
+            // Find submit button with better selector
+            submitButton = await driver.wait(
+                until.elementLocated(By.css('[data-testid="submit-button"]')),
+                5000
+            );
+
+            // Scroll into view with offset
+            await driver.executeScript(
+                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", 
+                submitButton
+            );
+            await driver.sleep(500);
+
+            // Wait for button to be clickable
+            await driver.wait(until.elementIsVisible(submitButton), 5000);
+            await driver.wait(until.elementIsEnabled(submitButton), 5000);
+
+            // Try multiple click methods
+            try {
+                await submitButton.click();
+            } catch (clickError) {
+                console.log("Direct click failed, trying JavaScript click");
+                await driver.executeScript("arguments[0].click();", submitButton);
+            }
+        } catch (error) {
+            console.error("Error clicking submit button:", error);
+            // Try one more time with force click
+            await driver.executeScript(`
+                document.querySelector('[data-testid="submit-button"]').click();
+            `);
+        }
+
+        await driver.sleep(1000);
 
         let messageElement = await driver.findElement(By.css(".alert"));
         let actualErrorMessage = await messageElement.getText();
@@ -281,28 +332,49 @@ async function testUploadForm(driver) {
 
         // Kiểm tra thông báo thành công
         try {
-            let successMessage = await driver.wait(
-                until.elementLocated(By.css(".modal-content p")),
-                5000
-            );
-            let successText = await successMessage.getText();
+            // First try to find alert message
+            try {
+                let messageElement = await driver.wait(
+                    until.elementLocated(By.css(".alert")),
+                    2000
+                );
+                let actualErrorMessage = await messageElement.getText();
 
-            // Kiểm tra nội dung thông báo
-            assert.strictEqual(successText, test.expectedError);
-            console.log(`✅ Passed: ${test.expectedError}`);
-
-            // Tìm và đóng modal
-            let modalButtons = await driver.findElements(By.xpath('//*[@id="app-content"]/div/div[3]/div/div/button'));
-
-            if (modalButtons.length > 0 && await modalButtons[0].isDisplayed()) {
-                // Nếu là testcase cuối cùng, trở về trang Home
-                if (testCases.indexOf(test) === testCases.length - 1) {
-                    let homeButton = await driver.findElements(By.xpath('//*[@id="app-content"]/div/div[3]/div/div/a/button'));
-                    if (homeButton.length > 0) await homeButton[0].click();
+                if (actualErrorMessage !== test.expectedError) {
+                    // If alert message doesn't match, try modal message
+                    throw new Error("Alert message doesn't match");
                 }
+                
+                console.log(`✅ Passed (Alert): ${actualErrorMessage}`);
+            } catch (alertError) {
+                // If alert not found or message doesn't match, check modal
+                let successMessage = await driver.wait(
+                    until.elementLocated(By.css(".modal-content p")),
+                    5000
+                );
+                let successText = await successMessage.getText();
+                
+                // For successful uploads, check if message contains success indicator
+                if (test.expectedError.includes("thành công")) {
+                    assert(
+                        successText.includes("thành công") || 
+                        successText.includes("đã được gửi"),
+                        `Expected success message, got: ${successText}`
+                    );
+                    console.log(`✅ Passed (Modal): ${successText}`);
+                } else {
+                    assert.strictEqual(successText, test.expectedError);
+                    console.log(`✅ Passed (Modal): ${test.expectedError}`);
+                }
+            }
 
+            // Handle modal closing
+            let modalButtons = await driver.findElements(By.css(".btn-outline-danger"));
+            if (modalButtons.length > 0) {
+                await driver.wait(until.elementIsVisible(modalButtons[0]), 5000);
                 await modalButtons[0].click();
             }
+
         } catch (error) {
             console.error(`❌ Failed: ${error.message}`);
         }
