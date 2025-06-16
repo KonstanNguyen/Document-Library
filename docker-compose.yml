@@ -1,0 +1,49 @@
+services:
+  document_db:
+    container_name: document_db
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: document_library_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  document_backend:
+    container_name: document_backend
+    build:
+      context: ./document-backend
+      dockerfile: Dockerfile
+    depends_on:
+      - document_db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://document_db:3306/document_library_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    restart: unless-stopped
+
+  document_frontend:
+    container_name: document_frontend
+    build:
+      context: ./document-front-end
+      dockerfile: Dockerfile
+    depends_on:
+      - document_backend
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:8080
+    restart: unless-stopped
+
+volumes:
+  db-data:
