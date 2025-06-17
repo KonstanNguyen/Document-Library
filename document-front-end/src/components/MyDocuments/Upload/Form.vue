@@ -198,7 +198,7 @@ export default {
             setTimeout(() => {
                 this.message = null;
                 this.isSuccess = false;
-            }, 2000);
+            }, 3000);
         }
     },
     async created() {
@@ -299,10 +299,11 @@ export default {
                     </div>
                     <div class="col-12 text-center pt-4">
                         <button 
-                            class="btn-apply" 
+                            class="btn-apply"
                             type="submit" 
                             :disabled="isLoading"
-                            data-testid="submit-button">
+                            data-testid="submit-button"
+                            id="submit-button">
                             <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Lưu thông tin
                         </button>

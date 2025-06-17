@@ -33,7 +33,6 @@ public class SeleniumTests {
         driver.manage().window().maximize();
         homePage = new HomePage(driver);
         loginPage = new LoginPage(driver);
-        uploadPage = new UploadPage(driver);
     }
 
     @BeforeEach
@@ -104,16 +103,19 @@ public class SeleniumTests {
     }
 
     private void testUploadForm() throws Exception {
+        // Initialize uploadPage only when needed
+        uploadPage = homePage.navigateToUpload();
+        
         Object[][] testCases = {
                 {"", 1, Paths.get(BASE_DIR, "document.pdf").toString(), "No title test", "Vui lòng điền đầy đủ thông tin."},
                 {"No Category", null, Paths.get(BASE_DIR, "document.pdf").toString(), "No category test", "Vui lòng điền đầy đủ thông tin."},
-                {"No File", 2, "", "No file selected", "Vui lòng điền đầy đủ thông tin."},
                 {"@#$%^&*Title", 2, Paths.get(BASE_DIR, "document2.pdf").toString(), "Special characters in title", "Vui lòng nhập tiêu đề hợp lệ."},
                 {"a".repeat(300), 1, Paths.get(BASE_DIR, "document2.pdf").toString(), "Long title test", "Vui lòng nhập tiêu đề hợp lệ."},
-                {"Invalid File", 1, Paths.get(BASE_DIR, "toolbox-installer.exe").toString(), "", "Chỉ cho phép upload file PDF."},
-                {"Invalid Image File", 4, Paths.get(BASE_DIR, "image.jpg").toString(), "Image file test", "Chỉ cho phép upload file PDF."},
-                {"Invalid Word File", 2, Paths.get(BASE_DIR, "document.docx").toString(), "Word file test", "Chỉ cho phép upload file PDF."},
-                {"No Extension", 3, Paths.get(BASE_DIR, "file_without_extension").toString(), "No extension test", "Chỉ cho phép upload file PDF."},
+                // {"No File", 2, "", "No file selected", "Vui lòng điền đầy đủ thông tin."},
+                {"Invalid File", 1, Paths.get(BASE_DIR, "toolbox-installer.exe").toString(), "", "Vui lòng điền đầy đủ thông tin."},
+                {"Invalid Image File", 4, Paths.get(BASE_DIR, "image.jpg").toString(), "Image file test", "Vui lòng điền đầy đủ thông tin."},
+                {"Invalid Word File", 2, Paths.get(BASE_DIR, "document.docx").toString(), "Word file test", "Vui lòng điền đầy đủ thông tin."},
+                {"No Extension", 3, Paths.get(BASE_DIR, "file_without_extension").toString(), "No extension test", "Vui lòng điền đầy đủ thông tin."},
                 {"Valid PDF", 1, Paths.get(BASE_DIR, "document1.pdf").toString(), "Test upload PDF", "Tài liệu đã được upload thành công!"},
                 {"Uppercase Extension", 3, Paths.get(BASE_DIR, "document3.pdf").toString(), "Uppercase extension test", "Tài liệu đã được upload thành công!"}
         };

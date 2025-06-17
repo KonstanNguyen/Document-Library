@@ -80,8 +80,23 @@ public class HomePage {
 
     public UploadPage navigateToUpload() {
         try {
+            // Wait for any loading transitions to complete
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.loading-transition")));
+            
+            // Wait for upload button and click
             wait.until(ExpectedConditions.elementToBeClickable(buttonUpload));
-            buttonUpload.click();
+            scrollToElement(buttonUpload);
+            try {
+                buttonUpload.click();
+            } catch (Exception e) {
+                log.warn("Standard click failed, attempting JavaScript click: {}", e.getMessage());
+                jsClick(buttonUpload);
+            }
+
+            // Wait for navigation
+            Thread.sleep(1000);
+            
+            // Return new page object
             log.info("Navigated to upload page");
             return new UploadPage(driver);
         } catch (Exception e) {
