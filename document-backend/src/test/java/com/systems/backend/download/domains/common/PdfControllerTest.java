@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,7 +19,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PdfController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class PdfControllerTest {
 
@@ -34,6 +37,7 @@ class PdfControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getPdfPage_ShouldReturnPdfPage() throws Exception {
         byte[] pdfPageContent = "PDF page content".getBytes();
 
@@ -56,6 +60,7 @@ class PdfControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getPdfPage_WhenExceptionThrown_ShouldReturn400() throws Exception {
         // Mock the static method to throw an exception
         try (MockedStatic<PdfPageExtractor> mockedStatic = mockStatic(PdfPageExtractor.class)) {
@@ -73,6 +78,7 @@ class PdfControllerTest {
     }
 
     @Test
+    @WithMockUser
     void downloadPdf_ShouldReturnPdfFile() throws Exception {
         File file = mock(File.class);
         when(file.exists()).thenReturn(true);
@@ -89,6 +95,7 @@ class PdfControllerTest {
     }
 
     @Test
+    @WithMockUser
     void downloadPdf_WhenFileNotFound_ShouldReturn404() throws Exception {
         String nonExistentPath = "nonexistent.pdf";
 

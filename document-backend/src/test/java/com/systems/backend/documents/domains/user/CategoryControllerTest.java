@@ -56,7 +56,7 @@ class CategoryControllerTest {
 
     @BeforeEach
     void setUp() {
-        category = new Category(categoryId, "Test Category", "Test Description", null);
+        category = new Category(categoryId, "Test Description", "Test Category", null);
         document = Document.builder()
                 .id(1L)
                 .category(category)
