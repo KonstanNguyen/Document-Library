@@ -94,7 +94,7 @@ export default {
                 if (error.response && error.response.data) {
                     this.message = error.response.data.message || 'Đăng nhập thất bại';
                 } else {
-                    this.message = 'Có lỗi xảy ra, vui lòng thử lại';
+                    this.message = 'Tên đăng nhập hoặc mật khẩu không đúng';
                 }
             }
         },

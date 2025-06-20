@@ -73,8 +73,8 @@ public class SeleniumTests {
 
     private void testLoginForm() throws Exception {
         Object[][] testCases = {
-                {"user@#$%", "short", "Có lỗi xảy ra, vui lòng thử lại"},
-                {"admin", "wrongpass", "Có lỗi xảy ra, vui lòng thử lại"},
+                {"user@#$%", "short", "Tên đăng nhập hoặc mật khẩu không đúng"},
+                {"admin", "wrongpass", "Tên đăng nhập hoặc mật khẩu không đúng"},
                 {"Long", "123", "Đăng nhập thành công!"}
         };
 

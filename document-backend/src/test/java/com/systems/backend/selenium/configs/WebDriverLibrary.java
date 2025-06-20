@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebDriverLibrary {
     public WebDriver getFirefoxDriver() {
-        WebDriverManager.firefoxdriver().setup();
-        return new FirefoxDriver();
+        // WebDriverManager.firefoxdriver().setup();
+        // return new FirefoxDriver();
 
         // Configure Chrome options if needed
-        // WebDriverManager.chromedriver().setup();
-        // ChromeOptions options = new ChromeOptions();
-        // options.addArguments("--start-maximized"); // Start browser maximized
-        // options.addArguments("--disable-notifications"); // Disable notifications
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized"); // Start browser maximized
+        options.addArguments("--disable-notifications"); // Disable notifications
 
-        // return new ChromeDriver(options);
+        return new ChromeDriver(options);
     }
 }
